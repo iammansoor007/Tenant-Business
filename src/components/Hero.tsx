@@ -242,7 +242,8 @@ const Hero = () => {
           className="w-full h-full object-cover object-center transform scale-105 transition-transform duration-1000"
           style={{ opacity: 0.60 }}
           loading="eager"
-          fetchPriority="high"
+          // @ts-ignore
+          fetchpriority="high"
           decoding="async"
         />
 

@@ -4,9 +4,44 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/pitchengine';
-const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin@pitchplatform.com';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin12345!';
+import fs from 'fs';
+import path from 'path';
+
+export function getMongoUri(): string {
+  let uri = process.env.MONGODB_URI || '';
+  if (!uri || uri.includes('<username>')) {
+    try {
+      const envPath = path.resolve(process.cwd(), '.env');
+      if (fs.existsSync(envPath)) {
+        const parsed = dotenv.parse(fs.readFileSync(envPath, 'utf8'));
+        if (parsed.MONGODB_URI && !parsed.MONGODB_URI.includes('<username>')) {
+          process.env.MONGODB_URI = parsed.MONGODB_URI;
+          uri = parsed.MONGODB_URI;
+        }
+      }
+    } catch {}
+  }
+  return uri || 'mongodb://localhost:27017/pitchengine';
+}
+
+export function getAdminCreds() {
+  let user = process.env.ADMIN_USERNAME || '';
+  let pass = process.env.ADMIN_PASSWORD || '';
+  if (!user || user.includes('yourdomain')) {
+    try {
+      const envPath = path.resolve(process.cwd(), '.env');
+      if (fs.existsSync(envPath)) {
+        const parsed = dotenv.parse(fs.readFileSync(envPath, 'utf8'));
+        if (parsed.ADMIN_USERNAME) user = parsed.ADMIN_USERNAME;
+        if (parsed.ADMIN_PASSWORD) pass = parsed.ADMIN_PASSWORD;
+      }
+    } catch {}
+  }
+  return {
+    username: user || 'admin@pitchplatform.com',
+    password: pass || 'admin12345!',
+  };
+}
 
 export let isDbConnected = false;
 
@@ -48,20 +83,24 @@ export const TenantModel = mongoose.models.Tenant || mongoose.model('Tenant', Te
 
 // ─── CONNECT & SEED ───
 export async function connectDB(): Promise<boolean> {
-  if (isDbConnected) return true;
+  if (isDbConnected && mongoose.connection.readyState === 1) return true;
+
+  const activeUri = getMongoUri();
 
   try {
-    await mongoose.connect(MONGODB_URI, {
-      serverSelectionTimeoutMS: 2500, // Quick timeout if no mongo daemon
-    });
-    isDbConnected = true;
-    console.log('✅ Connected to MongoDB at:', MONGODB_URI);
-
-    // Seed default admin if missing
-    await seedDefaultAdmin();
-    return true;
+    if (mongoose.connection.readyState === 0) {
+      await mongoose.connect(activeUri, {
+        serverSelectionTimeoutMS: 3000,
+      });
+    }
+    isDbConnected = (mongoose.connection.readyState === 1);
+    if (isDbConnected) {
+      console.log('✅ Connected to MongoDB at:', activeUri.replace(/:([^@]+)@/, ':****@'));
+      await seedDefaultAdmin();
+    }
+    return isDbConnected;
   } catch (err: any) {
-    console.warn('⚠️ MongoDB connection not available. Falling back to local offline memory/client storage mode:', err.message);
+    console.warn('⚠️ MongoDB connection not available. Falling back to local offline memory mode:', err.message);
     isDbConnected = false;
     return false;
   }

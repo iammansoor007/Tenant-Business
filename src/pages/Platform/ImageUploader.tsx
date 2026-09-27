@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Upload, X, Image as ImageIcon, Pipette, Sparkles } from 'lucide-react';
+import { Upload, X, Image as ImageIcon, Pipette, Sparkles, Cloud, Loader2, CheckCircle2 } from 'lucide-react';
 import { extractColorsFromImage, ExtractedColor } from '../../lib/colorExtractor';
 
 interface ImageUploaderProps {
@@ -82,6 +82,8 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
   const [extractedColors, setExtractedColors] = useState<ExtractedColor[]>([]);
   const [isSampling, setIsSampling] = useState(false);
   const [appliedHex, setAppliedHex] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
 
@@ -111,9 +113,32 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
     }
 
     try {
+      setIsUploading(true);
       const maxDimension = isLogo ? 600 : 1400;
       const dataUrl = await compressImage(file, maxDimension);
-      onChange(dataUrl);
+
+      // Upload directly to Cloudinary via server API
+      let finalUrl = dataUrl;
+      try {
+        const uploadRes = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            file: dataUrl,
+            folder: isLogo ? 'mercurial_logos' : 'mercurial_media',
+          }),
+        });
+        const uploadJson = await uploadRes.json();
+        if (uploadJson.success && uploadJson.url) {
+          finalUrl = uploadJson.url;
+          setUploadSuccess(true);
+          setTimeout(() => setUploadSuccess(false), 3500);
+        }
+      } catch (uploadErr) {
+        console.warn('Cloudinary upload fallback to dataUrl:', uploadErr);
+      }
+
+      onChange(finalUrl);
 
       // If logo, automatically extract dominant colors and apply first color
       if (isLogo) {
@@ -125,6 +150,8 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
       }
     } catch (err) {
       console.warn('Image processing error:', err);
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -170,6 +197,8 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
     setIsSampling(false);
   };
 
+  const isCloudinary = Boolean(value && (value.includes('cloudinary') || value.startsWith('https://res.cloudinary.com')));
+
   return (
     <div className="bg-white border border-slate-200 hover:border-slate-300 rounded-xl p-4 transition-colors shadow-xs">
       <div className="flex items-center justify-between mb-2.5">
@@ -180,7 +209,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
           </label>
           {sublabel && <p className="text-[11px] text-slate-500 mt-0.5">{sublabel}</p>}
         </div>
-        {value && (
+        {value && !isUploading && (
           <button
             type="button"
             onClick={() => {
@@ -194,7 +223,13 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
         )}
       </div>
 
-      {value ? (
+      {isUploading ? (
+        <div className="border border-blue-200 bg-blue-50/50 rounded-lg p-6 flex flex-col items-center justify-center">
+          <Loader2 className="w-6 h-6 text-blue-600 animate-spin mb-2" />
+          <p className="text-xs font-semibold text-blue-900">Uploading to Cloudinary CDN...</p>
+          <p className="text-[11px] text-blue-600/80 mt-0.5">Optimizing & storing image in cloud</p>
+        </div>
+      ) : value ? (
         <div className="relative rounded-lg border border-slate-200 bg-slate-50/60 p-3 flex flex-col items-center justify-center">
           <img
             ref={imgRef}
@@ -205,6 +240,14 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
               isSampling ? 'cursor-crosshair ring-2 ring-blue-600' : ''
             }`}
           />
+
+          {isCloudinary && (
+            <div className="flex items-center gap-1.5 text-[10px] text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 rounded-full font-medium mt-2">
+              <Cloud className="w-3 h-3 text-emerald-600 shrink-0" />
+              <span>Cloudinary CDN Hosted</span>
+              {uploadSuccess && <CheckCircle2 className="w-3 h-3 text-emerald-600 ml-1" />}
+            </div>
+          )}
 
           {isLogo && onColorExtracted && (
             <div className="w-full mt-3 pt-3 border-t border-slate-200">

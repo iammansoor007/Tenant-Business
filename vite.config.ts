@@ -108,3 +108,4 @@ export default defineConfig(({ mode }) => ({
     ],
   },
 }));
+// Production & dev configuration
