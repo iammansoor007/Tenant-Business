@@ -1,4 +1,4 @@
-import baselineData from '../src/data/completeData.json';
+import baselineData from '../data/completeData.json';
 
 export interface ClientProfile {
   name: string;

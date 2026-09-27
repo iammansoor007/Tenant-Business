@@ -182,6 +182,7 @@ ServiceCard.displayName = "ServiceCard";
 // ── Main Component ────────────────────────────────────────────────
 const Services = () => {
   const { tenant, isFlagship } = useTenant();
+  const completeData = useTenantData();
   const servicesData = completeData?.services || {};
   const badge = servicesData.badge || "Our Services";
   const rawHeadline = servicesData.headline;

@@ -1,5 +1,5 @@
 import { Tenant, BulkTenantItem } from '../types/tenant';
-import baselineCompleteData from '../src/data/completeData.json';
+import baselineCompleteData from '../data/completeData.json';
 
 const IDB_NAME = 'PitchEngineDB';
 const IDB_STORE = 'tenants';

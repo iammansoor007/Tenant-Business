@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState, useMemo } from '
 import { useParams } from 'react-router-dom';
 import { Tenant, TenantMedia, TenantColors } from '../types/tenant';
 import { fetchTenantBySlug } from '../lib/apiClient';
-import defaultCompleteData from '../src/data/completeData.json';
+import defaultCompleteData from '../data/completeData.json';
 import { hexToHsl } from '../lib/colorExtractor';
 import { updateClientSeo } from '../lib/seoManager';
 
