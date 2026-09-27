@@ -1,0 +1,496 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* ==========================================================================
+       MAX QUALITY ROOFING - BRAND COLOR PALETTE
+       Primary: Deep Navy #0B1D33 | Secondary: Steel Blue #344B63
+       Dark sections: Midnight Navy #06111F | Light background: Cool White #F4F6F8
+       Cards/sections: Light Steel Gray #D9E0E7 | Main text: Charcoal #17212B
+       Accent: Metallic Silver #AEB8C2 | CTA: Strong Navy #12365A
+       ========================================================================== */
+
+    /* ─── 1. Primary & CTA Colors ─── */
+    --primary-hex: #0B1D33;              /* Deep Navy: Primary brand, navbar, deep contrasts */
+    --primary-hover-hex: #12365A;        /* Strong Navy: CTA buttons, active states */
+    --primary-rgb: 11, 29, 51;           /* Deep Navy RGB */
+    --primary-hover-rgb: 18, 54, 90;     /* Strong Navy RGB */
+    --cta-hex: #12365A;                  /* Strong Navy: High-converting CTA buttons */
+    --cta-rgb: 18, 54, 90;
+
+    /* ─── 2. Secondary & Accent Colors ─── */
+    --secondary-hex: #344B63;            /* Steel Blue: Secondary accents, sub-actions */
+    --secondary-rgb: 52, 75, 99;
+    --accent-hex: #AEB8C2;               /* Metallic Silver: Subtle highlight borders & badges */
+    --accent-rgb: 174, 184, 194;
+
+    /* ─── 3. Neutral Surfaces & Backgrounds ─── */
+    --dark-bg: #F4F6F8;                  /* Cool White: Main website light background */
+    --section-bg: #F4F6F8;              /* Cool White: Section background */
+    --card-bg: #FFFFFF;                  /* Pure White for crisp card contrast */
+    --card-steel: #D9E0E7;               /* Light Steel Gray: Distinct card surfaces/dividers */
+    --white-color: #FFFFFF;              /* Pure White */
+    --charcoal-bg: #D9E0E7;              /* Light Steel Gray surface */
+
+    /* ─── 4. Typography Colors ─── */
+    --heading-color: #17212B;            /* Charcoal: Headings, high legibility */
+    --body-text-color: #17212B;          /* Charcoal: Body text */
+    --silver-color: #344B63;             /* Steel Blue: Subtitles, clear descriptions */
+    --steel-gray-color: #556975;         /* Medium Slate caption text */
+    --light-silver-color: #AEB8C2;       /* Metallic Silver text/accent on dark */
+    --muted-text: #5A6D80;               /* Muted text */
+    --light-muted-text: #8C9DAF;         /* Light muted text */
+
+    /* ─── 5. Borders & Dividers ─── */
+    --border-color: #D9E0E7;             /* Light Steel Gray: Borders & dividers */
+    --graphite-color: #D9E0E7;           /* Border alias */
+
+    /* ─── 6. Dark Sections (Midnight Navy) ─── */
+    --navy-color: #06111F;               /* Midnight Navy: Footer, dark heroes & CTA containers */
+    --navy-surface: #0B1D33;             /* Deep Navy surface inside dark sections */
+
+    /* ─── 7. Feedback / Status Colors ─── */
+    --success-color: #16A34A;            /* Success green */
+    --danger-color: #DC2626;             /* Danger red */
+
+    /* ─── 8. RGB Values for Opacity Overlays ─── */
+    --dark-bg-rgb: 244, 246, 248;
+    --card-bg-rgb: 255, 255, 255;
+    --white-rgb: 255, 255, 255;
+    --black-rgb: 23, 33, 43;
+    --border-rgb: 217, 224, 231;
+    --silver-rgb: 52, 75, 99;
+    --navy-rgb: 6, 17, 31;
+
+    /* ─── 9. Tailwind HSL Tokens ─── */
+    --background: 210 20% 96%;           /* #F4F6F8 (Cool White) */
+    --foreground: 210 30% 13%;           /* #17212B (Charcoal) */
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 30% 13%;
+    --card: 0 0% 100%;
+    --card-foreground: 210 30% 13%;
+    --primary: 213 65% 12%;              /* #0B1D33 (Deep Navy) */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 211 31% 30%;            /* #344B63 (Steel Blue) */
+    --secondary-foreground: 0 0% 100%;
+    --accent: 210 15% 72%;               /* #AEB8C2 (Metallic Silver) */
+    --accent-foreground: 210 30% 13%;
+    --muted: 210 23% 88%;                /* #D9E0E7 (Light Steel Gray) */
+    --muted-foreground: 211 31% 30%;     /* #344B63 (Steel Blue) */
+    --border: 210 23% 88%;               /* #D9E0E7 (Light Steel Gray) */
+    --input: 210 23% 88%;                /* #D9E0E7 (Light Steel Gray) */
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --ring: 210 67% 21%;                 /* #12365A (Strong Navy) */
+    --radius: 10px;
+
+    --sidebar-background: 210 20% 96%;
+    --sidebar-foreground: 210 30% 13%;
+    --sidebar-primary: 213 65% 12%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 211 31% 30%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 210 23% 88%;
+    --sidebar-ring: 210 67% 21%;
+
+    --font-heading: 'Cinzel', serif;
+    --font-body: 'Montserrat', sans-serif;
+  }
+}
+
+@layer base {
+
+  /* ─── Performance: GPU compositing layer for the entire page ─── */
+  html {
+    scroll-behavior: smooth;
+    /* Smooth native scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
+    /* Prevent layout shift caused by scrollbar appearance */
+    scrollbar-gutter: stable;
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  * {
+    @apply border-border;
+    box-sizing: border-box;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: var(--dark-bg);
+    color: var(--body-text-color);
+    /* Prevent layout shift when scrollbar appears */
+    overflow-x: hidden;
+  }
+
+  #root {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    /* Isolate root so fixed children work correctly */
+    isolation: isolate;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.01em;
+    line-height: 1.05;
+    /* Headings in strong contrast black */
+    color: var(--heading-color);
+  }
+
+  /* Dark containers: let headings inherit white from parent */
+  [style*="var(--navy-color)"] h1,
+  [style*="var(--navy-color)"] h2,
+  [style*="var(--navy-color)"] h3,
+  [style*="var(--primary-hover-hex)"] h1,
+  [style*="var(--primary-hover-hex)"] h2,
+  [style*="var(--primary-hover-hex)"] h3,
+  [style*="var(--primary-hex)"] h1,
+  [style*="var(--primary-hex)"] h2,
+  [style*="var(--primary-hex)"] h3,
+  .dark-section h1,
+  .dark-section h2,
+  .dark-section h3,
+  footer h1,
+  footer h2,
+  footer h3,
+  footer h4,
+  footer h5,
+  footer h6 {
+    color: inherit;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .font-black,
+  .font-extrabold {
+    font-weight: 700 !important;
+  }
+
+  /* ─── Sections ─── */
+  section {
+    position: relative;
+  }
+
+  /* ─── Images: prevent layout shift, smooth load ─── */
+  img {
+    display: block;
+    max-width: 100%;
+    /* Smoothly fade in lazy-loaded images */
+    transition: opacity 0.3s ease;
+  }
+
+  /* ─── Lazy images: fade in on load (handled per-component via onLoad) ─── */
+  img[loading="lazy"].loaded {
+    opacity: 1;
+  }
+
+  /* ─── Focus visible — accessibility without layout flicker ─── */
+  :focus-visible {
+    outline: 2px solid var(--primary-hex);
+    outline-offset: 2px;
+  }
+
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .section-padding {
+    @apply px-6 md:px-12 lg:px-24 py-20 md:py-32;
+  }
+
+  .heading-xl {
+    @apply text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-medium;
+    font-family: var(--font-heading);
+    letter-spacing: -0.03em;
+    line-height: 0.95;
+  }
+
+  .heading-lg {
+    @apply text-4xl md:text-5xl lg:text-6xl font-medium;
+    font-family: var(--font-heading);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .heading-md {
+    @apply text-2xl md:text-3xl lg:text-4xl font-medium;
+    font-family: var(--font-heading);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+
+  .body-lg {
+    @apply text-lg md:text-xl;
+    font-family: var(--font-body);
+    line-height: 1.6;
+  }
+
+  .body-sm {
+    @apply text-sm md:text-base;
+    font-family: var(--font-body);
+    line-height: 1.5;
+  }
+
+  /* ORANGE BRAND LINE */
+  .accent-line {
+    @apply w-14 h-1 rounded-full;
+    background: hsl(var(--primary));
+  }
+
+  .grid-editorial {
+    @apply grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8;
+  }
+
+  /* ORANGE TEXT GRADIENT */
+  .text-gradient {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* CTA BUTTON */
+  .bg-gradient-cta {
+    background: linear-gradient(135deg, var(--primary-hex), var(--primary-hover-hex));
+    color: var(--white-color);
+  }
+
+  /* PRIMARY BUTTON */
+  .drpaint-btn-primary {
+    background: var(--primary-hex);
+    color: var(--white-color);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    border-radius: var(--radius);
+    font-weight: 600;
+    box-shadow: 0 10px 25px rgba(var(--primary-rgb), 0.15);
+    will-change: transform;
+  }
+
+  .drpaint-btn-primary:hover {
+    background: var(--primary-hover-hex);
+    transform: translateY(-3px);
+    box-shadow: 0 16px 35px rgba(var(--primary-rgb), 0.25);
+  }
+
+  /* SECONDARY BUTTON */
+  .drpaint-btn-secondary {
+    background: transparent;
+    color: var(--primary-hex);
+    border: 2px solid var(--primary-hex);
+    transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+    border-radius: var(--radius);
+    font-weight: 600;
+    will-change: transform;
+  }
+
+  .drpaint-btn-secondary:hover {
+    background: var(--primary-hex);
+    border-color: var(--primary-hex);
+    color: var(--white-color);
+    transform: translateY(-2px);
+  }
+
+  /* CARD SYSTEM */
+  .drpaint-card {
+    background: var(--card-bg);
+    border: 1px solid var(--graphite-color);
+    box-shadow: 0 4px 20px rgba(var(--black-rgb), 0.08);
+    border-radius: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .drpaint-card:hover {
+    border-color: var(--primary-hex);
+    box-shadow: 0 8px 32px rgba(var(--primary-rgb), 0.12);
+  }
+
+  .drpaint-shadow {
+    box-shadow: 0 4px 16px rgba(var(--black-rgb), 0.08);
+  }
+
+  /* NAVBAR GLASS */
+  .navbar-glass {
+    background: rgba(var(--white-rgb), 0.95);
+    /* White with slight transparency */
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--graphite-color);
+    box-shadow: 0 1px 12px rgba(var(--black-rgb), 0.06);
+  }
+
+  /* HERO OVERLAY — dark navy for high contrast over hero images */
+  .hero-overlay {
+    background: linear-gradient(135deg, rgba(var(--navy-rgb), 0.88), rgba(var(--primary-rgb), 0.78));
+  }
+
+  /* PREMIUM SECTION BACKGROUND GRADIENT */
+  .bg-premium-gradient {
+    background: linear-gradient(135deg, var(--dark-bg) 0%, var(--section-bg) 50%, var(--charcoal-bg) 100%);
+  }
+
+  /* ELEGANT GRADIENT DIVIDER */
+  .premium-divider {
+    height: 1px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(var(--primary-rgb), 0.15) 20%,
+        rgba(var(--primary-rgb), 0.3) 50%,
+        rgba(var(--primary-rgb), 0.15) 80%,
+        transparent 100%);
+    width: 100%;
+    /* No layout recalculation — height is fixed */
+    contain: strict;
+  }
+
+  /* ORANGE ACCENTS */
+  .gold-accent {
+    color: hsl(var(--accent));
+  }
+
+  .brown-accent {
+    color: hsl(var(--secondary));
+  }
+
+  /* GPU-COMPOSITED LAYER HINT */
+  .will-change-gpu {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+
+  /* ─── Super-smooth motion: only animate compositable properties ─── */
+  .smooth-hover {
+    transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+      opacity 0.2s ease;
+    will-change: transform;
+  }
+
+  .smooth-hover:hover {
+    transform: translateY(-4px);
+  }
+
+  /* ULTRA-SMOOTH FLOATING ANIMATION */
+  @keyframes float {
+
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  /* SUBTLE BLUE PULSE */
+  @keyframes blue-pulse {
+
+    0%,
+    100% {
+      opacity: 0.6;
+    }
+
+    50% {
+      opacity: 1;
+    }
+  }
+
+  .animate-gold-pulse {
+    animation: blue-pulse 3s ease-in-out infinite;
+    will-change: opacity;
+  }
+
+  /* SHIMMER FOR LOADING STATES */
+  @keyframes shimmer {
+    0% {
+      background-position: -200% center;
+    }
+
+    100% {
+      background-position: 200% center;
+    }
+  }
+
+  .animate-shimmer {
+    background: linear-gradient(90deg, var(--dark-bg) 25%, var(--border-color) 50%, var(--dark-bg) 75%);
+    background-size: 200% auto;
+    animation: shimmer 1.5s linear infinite;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   LIGHT THEME GLOBAL OVERRIDES
+   Fix hardcoded dark-theme text colors on white background sections.
+   Only applies to sections that are NOT explicitly dark.
+   Dark contexts: .dark-section, [class*="bg-dark"], hero#hero-section
+   ═══════════════════════════════════════════════════════════ */
+
+/* Mark intentional dark containers so their text-white stays correct */
+.dark-section,
+[style*="background: linear-gradient(135deg, var(--dark-bg)"],
+[style*="var(--navy-color)"],
+[style*="var(--primary-hover-hex)"],
+[style*="var(--primary-hex)"] {
+  /* Dark containers: allow white text */
+  color: inherit;
+}
+
+/* For all sections WITHOUT dark background: fix text-white to dark */
+section:not(#hero-section):not(.dark-section) .text-white,
+nav .text-foreground {
+  /* already handled by semantic classes */
+}
+
+/* Safeguard text-white inside dark gradient boxes */
+[style*="var(--navy-color)"] .text-white,
+[style*="var(--primary-hover-hex)"] .text-white,
+[style*="var(--primary-hex)"] .text-white,
+.dark-section .text-white {
+  color: var(--white-color) !important;
+}
+
+/* Fix step indicator colors in hero form that are hardcoded white */
+.light-step-label {
+  color: var(--silver-color);
+}
+
+/* Footer keeps dark navy bg */
+footer,
+.footer-dark {
+  background: var(--navy-color);
+  color: var(--dark-bg);
+}
+
+footer .text-white,
+footer [class*="text-"],
+.footer-dark .text-white {
+  color: inherit;
+}

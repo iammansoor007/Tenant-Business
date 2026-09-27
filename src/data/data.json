@@ -1,0 +1,1087 @@
+{
+  "navbar": {
+    "services": [
+      {
+        "title": "ROOF REPLACEMENT",
+        "description": "Full tear-off and installation of high-performance architectural shingles.",
+        "icon": "Home",
+        "items": [
+          "Full Roof Replacement"
+        ],
+        "features": [
+          "100% Workmanship Guaranteed",
+          "Premium Materials",
+          "Full Insurance Protection"
+        ]
+      },
+      {
+        "title": "LEAK DETECTION & FLASHING",
+        "description": "Immediate diagnostic inspections to stop active moisture infiltration.",
+        "icon": "ClipboardCheck",
+        "items": [
+          "Leak Detection & Flashing"
+        ],
+        "features": [
+          "24/7 Emergency Leak Response",
+          "Structural Protection",
+          "Fast Dispatch"
+        ]
+      },
+      {
+        "title": "STORM & HAIL CLAIMS",
+        "description": "Detailed photographic damage documentation for full insurance approval.",
+        "icon": "Sun",
+        "items": [
+          "Storm & Hail Insurance Claims"
+        ],
+        "features": [
+          "Full Policy Coverage",
+          "Pre-Loss Condition Restoration",
+          "Direct Contractor Intake"
+        ]
+      },
+      {
+        "title": "GUTTERS & DOWNSPOUTS",
+        "description": "Seamless gutter systems and heavy-duty downspouts to protect your property.",
+        "icon": "Droplets",
+        "items": [
+          "Gutters & Downspouts"
+        ],
+        "features": [
+          "Seamless Systems",
+          "Gutter Guards Available",
+          "Foundation Protection"
+        ]
+      }
+    ],
+    "companyLinks": [
+      {
+        "label": "Home",
+        "href": "#",
+        "icon": "Home"
+      },
+      {
+        "label": "About",
+        "href": "#about",
+        "icon": "Users"
+      },
+      {
+        "label": "Services",
+        "href": "#services",
+        "icon": "Briefcase"
+      },
+      {
+        "label": "Gallery",
+        "href": "#portfolio",
+        "icon": "FileText"
+      },
+      {
+        "label": "Contact",
+        "href": "#contact",
+        "icon": "MessageSquare"
+      }
+    ],
+    "stats": [
+      {
+        "value": "Sugar Hill, GA",
+        "label": "Headquarters",
+        "icon": "MapPin"
+      },
+      {
+        "value": "5 States",
+        "label": "Coverage",
+        "icon": "Home"
+      },
+      {
+        "value": "100%",
+        "label": "Workmanship Guaranteed",
+        "icon": "Star"
+      },
+      {
+        "value": "24/7",
+        "label": "Emergency Leak Response",
+        "icon": "Shield"
+      }
+    ],
+    "cta": {
+      "title": "Need Fast Roof Support?",
+      "description": "Get an on-site structural inspection or emergency tarping service across our fully insured coverage states.",
+      "buttonText": "Call Now",
+      "buttonLink": "tel:+14703236048"
+    },
+    "ctaButton": {
+      "label": "Free Inspection",
+      "href": "#contact",
+      "icon": "Calendar"
+    }
+  },
+  "hero": {
+    "badge": "HQ: Sugar Hill, GA • Multi-State Coverage • Fully Insured",
+    "headlines": [
+      "Engineered Roofing.",
+      "Built to Protect.",
+      "What Matters Most."
+    ],
+    "description": "Residential and commercial roofing solutions backed by superior materials, honest craftsmanship, and full insurance policy protection across Georgia, Maryland, Virginia, North Carolina, and South Carolina.",
+    "buttons": [
+      {
+        "text": "Schedule Free Inspection",
+        "href": "#contact",
+        "primary": true,
+        "icon": "FiArrowRight"
+      },
+      {
+        "text": "Call Now",
+        "href": "tel:+14703236048",
+        "primary": false,
+        "icon": "FiArrowRight"
+      }
+    ],
+    "stats": [
+      {
+        "value": "100%",
+        "label": "Workmanship Guaranteed",
+        "icon": "FiShield"
+      },
+      {
+        "value": "24/7",
+        "label": "Emergency Leak Response",
+        "icon": "FiClock"
+      },
+      {
+        "value": "5 States",
+        "label": "Full Insurance Coverage",
+        "icon": "FiMapPin"
+      },
+      {
+        "value": "(470) 323-6048",
+        "label": "Call Now",
+        "icon": "FiArrowRight"
+      }
+    ]
+  },
+  "about": {
+    "badge": "Get to Know Us",
+    "headline": {
+      "prefix": "Welcome to",
+      "highlight": "Max Quality Roofing",
+      "suffix": ""
+    },
+    "description": "We're a fully insured roofing contractor headquartered in <span class=\"font-semibold text-primary\">Sugar Hill, Georgia</span>, with multi-state coverage across Georgia, Maryland, Virginia, North Carolina, and South Carolina. We deliver residential and commercial roofing solutions backed by superior materials, honest craftsmanship, and full insurance policy protection.",
+    "image": {
+      "src": "MaxQualityRoofingCrew",
+      "alt": "Max Quality Roofing crew on a residential roof",
+      "badge": "Engineered Roofing Built to Protect"
+    },
+    "stats": [
+      {
+        "value": 100,
+        "suffix": "%",
+        "label": "Workmanship Guaranteed"
+      },
+      {
+        "value": 5,
+        "suffix": " States",
+        "label": "Full Insurance Coverage"
+      },
+      {
+        "value": "24/7",
+        "suffix": "",
+        "label": "Emergency Leak Response"
+      }
+    ],
+    "buttons": [
+      {
+        "text": "SCHEDULE FREE INSPECTION",
+        "href": "#contact",
+        "primary": true
+      },
+      {
+        "text": "OUR FULL STORY",
+        "href": "#about-story",
+        "primary": false
+      }
+    ],
+    "trustBadges": {
+      "founded": "Fully Insured",
+      "headquarters": "Sugar Hill, Georgia"
+    }
+  },
+  "aboutStory": {
+    "badge": "Our Story",
+    "headline": {
+      "prefix": "Engineered Roofing.",
+      "highlight": "Honest Craftsmanship.",
+      "suffix": ""
+    },
+    "description": [
+      "Max Quality Roofing was founded on a simple principle: every roof should be engineered to protect what matters most. Too many homeowners and business owners across the Southeast were dealing with aging, storm-battered roofs, patchwork repairs, and insurance claims that never covered the full scope of damage. We knew there had to be a better way — one built on superior materials, honest workmanship, and full accountability from inspection to final walkthrough.",
+      "Headquartered in Sugar Hill, Georgia, we built Max Quality Roofing with a direct-dispatch model and a fully insured multi-state operation. No high-pressure sales tactics. No cutting corners on materials. Just honest, photographic diagnoses of your roof deck, flashing, and shingle condition — followed by a clear, fixed-price estimate backed by material warranties and full insurance guidance. Whether it's a full roof replacement, emergency leak detection, storm and hail claims, or seamless gutters and downspouts, we handle every project with the same disciplined standard.",
+      "Today, Max Quality Roofing proudly serves residential and commercial clients across five states — Georgia, Maryland, Virginia, North Carolina, and South Carolina — with state-wide insured coverage and 24/7 emergency leak response. We're Google Verified, Yelp Official, and committed to protecting your property like it's our own. Engineered roofing built to protect what matters most."
+    ],
+    "image": {
+      "src": "MaxQualityRoofingFounder",
+      "alt": "Max Quality Roofing leadership and field crew",
+      "badge": "Fully Insured • Multi-State"
+    },
+    "stats": [
+      {
+        "value": "Sugar Hill",
+        "suffix": ", GA",
+        "label": "Headquarters"
+      },
+      {
+        "value": "5 States",
+        "suffix": "",
+        "label": "Full Coverage"
+      },
+      {
+        "value": "100%",
+        "suffix": "",
+        "label": "Workmanship Guaranteed"
+      }
+    ]
+  },
+  "services": {
+    "badge": "Our Core Capabilities",
+    "headline": {
+      "prefix": "Complete Roofing Solutions",
+      "highlight": "Backed by Full Insurance",
+      "suffix": ""
+    },
+    "description": [
+      "Every roof is engineered to withstand extreme weather, heavy downpours, wind gusts, and severe hail.",
+      "From full roof replacement to storm and hail insurance claims, we deliver complete roofing solutions across five fully insured states."
+    ],
+    "stats": [
+      {
+        "value": 4,
+        "suffix": "",
+        "label": "Core Services"
+      },
+      {
+        "value": 5,
+        "suffix": " States",
+        "label": "Full Coverage"
+      },
+      {
+        "value": "24/7",
+        "suffix": "",
+        "label": "Emergency Response"
+      }
+    ],
+    "services": [
+      {
+        "number": "01",
+        "title": "Full Roof Replacement",
+        "description": "Complete tear-off down to the decking, replacement of damaged plywood, premium synthetic underlayment, and installation of high-performance architectural shingles.",
+        "icon": "Home",
+        "tag": "Residential & Commercial",
+        "features": [
+          "Full Tear-Off",
+          "Premium Underlayment",
+          "Architectural Shingles"
+        ]
+      },
+      {
+        "number": "02",
+        "title": "Leak Detection & Flashing",
+        "description": "Immediate diagnostic inspections to stop active moisture infiltration before it destroys structural rafters, drywall, and electrical systems.",
+        "icon": "Building2",
+        "tag": "24/7 Emergency",
+        "features": [
+          "Diagnostic Inspections",
+          "Structural Protection",
+          "Emergency Tarping"
+        ]
+      },
+      {
+        "number": "03",
+        "title": "Storm & Hail Insurance Claims",
+        "description": "Detailed photographic damage documentation to ensure your insurance carrier approves the full scope required to restore your home to pre-loss condition.",
+        "icon": "Hammer",
+        "tag": "Insurance Backed",
+        "features": [
+          "Photographic Documentation",
+          "Full Scope Approval",
+          "Pre-Loss Restoration"
+        ]
+      },
+      {
+        "number": "04",
+        "title": "Gutters & Downspouts",
+        "description": "Seamless gutter systems, heavy-duty downspouts, and gutter guards designed to divert rainwater and safeguard your siding, fascia, and foundation.",
+        "icon": "Droplets",
+        "tag": "Water Management",
+        "features": [
+          "Seamless Gutters",
+          "Heavy-Duty Downspouts",
+          "Gutter Guards"
+        ]
+      }
+    ],
+    "cta": {
+      "title": "Need Structural Roofing or Storm Mitigation?",
+      "description": "Reach our dispatch team directly for on-site inspection or emergency tarping across any of our covered states.",
+      "buttonText": "Call Now",
+      "buttonLink": "tel:+14703236048"
+    }
+  },
+  "howWeWork": {
+    "badge": "Fast Turnaround",
+    "headline": "Request Your Free Roof Inspection <span class=\"text-primary\">Today</span>",
+    "description": "No high-pressure sales tactics. The Max Quality Roofing team provides an honest, photographic diagnosis of your roof deck, flashing, and shingle condition.",
+    "steps": [
+      {
+        "number": "01",
+        "title": "Same-Day Dispatch Confirmation",
+        "description": "We reach out promptly to lock in a time that fits your schedule.",
+        "icon": "Clock"
+      },
+      {
+        "number": "02",
+        "title": "Comprehensive Photographic Report",
+        "description": "High-resolution drone and roof photos detailing any storm impact or wear.",
+        "icon": "FileText"
+      },
+      {
+        "number": "03",
+        "title": "Clear, Fixed-Price Estimate",
+        "description": "Upfront pricing with material warranties and insurance guidance.",
+        "icon": "Check"
+      }
+    ]
+  },
+  "whyChooseUs": {
+    "section": {
+      "badge": "WHY CHOOSE US",
+      "headline": "Insurance-Backed <span class=\"text-primary\">Peace of Mind.</span>",
+      "description": "When you need roofing work done right, you want a contractor with full insurance protection, honest craftsmanship, and coverage across entire states."
+    },
+    "features": [
+      {
+        "icon": "Award",
+        "title": "100% Workmanship Guaranteed",
+        "description": "Every roof we install is backed by our workmanship guarantee — no shortcuts, no compromises."
+      },
+      {
+        "icon": "MessageSquare",
+        "title": "24/7 Emergency Leak Response",
+        "description": "Active leaks don't wait for business hours. Neither do we. Emergency tarping and leak detection available 24/7."
+      },
+      {
+        "icon": "Globe",
+        "title": "5-State Full Insurance Coverage",
+        "description": "Active insurance policy gives you full protection across entire states for residential and commercial roofing projects."
+      },
+      {
+        "icon": "Clock",
+        "title": "Direct Dispatch",
+        "description": "Speak directly with our dispatch team. No call centers, no runaround — just fast, direct service."
+      },
+      {
+        "icon": "Shield",
+        "title": "Full Policy Protection",
+        "description": "Detailed photographic documentation ensures your insurance carrier approves the full scope required."
+      },
+      {
+        "icon": "Check",
+        "title": "Honest, Photographic Diagnosis",
+        "description": "No high-pressure sales tactics. Just an honest, photographic diagnosis of your roof's true condition."
+      }
+    ],
+    "stats": [
+      {
+        "value": "Sugar Hill, GA",
+        "suffix": "",
+        "label": "Headquarters"
+      },
+      {
+        "value": "5 States",
+        "suffix": "",
+        "label": "Full Coverage"
+      },
+      {
+        "value": "100%",
+        "suffix": "",
+        "label": "Workmanship Guaranteed"
+      },
+      {
+        "value": "(470) 323-6048",
+        "suffix": "",
+        "label": "Call Now"
+      }
+    ],
+    "cta": {
+      "badge": "GET STARTED",
+      "title": "Ready for a <span class=\"\">Free Inspection?</span>",
+      "description": "Schedule your free roof inspection today. Call (470) 323-6048 or submit your request online.",
+      "trustBadges": [
+        "Fully Insured",
+        "24/7 Emergency",
+        "100% Workmanship Guaranteed"
+      ],
+      "buttons": [
+        {
+          "text": "Schedule Free Inspection",
+          "href": "#contact",
+          "primary": true
+        },
+        {
+          "text": "Call Now",
+          "href": "tel:+14703236048",
+          "primary": false
+        }
+      ]
+    }
+  },
+  "portfolio": {
+    "section": {
+      "badge": "Proven Workmanship",
+      "headline": "Real Transformations <span class=\"text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/70\">Before & After</span>"
+    },
+    "projects": [
+      {
+        "number": "01",
+        "title": "Sugar Hill Full Roof Replacement",
+        "category": "Residential",
+        "image": "portfolio1",
+        "location": "Sugar Hill, GA",
+        "year": "2025",
+        "accent": "from-primary to-primary/80",
+        "scope": "Complete Tear-Off & Replacement",
+        "desc": "Aging, storm-battered roof transformed into a weather-tight architectural asset with premium underlayment and shingles."
+      },
+      {
+        "number": "02",
+        "title": "Atlanta Storm Damage Restoration",
+        "category": "Storm & Hail",
+        "image": "portfolio2",
+        "location": "Atlanta, GA",
+        "year": "2025",
+        "accent": "from-primary to-primary/70",
+        "scope": "Insurance Claim Restoration",
+        "desc": "Full photographic documentation and complete restoration to pre-loss condition with insurance approval."
+      },
+      {
+        "number": "03",
+        "title": "Maryland Commercial Roofing",
+        "category": "Commercial",
+        "image": "portfolio3",
+        "location": "Maryland",
+        "year": "2024",
+        "accent": "from-primary/90 to-primary/60",
+        "scope": "Commercial Roof System",
+        "desc": "High-performance commercial roofing installation engineered to withstand heavy downpours and wind gusts."
+      },
+      {
+        "number": "04",
+        "title": "Virginia Leak Detection & Repair",
+        "category": "Leak Detection",
+        "image": "portfolio4",
+        "location": "Virginia",
+        "year": "2025",
+        "accent": "from-primary to-primary/80",
+        "scope": "Emergency Leak Response",
+        "desc": "Immediate diagnostic inspection and flashing repair stopped active moisture infiltration before structural damage."
+      },
+      {
+        "number": "05",
+        "title": "North Carolina Gutters & Downspouts",
+        "category": "Gutters",
+        "image": "portfolio5",
+        "location": "North Carolina",
+        "year": "2024",
+        "accent": "from-primary/80 to-primary/60",
+        "scope": "Seamless Gutter System",
+        "desc": "Heavy-duty seamless gutters and downspouts installed to divert rainwater and safeguard siding and foundation."
+      }
+    ],
+    "button": {
+      "text": "View Full Gallery",
+      "link": "#portfolio"
+    }
+  },
+  "testimonials": {
+    "section": {
+      "badge": "Client Testimonials",
+      "headline": "What Our Customers Say",
+      "description": "Hear from homeowners and businesses who trust Max Quality Roofing across Georgia, Maryland, Virginia, North Carolina, and South Carolina.",
+      "featured": "Trusted Roofing Contractor in Sugar Hill, GA & Multi-State"
+    },
+    "testimonials": [
+      {
+        "id": 1,
+        "name": "Maria R.",
+        "position": "Homeowner",
+        "company": "Sugar Hill, GA",
+        "avatar": "MR",
+        "text": "Max Quality Roofing handled our full roof replacement with complete professionalism. Honest diagnosis, clear fixed-price estimate, and the crew left the site spotless. Exactly what you want."
+      },
+      {
+        "id": 2,
+        "name": "David K.",
+        "position": "Property Manager",
+        "company": "Atlanta, GA",
+        "avatar": "DK",
+        "text": "We had storm damage across multiple properties. Max Quality Roofing documented everything photographically and got full insurance approval. Fast, insured, and reliable."
+      },
+      {
+        "id": 3,
+        "name": "Sarah L.",
+        "position": "Business Owner",
+        "company": "Maryland",
+        "avatar": "SL",
+        "text": "Called Max Quality for emergency leak detection. They responded fast, stopped the infiltration, and repaired the flashing before it caused structural damage. Highly recommend."
+      },
+      {
+        "id": 4,
+        "name": "James T.",
+        "position": "Homeowner",
+        "company": "North Carolina",
+        "avatar": "JT",
+        "text": "Max Quality Roofing replaced our aging roof and installed seamless gutters. Honest workmanship, fair pricing, and fully insured across state lines. Great experience."
+      },
+      {
+        "id": 5,
+        "name": "Max Quality Roofing Team",
+        "position": "Fully Insured Multi-State Contractor",
+        "company": "Max Quality Roofing",
+        "avatar": "MR",
+        "text": "We built Max Quality Roofing to protect what matters most for homeowners and businesses across five states. Superior materials, honest craftsmanship, and full insurance protection — every project, every time."
+      }
+    ],
+    "videos": [
+      {
+        "id": "v1",
+        "videoId": "dQw4w9WgXcQ",
+        "title": "Full Roof Replacement Walkthrough",
+        "name": "Maria R."
+      },
+      {
+        "id": "v2",
+        "videoId": "dQw4w9WgXcQ",
+        "title": "Storm Damage Insurance Claims",
+        "name": "David K."
+      },
+      {
+        "id": "v3",
+        "videoId": "dQw4w9WgXcQ",
+        "title": "Emergency Leak Detection",
+        "name": "Sarah L."
+      },
+      {
+        "id": "v4",
+        "videoId": "dQw4w9WgXcQ",
+        "title": "Gutters & Downspouts Installation",
+        "name": "James T."
+      }
+    ],
+    "stats": {
+      "reviewPlatform": "Google Verified • Yelp Official",
+      "satisfactionFocus": "100% Workmanship Guaranteed",
+      "totalVideos": 12
+    }
+  },
+  "faq": {
+    "section": {
+      "badge": "Knowledge Base",
+      "headline": "Frequently Asked Questions",
+      "description": "Straight answers about our roofing services, insurance claims, and multi-state coverage."
+    },
+    "categories": [
+      {
+        "id": "all",
+        "label": "All Questions",
+        "icon": null
+      },
+      {
+        "id": "roofing",
+        "label": "Roofing",
+        "icon": "Home"
+      },
+      {
+        "id": "claims",
+        "label": "Insurance Claims",
+        "icon": "Shield"
+      },
+      {
+        "id": "coverage",
+        "label": "Coverage",
+        "icon": "MapPin"
+      }
+    ],
+    "items": [
+      {
+        "id": 1,
+        "category": "roofing",
+        "question": "What roofing services do you offer?",
+        "answer": "We offer full roof replacement, leak detection and flashing repair, storm and hail insurance claims, and gutters and downspouts. Every roof is engineered to withstand extreme weather, heavy downpours, wind gusts, and severe hail.",
+        "metadata": [
+          {
+            "label": "Replacement",
+            "value": "Full tear-off"
+          },
+          {
+            "label": "Gutters",
+            "value": "Seamless systems"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "category": "claims",
+        "question": "Do you help with insurance claims?",
+        "answer": "Yes. We provide detailed photographic damage documentation to ensure your insurance carrier approves the full scope required to restore your home to pre-loss condition.",
+        "metadata": [
+          {
+            "label": "Documentation",
+            "value": "Photographic"
+          },
+          {
+            "label": "Approval",
+            "value": "Full scope"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "category": "coverage",
+        "question": "What states do you serve?",
+        "answer": "We're headquartered in Sugar Hill, GA, with full insurance policy coverage extending across five states: Georgia, Maryland, Virginia, North Carolina, and South Carolina.",
+        "metadata": [
+          {
+            "label": "Headquarters",
+            "value": "Sugar Hill, GA"
+          },
+          {
+            "label": "Coverage",
+            "value": "5 states"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "category": "roofing",
+        "question": "Do you offer 24/7 emergency response?",
+        "answer": "Yes. We provide 24/7 emergency leak response and emergency tarping service across our fully insured coverage states. Call (470) 323-6048 anytime.",
+        "metadata": [
+          {
+            "label": "Response",
+            "value": "24/7"
+          },
+          {
+            "label": "Service",
+            "value": "Emergency tarping"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "category": "roofing",
+        "question": "Are you licensed and insured?",
+        "answer": "Yes. Max Quality Roofing is fully insured with an active insurance policy that gives you full protection across entire states for residential and commercial roofing projects.",
+        "metadata": [
+          {
+            "label": "Insured",
+            "value": "Yes — full policy"
+          },
+          {
+            "label": "Coverage",
+            "value": "State-wide"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "category": "roofing",
+        "question": "What does a free inspection include?",
+        "answer": "Our free inspection includes a comprehensive photographic report using high-resolution drone and roof photos detailing any storm impact or wear, followed by a clear, fixed-price estimate with material warranties and insurance guidance.",
+        "metadata": [
+          {
+            "label": "Report",
+            "value": "Photographic"
+          },
+          {
+            "label": "Estimate",
+            "value": "Fixed-price"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "category": "roofing",
+        "question": "How fast can you respond?",
+        "answer": "We offer same-day dispatch confirmation and 24/7 emergency leak response. We reach out promptly to lock in a time that fits your schedule.",
+        "metadata": [
+          {
+            "label": "Dispatch",
+            "value": "Same-day"
+          },
+          {
+            "label": "Emergency",
+            "value": "24/7"
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "category": "roofing",
+        "question": "Do you handle residential and commercial projects?",
+        "answer": "Yes. We handle both residential and commercial roofing projects across all five covered states — full replacements, leak repair, storm claims, and gutters.",
+        "metadata": [
+          {
+            "label": "Residential",
+            "value": "Yes"
+          },
+          {
+            "label": "Commercial",
+            "value": "Yes"
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "category": "claims",
+        "question": "How do you document storm damage?",
+        "answer": "We use high-resolution drone and roof photos to create a detailed photographic report of any storm impact or wear. This documentation helps ensure your insurance carrier approves the full scope of restoration.",
+        "metadata": [
+          {
+            "label": "Method",
+            "value": "Drone & roof photos"
+          },
+          {
+            "label": "Purpose",
+            "value": "Full claim approval"
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "category": "coverage",
+        "question": "Do you have a physical office?",
+        "answer": "Yes. Our base is Sugar Hill, GA 30518. We operate state-wide across Georgia, Maryland, Virginia, North Carolina, and South Carolina.",
+        "metadata": [
+          {
+            "label": "Base",
+            "value": "Sugar Hill, GA 30518"
+          },
+          {
+            "label": "Operations",
+            "value": "Multi-state"
+          }
+        ]
+      }
+    ],
+    "knowledgeCard": {
+      "title": "Still Have Questions?",
+      "description": "Reach our dispatch team directly for structural roofing or storm mitigation support across any of our covered states.",
+      "buttons": [
+        {
+          "text": "Call Now",
+          "href": "tel:+14703236048",
+          "primary": true
+        },
+        {
+          "text": "Schedule Free Inspection",
+          "href": "#contact",
+          "primary": false
+        }
+      ]
+    }
+  },
+  "quote": {
+    "section": {
+      "badge": "DIRECT CONTRACTOR INTAKE",
+      "headline": "Request Your <span class=\"font-black text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-primary/80\">Free Roof Inspection Today</span>",
+      "description": "No high-pressure sales tactics. The Max Quality Roofing team provides an honest, photographic diagnosis of your roof deck, flashing, and shingle condition."
+    },
+    "services": [
+      {
+        "id": 1,
+        "title": "Full Roof Replacement",
+        "desc": "Complete tear-off & install",
+        "icon": "⌗"
+      },
+      {
+        "id": 2,
+        "title": "Leak Repair & Flashing",
+        "desc": "Emergency response",
+        "icon": "⎔"
+      },
+      {
+        "id": 3,
+        "title": "Storm Damage Claims",
+        "desc": "Insurance documentation",
+        "icon": "⌖"
+      },
+      {
+        "id": 4,
+        "title": "Gutters & Downspouts",
+        "desc": "Seamless gutter systems",
+        "icon": "⌘"
+      },
+      {
+        "id": 5,
+        "title": "Free Roof Inspections",
+        "desc": "Photographic diagnosis",
+        "icon": "⚡"
+      },
+      {
+        "id": 6,
+        "title": "Emergency Tarping",
+        "desc": "24/7 response",
+        "icon": "◈"
+      }
+    ],
+    "projectTypes": [
+      {
+        "value": "residential",
+        "label": "Residential"
+      },
+      {
+        "value": "commercial",
+        "label": "Commercial"
+      },
+      {
+        "value": "emergency",
+        "label": "Emergency"
+      },
+      {
+        "value": "inspection",
+        "label": "Free Inspection"
+      }
+    ],
+    "timelines": [
+      {
+        "value": "emergency",
+        "label": "Emergency (24/7 Response)"
+      },
+      {
+        "value": "urgent",
+        "label": "Urgent (ASAP)"
+      },
+      {
+        "value": "standard",
+        "label": "Standard (1-2 weeks)"
+      },
+      {
+        "value": "planned",
+        "label": "Planned Project"
+      }
+    ],
+    "email": "maxqualityroofing@gmail.com",
+    "success": {
+      "title": "Inspection Request Received",
+      "message": "Your project details have been sent to the Max Quality Roofing dispatch team.",
+      "response": "We'll respond promptly with your free inspection confirmation. Engineered roofing built to protect what matters most.",
+      "buttonText": "Close"
+    }
+  },
+  "footer": {
+    "company": {
+      "name": "Max Quality Roofing",
+      "tagline": "ENGINEERED ROOFING BUILT TO PROTECT WHAT MATTERS MOST.",
+      "description": "Official website of Max Quality Roofing. Fully insured roofing contractor covering Georgia, Maryland, Virginia, North Carolina, and South Carolina. Residential and commercial roofing solutions backed by superior materials, honest craftsmanship, and full insurance policy protection."
+    },
+    "services": {
+      "title": "Services",
+      "main": [
+        {
+          "label": "Roof Replacement",
+          "href": "/roof-replacement",
+          "icon": "Home"
+        },
+        {
+          "label": "Leak Repair & Flashing",
+          "href": "/leak-repair",
+          "icon": "Building2"
+        },
+        {
+          "label": "Storm Damage Claims",
+          "href": "/storm-damage",
+          "icon": "Hammer"
+        },
+        {
+          "label": "Gutters & Downspouts",
+          "href": "/gutters",
+          "icon": "Droplets"
+        },
+        {
+          "label": "Free Roof Inspections",
+          "href": "/inspections",
+          "icon": "FileText"
+        }
+      ],
+      "materials": {
+        "title": "Covered States",
+        "items": [
+          {
+            "label": "Georgia",
+            "href": "/georgia"
+          },
+          {
+            "label": "Maryland",
+            "href": "/maryland"
+          },
+          {
+            "label": "Virginia",
+            "href": "/virginia"
+          },
+          {
+            "label": "North Carolina",
+            "href": "/north-carolina"
+          },
+          {
+            "label": "South Carolina",
+            "href": "/south-carolina"
+          }
+        ]
+      }
+    },
+    "contact": {
+      "title": "Contact",
+      "email": "maxqualityroofing@gmail.com",
+      "phone": "+1 (470) 323-6048",
+      "address": "Sugar Hill, GA 30518",
+      "emergency": "24/7 Emergency: (470) 323-6048",
+      "areas": "Sugar Hill, GA • Multi-State Operations"
+    },
+    "certifications": [
+      {
+        "cert": "100%",
+        "number": "Workmanship Guaranteed",
+        "icon": "Award"
+      },
+      {
+        "cert": "24/7",
+        "number": "Emergency Response",
+        "icon": "Clock"
+      },
+      {
+        "cert": "5 States",
+        "number": "Full Coverage",
+        "icon": "MapPin"
+      },
+      {
+        "cert": "Fully",
+        "number": "Insured",
+        "icon": "Shield"
+      },
+      {
+        "cert": "Google",
+        "number": "Verified",
+        "icon": "Check"
+      },
+      {
+        "cert": "Yelp",
+        "number": "Official",
+        "icon": "Star"
+      }
+    ],
+    "quickLinks": [
+      {
+        "label": "Free Inspection",
+        "href": "#contact",
+        "icon": "Phone"
+      },
+      {
+        "label": "Insurance Claims",
+        "href": "#services",
+        "icon": "Shield"
+      },
+      {
+        "label": "About Us",
+        "href": "#about",
+        "icon": "Users"
+      }
+    ],
+    "social": [
+      {
+        "platform": "Email",
+        "icon": "Mail",
+        "href": "mailto:maxqualityroofing@gmail.com"
+      },
+      {
+        "platform": "Phone",
+        "icon": "Phone",
+        "href": "tel:+14703236048"
+      },
+      {
+        "platform": "Facebook",
+        "icon": "Facebook",
+        "href": "#"
+      },
+      {
+        "platform": "Instagram",
+        "icon": "Instagram",
+        "href": "#"
+      },
+      {
+        "platform": "LinkedIn",
+        "icon": "Linkedin",
+        "href": "#"
+      },
+      {
+        "platform": "YouTube",
+        "icon": "Youtube",
+        "href": "#"
+      }
+    ],
+    "bottom": {
+      "copyright": "© 2026 Max Quality Roofing",
+      "rights": "All Rights Reserved.",
+      "links": [
+        {
+          "label": "Privacy Policy",
+          "href": "/privacy"
+        },
+        {
+          "label": "Terms & Conditions",
+          "href": "/terms"
+        },
+        {
+          "label": "Developed & Managed by HispanGo Agency",
+          "href": "#"
+        }
+      ],
+      "tagline": "ENGINEERED ROOFING BUILT TO PROTECT WHAT MATTERS MOST."
+    },
+    "marquee": {
+      "texts": [
+        "ENGINEERED ROOFING BUILT TO PROTECT WHAT MATTERS MOST.",
+        "100% WORKMANSHIP GUARANTEED • 24/7 EMERGENCY RESPONSE",
+        "5 STATES • FULLY INSURED • (470) 323-6048"
+      ]
+    }
+  },
+  "leadership": {
+    "section": {
+      "badge": "OUR LEADERSHIP",
+      "headline": "Engineered Roofing. <span class=\"text-primary\">Honest Craftsmanship.</span>",
+      "description": "At Max Quality Roofing, our leadership is driven by a singular mission: to deliver roofing solutions backed by superior materials, honest craftsmanship, and full insurance policy protection across every state we serve."
+    },
+    "ceo": {
+      "name": "Max Quality Roofing Team",
+      "title": "FULLY INSURED MULTI-STATE CONTRACTOR",
+      "quotes": [
+        "We built Max Quality Roofing to protect what matters most for homeowners and businesses across five states. Superior materials, honest craftsmanship, and full insurance protection — every project, every time."
+      ],
+      "description": [
+        "Max Quality Roofing was founded on a simple principle: every roof should be engineered to protect what matters most. Headquartered in Sugar Hill, Georgia, we built our company with a direct-dispatch model and a fully insured multi-state operation. No high-pressure sales tactics. No cutting corners on materials. Just honest, photographic diagnoses followed by clear, fixed-price estimates backed by material warranties and full insurance guidance.",
+        "Today, Max Quality Roofing proudly serves residential and commercial clients across five states — Georgia, Maryland, Virginia, North Carolina, and South Carolina — with state-wide insured coverage and 24/7 emergency leak response. From full roof replacement and leak detection to storm and hail insurance claims and seamless gutters, we handle every project with the same disciplined standard. Google Verified. Yelp Official. Committed to protecting your property like it's our own."
+      ],
+      "social": {
+        "facebook": "#",
+        "instagram": "#",
+        "linkedin": "#",
+        "email": "maxqualityroofing@gmail.com"
+      },
+      "badges": {
+        "top": "Fully Insured",
+        "bottom": "Multi-State Coverage"
+      },
+      "alt": "Max Quality Roofing Team - Fully Insured Multi-State Contractor"
+    }
+  }
+}

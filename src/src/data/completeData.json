@@ -1,0 +1,1302 @@
+{
+  "navbar": {
+    "services": [
+      {
+        "title": "ASPHALT SHINGLE ROOFING",
+        "description": "Architectural asphalt shingle installation by a true shingle specialist.",
+        "icon": "Home",
+        "items": [
+          "Architectural Asphalt Shingles"
+        ],
+        "features": [
+          "Shingle Master",
+          "Precision Installation",
+          "Built to Endure Montana Weather"
+        ]
+      },
+      {
+        "title": "ROOF REPLACEMENT",
+        "description": "Full tear-off and replacement for aging, storm-damaged roofs.",
+        "icon": "ClipboardCheck",
+        "items": [
+          "Full Roof Replacement"
+        ],
+        "features": [
+          "Complete Tear-Off",
+          "Quality Materials",
+          "Clean, Protected Sites"
+        ]
+      },
+      {
+        "title": "ROOF REPAIR & MAINTENANCE",
+        "description": "Leak repair, flashing, and preventative maintenance to extend roof life.",
+        "icon": "Sun",
+        "items": [
+          "Roof Repair & Maintenance"
+        ],
+        "features": [
+          "Leak Detection",
+          "Flashing Repair",
+          "Long-Term Protection"
+        ]
+      }
+    ],
+    "companyLinks": [
+      {
+        "label": "Home",
+        "href": "#",
+        "icon": "Home"
+      },
+      {
+        "label": "About",
+        "href": "#about",
+        "icon": "Users"
+      },
+      {
+        "label": "Services",
+        "href": "#services",
+        "icon": "Briefcase"
+      },
+      {
+        "label": "Gallery",
+        "href": "#portfolio",
+        "icon": "FileText"
+      },
+      {
+        "label": "Contact",
+        "href": "#contact",
+        "icon": "MessageSquare"
+      }
+    ],
+    "stats": [
+      {
+        "value": "Great Falls, MT",
+        "label": "Headquarters",
+        "icon": "MapPin"
+      },
+      {
+        "value": "Local",
+        "label": "Owner Operated",
+        "icon": "Home"
+      },
+      {
+        "value": "Shingle",
+        "label": "Master Specialist",
+        "icon": "Star"
+      },
+      {
+        "value": "Quality",
+        "label": "Workmanship First",
+        "icon": "Shield"
+      }
+    ],
+    "cta": {
+      "title": "Need a Roof You Can Count On?",
+      "description": "Architectural asphalt shingle specialist serving Great Falls, Montana and surrounding communities.",
+      "buttonText": "Call Now",
+      "buttonLink": "tel:+14062171720"
+    },
+    "ctaButton": {
+      "label": "Request Free Estimate",
+      "href": "#contact",
+      "icon": "Calendar"
+    },
+    "servicesMenuTitle": "Our Services",
+    "quickLinksTitle": "Quick Links",
+    "mobileCtaText": "Request Estimate",
+    "logoAlt": "Max Quality Roofing Logo"
+  },
+  "hero": {
+    "badge": "Great Falls, Montana • Shingle Master • Owner Operated",
+    "headlines": [
+      "Max Quality.",
+      "Max Craftsmanship."
+    ],
+    "description": "Architectural asphalt shingle specialist serving Great Falls, Montana and surrounding communities. Honest work, quality materials, and roofs built to endure Montana weather.",
+    "emergencyButton": {
+      "text": "Call: (406) 217-1720",
+      "href": "tel:+14062171720"
+    },
+    "requestButton": {
+      "text": "Request Free Estimate",
+      "href": "#contact"
+    },
+    "trustMetrics": [
+      {
+        "label": "Owner Operated",
+        "value": "Local",
+        "icon": "Home"
+      },
+      {
+        "label": "Specialty",
+        "value": "Shingle Master",
+        "icon": "Award"
+      },
+      {
+        "label": "Workmanship",
+        "value": "Quality First",
+        "icon": "Shield"
+      },
+      {
+        "label": "Based In",
+        "value": "Great Falls, MT",
+        "icon": "MapPin"
+      }
+    ],
+    "estimateCard": {
+      "title": "Priority Estimate",
+      "subtitle": "Direct response from Max himself",
+      "badge": "Fast Response",
+      "divisionLabel": "Select Service",
+      "divisions": [
+        {
+          "key": "shingle",
+          "label": "Shingle",
+          "icon": "Home"
+        },
+        {
+          "key": "replacement",
+          "label": "Replacement",
+          "icon": "Hammer"
+        },
+        {
+          "key": "repair",
+          "label": "Repair",
+          "icon": "Wrench"
+        }
+      ],
+      "fields": {
+        "name": {
+          "label": "Your Name",
+          "placeholder": "e.g. Michael Smith"
+        },
+        "phone": {
+          "label": "Phone Number (For Fast Callback)",
+          "placeholder": "e.g. (406) 555-0192"
+        },
+        "address": {
+          "label": "Property Address or City",
+          "placeholder": "e.g. 1200 Central Ave, Great Falls, MT"
+        },
+        "urgency": {
+          "label": "Project Priority",
+          "options": [
+            {
+              "value": "standard",
+              "label": "Standard Request (Planning & Quote)"
+            },
+            {
+              "value": "urgent",
+              "label": "Urgent — Active Leak or Damage"
+            },
+            {
+              "value": "emergency",
+              "label": "Immediate Emergency Dispatch"
+            }
+          ]
+        }
+      },
+      "submitButton": {
+        "idle": "Request Priority Dispatch",
+        "submitting": "Transmitting Dispatch..."
+      },
+      "success": {
+        "title": "Dispatch Request Received",
+        "message": "Max will review your property scope and call you shortly."
+      },
+      "trustNote": "Free Estimates • Written Scopes • Direct Insurance Guidance"
+    }
+  },
+  "about": {
+    "badge": "Get to Know Us",
+    "headline": {
+      "prefix": "Welcome to",
+      "highlight": "Max Quality Roofing",
+      "suffix": ""
+    },
+    "description": "We're an architectural asphalt shingle specialist based in <span class=\"font-semibold text-primary\">Great Falls, Montana</span>. Owned and operated by Max Poitra, we deliver honest workmanship, quality materials, and roofing systems built to endure Montana weather. One roofer. One standard. No runaround.",
+    "image": {
+      "src": "MaxQualityRoofingCrew",
+      "alt": "Max Quality Roofing crew on a residential roof",
+      "badge": "Shingle Master • Owner Operated"
+    },
+    "stats": [
+      {
+        "value": 100,
+        "suffix": "%",
+        "label": "Owner Operated"
+      },
+      {
+        "value": 3,
+        "suffix": "",
+        "label": "Core Roofing Services"
+      },
+      {
+        "value": "Local",
+        "suffix": "",
+        "label": "Great Falls, MT"
+      }
+    ],
+    "buttons": [
+      {
+        "text": "CALL FOR FREE ESTIMATE",
+        "href": "tel:+14062171720",
+        "primary": true
+      },
+      {
+        "text": "OUR FULL STORY",
+        "href": "#about-story",
+        "primary": false
+      }
+    ],
+    "trustBadges": {
+      "founded": "Owner Operated",
+      "headquarters": "Great Falls, Montana"
+    }
+  },
+  "aboutStory": {
+    "badge": "Our Story",
+    "headline": {
+      "prefix": "Max Quality.",
+      "highlight": "Max Craftsmanship.",
+      "suffix": ""
+    },
+    "description": [
+      "Max Quality Roofing was founded on a simple belief: a roof is only as good as the person who installs it. Max Poitra is an architectural asphalt shingle specialist who built this company on honest work, quality materials, and a refusal to cut corners. No subcontractor roulette. No high-pressure sales tactics. Just a shingle master doing the job right — the first time.",
+      "Based in Great Falls, Montana, Max Quality Roofing serves homeowners and businesses across the surrounding communities. From full roof replacement and architectural asphalt shingle installations to leak repair and preventative maintenance, every project is handled personally by Max and his crew. Montana weather doesn't forgive a poorly installed roof — so we build every roof to endure heavy snow, wind, hail, and temperature swings.",
+      "Today, Max Quality Roofing stands for one thing above all else: craftsmanship. If your roof needs replacing, repairing, or a professional opinion, you'll get a straight answer and a fair price. Because at the end of the day, quality isn't a marketing word — it's the only way we do business."
+    ],
+    "image": {
+      "src": "MaxPoitra",
+      "alt": "Max Poitra - Owner & Founder, Max Quality Roofing",
+      "badge": "Owner & Founder"
+    },
+    "stats": [
+      {
+        "value": "Great Falls",
+        "suffix": ", MT",
+        "label": "Headquarters"
+      },
+      {
+        "value": "Shingle",
+        "suffix": " Master",
+        "label": "Specialty"
+      },
+      {
+        "value": "Owner",
+        "suffix": " Operated",
+        "label": "Business Model"
+      }
+    ]
+  },
+  "services": {
+    "badge": "Our Services",
+    "headline": {
+      "prefix": "Roofing Done Right.",
+      "highlight": "Every Time.",
+      "suffix": ""
+    },
+    "description": [
+      "Max Quality Roofing specializes in three core roofing services — architectural asphalt shingle installation, full roof replacement, and roof repair & maintenance.",
+      "Every project is handled personally by Max Poitra and his crew, with quality materials and workmanship built to endure Montana weather."
+    ],
+    "stats": [
+      {
+        "value": 3,
+        "suffix": "",
+        "label": "Core Services"
+      },
+      {
+        "value": 100,
+        "suffix": "%",
+        "label": "Owner Operated"
+      },
+      {
+        "value": "Shingle",
+        "suffix": "",
+        "label": "Master Specialist"
+      }
+    ],
+    "services": [
+      {
+        "number": "01",
+        "title": "Architectural Asphalt Shingle Roofing",
+        "description": "Precision installation of architectural asphalt shingles — Max's specialty. Proper underlayment, correct flashing, and clean, straight lines that protect your home and boost curb appeal.",
+        "icon": "Home",
+        "tag": "Specialty",
+        "features": [
+          "Shingle Master Craftsmanship",
+          "Premium Underlayment",
+          "Montana Weather Rated"
+        ]
+      },
+      {
+        "number": "02",
+        "title": "Full Roof Replacement",
+        "description": "Complete tear-off down to the decking, replacement of damaged plywood, and installation of a brand-new roofing system. We leave the site clean and protected — every time.",
+        "icon": "Building2",
+        "tag": "Replacement",
+        "features": [
+          "Full Tear-Off",
+          "Decking Repair",
+          "Clean Site Guarantee"
+        ]
+      },
+      {
+        "number": "03",
+        "title": "Roof Repair & Maintenance",
+        "description": "Leak detection, flashing repair, and preventative maintenance to extend the life of your roof. Fast diagnosis, honest recommendations, and durable fixes.",
+        "icon": "Hammer",
+        "tag": "Repair",
+        "features": [
+          "Leak Detection",
+          "Flashing Repair",
+          "Preventative Maintenance"
+        ]
+      }
+    ],
+    "cardCta": "Request Estimate",
+    "cta": {
+      "badge": "Free Estimates Available",
+      "title": "Not Sure What Your Roof Needs?",
+      "description": "Tell us what's going on with your roof. From a full replacement to a minor leak repair, Max will give you a straight answer and a fair price.",
+      "buttonText": "Request Free Estimate",
+      "buttonLink": "#contact",
+      "phone": "(406) 217-1720",
+      "phoneLink": "tel:+14062171720",
+      "phoneLabel": "Great Falls, MT · Call or Text",
+      "trustBadges": [
+        "Owner Operated",
+        "Shingle Master",
+        "Free Estimates"
+      ],
+      "dividerText": "Or Call Direct",
+      "callButtonText": "Call (406) 217-1720"
+    }
+  },
+  "howWeWork": {
+    "badge": "Our Process",
+    "headline": "Straightforward. <span class=\"text-primary\">Every Time.</span>",
+    "description": "No high-pressure sales tactics. No vague estimates. Just an honest inspection, a clear plan, and quality workmanship from start to finish.",
+    "stagePrefix": "Step",
+    "stageOf": "of 03",
+    "verifiedTitle": "Verified Workmanship",
+    "deliverablesTitle": "What You Get at Each Stage",
+    "requestButtonText": "Request Your Free Estimate",
+    "requestButtonLink": "#contact",
+    "steps": [
+      {
+        "number": "01",
+        "title": "Inspect",
+        "subtitle": "Honest Roof Assessment",
+        "description": "Max personally inspects your roof, identifies any damage or wear, and gives you a straight answer about what's actually needed.",
+        "deliverables": [
+          "On-site roof inspection",
+          "Photo documentation of findings",
+          "Honest recommendation — no upselling"
+        ],
+        "icon": "ClipboardCheck"
+      },
+      {
+        "number": "02",
+        "title": "Estimate",
+        "subtitle": "Clear, Fixed Pricing",
+        "description": "You get a clear, written estimate with material details and a timeline. No hidden fees. No surprise charges. Just straight numbers.",
+        "deliverables": [
+          "Written fixed-price estimate",
+          "Material specifications",
+          "Clear project timeline"
+        ],
+        "icon": "Calendar"
+      },
+      {
+        "number": "03",
+        "title": "Install",
+        "subtitle": "Quality Workmanship & Cleanup",
+        "description": "Max and his crew complete the work with quality materials, protect your property throughout, and leave the site spotless when done.",
+        "deliverables": [
+          "Quality materials & installation",
+          "Protected, clean work site",
+          "Final walkthrough with owner"
+        ],
+        "icon": "ShieldCheck"
+      }
+    ]
+  },
+  "whyChooseUs": {
+    "section": {
+      "badge": "Why Max Quality Roofing",
+      "headline": "Quality Isn't A Word. <span class=\"text-primary\">It's The Standard.</span>",
+      "description": "When you hire Max Quality Roofing, you're hiring the owner himself — not a salesperson, not a subcontractor. Just honest work from someone who cares about the result.",
+      "standardGuarantee": "Quality Guarantee"
+    },
+    "features": [
+      {
+        "icon": "Award",
+        "title": "Shingle Master Specialist",
+        "description": "Max is an architectural asphalt shingle specialist. This isn't a side service — it's the craft he's mastered."
+      },
+      {
+        "icon": "MessageSquare",
+        "title": "Owner Operated",
+        "description": "Max Poitra is on every job. You talk to the owner, you get the owner's work. No middlemen, no runaround."
+      },
+      {
+        "icon": "Compass",
+        "title": "Honest Recommendations",
+        "description": "We tell you what your roof actually needs — not what makes us the most money. Straight answers, every time."
+      },
+      {
+        "icon": "Clock",
+        "title": "Fast Response",
+        "description": "We respond quickly to estimate requests and show up when we say we will. Your time matters."
+      },
+      {
+        "icon": "Shield",
+        "title": "Built for Montana Weather",
+        "description": "Heavy snow, wind, hail, and temperature swings — Montana roofs take a beating. We build them to endure."
+      },
+      {
+        "icon": "Layers",
+        "title": "Quality Materials Only",
+        "description": "No cheap shortcuts. We use quality materials that protect your home and last for decades."
+      }
+    ],
+    "stats": [
+      {
+        "value": "Great Falls",
+        "suffix": ", MT",
+        "label": "Based In"
+      },
+      {
+        "value": "100%",
+        "suffix": "",
+        "label": "Owner Operated"
+      },
+      {
+        "value": "Shingle",
+        "suffix": " Master",
+        "label": "Specialty"
+      },
+      {
+        "value": "(406)",
+        "suffix": " 217-1720",
+        "label": "Call or Text"
+      }
+    ],
+    "cta": {
+      "badge": "START YOUR PROJECT",
+      "title": "Ready for a Roof <span class=\"text-primary\">Done Right?</span>",
+      "description": "Whether you need a full roof replacement, architectural shingle installation, or a repair, Max Quality Roofing is ready to help in Great Falls and surrounding Montana communities.",
+      "trustBadges": [
+        "Owner Operated",
+        "Free Estimates",
+        "Quality Materials"
+      ],
+      "buttons": [
+        {
+          "text": "(406) 217-1720",
+          "href": "tel:+14062171720",
+          "primary": true
+        },
+        {
+          "text": "Request Free Estimate",
+          "href": "#contact",
+          "primary": false
+        }
+      ],
+      "imageAlt": "Max Quality Roofing Professional"
+    }
+  },
+  "portfolio": {
+    "section": {
+      "badge": "Our Work",
+      "headline": "Recent Roofing Projects",
+      "description": "Explore recent roof replacements, architectural shingle installations, and repair projects completed in Great Falls, Montana and surrounding communities.",
+      "viewScopeLabel": "View Project Scope",
+      "allFilterLabel": "All"
+    },
+    "modal": {
+      "scopeTitle": "Project Scope & Deliverables",
+      "guaranteeTitle": "Max Quality Guarantee",
+      "guaranteeItems": [
+        "Owner Operated",
+        "Quality Materials Only",
+        "Clean Site Guarantee"
+      ],
+      "closeButton": "Close",
+      "ctaButton": "Request Similar Estimate"
+    },
+    "consultation": {
+      "badge": "Free On-Site Estimates",
+      "title": "Have a Similar Roof in Great Falls?",
+      "description": "Max personally inspects every roof. Get a free, honest assessment with photo documentation and a clear, fixed-price estimate.",
+      "buttonText": "Request Free Estimate",
+      "buttonLink": "#contact",
+      "phone": "(406) 217-1720",
+      "phoneLink": "tel:+14062171720"
+    },
+    "projects": [
+      {
+        "number": "01",
+        "title": "Great Falls Architectural Shingle Install",
+        "category": "Shingle",
+        "image": "portfolio1",
+        "location": "Great Falls, MT",
+        "year": "2025",
+        "accent": "from-primary to-primary/80",
+        "scope": "Architectural Asphalt Shingles",
+        "desc": "Precision installation of architectural asphalt shingles with premium underlayment and correct flashing. Built for Montana weather."
+      },
+      {
+        "number": "02",
+        "title": "Full Roof Replacement Project",
+        "category": "Replacement",
+        "image": "portfolio2",
+        "location": "Great Falls, MT",
+        "year": "2025",
+        "accent": "from-primary to-primary/70",
+        "scope": "Complete Tear-Off & Replace",
+        "desc": "Full tear-off down to decking, damaged plywood replacement, and complete new roofing system installation."
+      },
+      {
+        "number": "03",
+        "title": "Storm Damage Roof Repair",
+        "category": "Repair",
+        "image": "portfolio3",
+        "location": "Great Falls, MT",
+        "year": "2024",
+        "accent": "from-primary/90 to-primary/60",
+        "scope": "Storm Damage Repair",
+        "desc": "Fast repair of storm-damaged roofing, including shingle replacement and flashing repair to restore full protection."
+      },
+      {
+        "number": "04",
+        "title": "Residential Roof Replacement",
+        "category": "Replacement",
+        "image": "portfolio4",
+        "location": "Great Falls, MT",
+        "year": "2025",
+        "accent": "from-primary to-primary/80",
+        "scope": "Full Residential Replacement",
+        "desc": "Complete roof replacement on a residential home with new architectural shingles and clean site handoff."
+      },
+      {
+        "number": "05",
+        "title": "Leak Detection & Flashing Repair",
+        "category": "Repair",
+        "image": "portfolio5",
+        "location": "Great Falls, MT",
+        "year": "2024",
+        "accent": "from-primary/80 to-primary/60",
+        "scope": "Leak Detection & Repair",
+        "desc": "Diagnosed active leak, repaired damaged flashing, and restored watertight protection for the property owner."
+      },
+      {
+        "number": "06",
+        "title": "Shingle Replacement & Maintenance",
+        "category": "Shingle",
+        "image": "portfolio6",
+        "location": "Great Falls, MT",
+        "year": "2025",
+        "accent": "from-primary to-primary/80",
+        "scope": "Shingle Repair & Maintenance",
+        "desc": "Replaced damaged shingles and completed preventative maintenance to extend the life of the roofing system."
+      }
+    ],
+    "button": {
+      "text": "Request Free Estimate",
+      "link": "#contact"
+    }
+  },
+  "testimonials": {
+    "section": {
+      "badge": "Client Testimonials",
+      "headline": "Trusted By Great Falls",
+      "description": "Hear from homeowners in Great Falls and surrounding Montana communities who trust Max Quality Roofing.",
+      "featured": "Trusted Roofing Specialist in Great Falls, Montana"
+    },
+    "testimonials": [
+      {
+        "id": 1,
+        "name": "Robert H.",
+        "position": "Homeowner",
+        "company": "Great Falls, MT",
+        "avatar": "RH",
+        "text": "Max replaced our entire roof with architectural shingles and the quality is outstanding. He showed up when he said he would, gave us a fair price, and left the yard spotless. Couldn't ask for better."
+      },
+      {
+        "id": 2,
+        "name": "Linda M.",
+        "position": "Homeowner",
+        "company": "Great Falls, MT",
+        "avatar": "LM",
+        "text": "We had a leak that two other roofers couldn't find. Max found it, fixed it properly, and explained exactly what was wrong. Honest guy, quality work."
+      },
+      {
+        "id": 3,
+        "name": "David K.",
+        "position": "Property Owner",
+        "company": "Great Falls, MT",
+        "avatar": "DK",
+        "text": "Max is a true shingle specialist. You can tell he takes pride in the details — clean lines, proper flashing, quality materials. Highly recommend."
+      },
+      {
+        "id": 4,
+        "name": "Sarah W.",
+        "position": "Homeowner",
+        "company": "Great Falls, MT",
+        "avatar": "SW",
+        "text": "Called Max for an estimate on a roof replacement. No pressure, no upsell, just straight answers and a fair price. The work was done on time and looks fantastic."
+      },
+      {
+        "id": 5,
+        "name": "Max Poitra",
+        "position": "Owner & Founder",
+        "company": "Max Quality Roofing",
+        "avatar": "MP",
+        "text": "I built Max Quality Roofing on one simple promise: do the job right, use quality materials, and treat every customer like a neighbor. That's how I do business — every roof, every time."
+      }
+    ],
+    "videos": [
+      {
+        "id": "v1",
+        "videoId": "dQw4w9WgXcQ",
+        "title": "Full Roof Replacement Walkthrough",
+        "name": "Robert H."
+      },
+      {
+        "id": "v2",
+        "videoId": "dQw4w9WgXcQ",
+        "title": "Leak Detection & Repair",
+        "name": "Linda M."
+      },
+      {
+        "id": "v3",
+        "videoId": "dQw4w9WgXcQ",
+        "title": "Architectural Shingle Installation",
+        "name": "David K."
+      },
+      {
+        "id": "v4",
+        "videoId": "dQw4w9WgXcQ",
+        "title": "Roof Replacement Project",
+        "name": "Sarah W."
+      }
+    ],
+    "stats": {
+      "reviewPlatform": "Google Reviews",
+      "satisfactionFocus": "Quality Workmanship",
+      "totalVideos": 12,
+      "videoSection": {
+        "badge": "Video Testimonials",
+        "reviewCountText": "12 reviews on Google",
+        "googleReviewsLink": "https://maps.google.com/?q=Max+Quality+Roofing+Great+Falls+MT",
+        "googleReviewsButtonText": "Read all reviews on Google",
+        "videoPlayerTitle": "YouTube video player"
+      }
+    }
+  },
+  "faq": {
+    "section": {
+      "badge": "Knowledge Base",
+      "headline": "Frequently Asked Questions",
+      "description": "Straight answers about our roofing services in Great Falls, Montana."
+    },
+    "categories": [
+      {
+        "id": "all",
+        "label": "All Questions",
+        "icon": null
+      },
+      {
+        "id": "shingle",
+        "label": "Shingles",
+        "icon": "Home"
+      },
+      {
+        "id": "replacement",
+        "label": "Replacement",
+        "icon": "Hammer"
+      },
+      {
+        "id": "repair",
+        "label": "Repair",
+        "icon": "Shield"
+      }
+    ],
+    "items": [
+      {
+        "id": 1,
+        "category": "shingle",
+        "question": "What kind of roofing do you specialize in?",
+        "answer": "Max Quality Roofing specializes in architectural asphalt shingle roofing. Max Poitra is a shingle master with years of experience installing high-quality shingle systems built to endure Montana weather.",
+        "metadata": [
+          {
+            "label": "Specialty",
+            "value": "Architectural asphalt shingles"
+          },
+          {
+            "label": "Skill Level",
+            "value": "Shingle Master"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "category": "replacement",
+        "question": "Do you do full roof replacements?",
+        "answer": "Yes. We handle complete roof replacements including full tear-off down to the decking, replacement of damaged plywood, and installation of a brand-new roofing system.",
+        "metadata": [
+          {
+            "label": "Tear-Off",
+            "value": "Full"
+          },
+          {
+            "label": "Decking",
+            "value": "Repaired as needed"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "category": "repair",
+        "question": "Do you repair roof leaks?",
+        "answer": "Yes. We offer leak detection, flashing repair, and preventative maintenance. If you have an active leak, call (406) 217-1720 and Max will diagnose it quickly and honestly.",
+        "metadata": [
+          {
+            "label": "Leak Detection",
+            "value": "Yes"
+          },
+          {
+            "label": "Flashing Repair",
+            "value": "Yes"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "category": "shingle",
+        "question": "What areas do you serve?",
+        "answer": "We're based in Great Falls, Montana and serve the surrounding communities. If you're not sure whether we cover your area, just give us a call.",
+        "metadata": [
+          {
+            "label": "Base",
+            "value": "Great Falls, MT"
+          },
+          {
+            "label": "Coverage",
+            "value": "Surrounding communities"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "category": "shingle",
+        "question": "Are you the owner of the company?",
+        "answer": "Yes. Max Poitra is the owner and operator of Max Quality Roofing. He's personally involved in every project — you talk to the owner, you get the owner's work.",
+        "metadata": [
+          {
+            "label": "Owner",
+            "value": "Max Poitra"
+          },
+          {
+            "label": "Model",
+            "value": "Owner Operated"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "category": "shingle",
+        "question": "Do you offer free estimates?",
+        "answer": "Yes. We provide free, no-obligation estimates on every project. Max personally inspects your roof and gives you an honest, written estimate with no hidden fees.",
+        "metadata": [
+          {
+            "label": "Cost",
+            "value": "Free"
+          },
+          {
+            "label": "Obligation",
+            "value": "None"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "category": "repair",
+        "question": "How fast can you respond?",
+        "answer": "We respond quickly to estimate requests and schedule promptly. If you have an active leak or urgent issue, call (406) 217-1720 and we'll prioritize your request.",
+        "metadata": [
+          {
+            "label": "Response",
+            "value": "Fast"
+          },
+          {
+            "label": "Emergency",
+            "value": "Call or text"
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "category": "replacement",
+        "question": "Do you handle both residential and commercial roofs?",
+        "answer": "Yes. We handle residential and commercial roofing projects in Great Falls and surrounding Montana communities — replacements, shingle installations, and repairs.",
+        "metadata": [
+          {
+            "label": "Residential",
+            "value": "Yes"
+          },
+          {
+            "label": "Commercial",
+            "value": "Yes"
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "category": "shingle",
+        "question": "What materials do you use?",
+        "answer": "We use quality materials — premium underlayment, architectural asphalt shingles, and proper flashing. No cheap shortcuts. We build roofs that protect your home and last for decades.",
+        "metadata": [
+          {
+            "label": "Shingles",
+            "value": "Architectural asphalt"
+          },
+          {
+            "label": "Quality",
+            "value": "Premium only"
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "category": "replacement",
+        "question": "How long does a roof replacement take?",
+        "answer": "Most residential roof replacements are completed in 1-3 days depending on the size and complexity. Max will give you a clear timeline before any work begins.",
+        "metadata": [
+          {
+            "label": "Typical Timeline",
+            "value": "1-3 days"
+          },
+          {
+            "label": "Communication",
+            "value": "Clear upfront"
+          }
+        ]
+      }
+    ],
+    "searchPlaceholder": "Search questions...",
+    "noResultsText": "No questions found matching your criteria.",
+    "clearFiltersText": "Clear filters",
+    "knowledgeCard": {
+      "badge": "STILL HAVE QUESTIONS?",
+      "title": "Still Have Questions?",
+      "description": "Call or text Max directly. He'll give you an honest answer about your roof — no pressure, no sales pitch.",
+      "buttons": [
+        {
+          "text": "Call (406) 217-1720",
+          "href": "tel:+14062171720",
+          "primary": true
+        },
+        {
+          "text": "Request Free Estimate",
+          "href": "#contact",
+          "primary": false
+        }
+      ],
+      "trustBadges": [
+        {
+          "label": "Quick Response",
+          "color": "green"
+        },
+        {
+          "label": "Honest Answers",
+          "color": "blue"
+        },
+        {
+          "label": "Owner Operated",
+          "color": "yellow"
+        }
+      ]
+    }
+  },
+  "quote": {
+    "section": {
+      "badge": "MAX QUALITY COMMAND CENTER",
+      "headline": "Tell Us What Your <span class=\"font-black text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary to-primary/80\">Roof Needs</span>",
+      "description": "From full replacements to minor repairs, Max will personally review your request and get back to you with an honest answer and a fair price."
+    },
+    "services": [
+      {
+        "id": 1,
+        "title": "Architectural Shingle Roofing",
+        "desc": "Shingle specialist installation",
+        "icon": "⌗"
+      },
+      {
+        "id": 2,
+        "title": "Full Roof Replacement",
+        "desc": "Complete tear-off & install",
+        "icon": "⎔"
+      },
+      {
+        "id": 3,
+        "title": "Roof Repair & Maintenance",
+        "desc": "Leak detection & flashing",
+        "icon": "⌖"
+      }
+    ],
+    "projectTypes": [
+      {
+        "value": "shingle",
+        "label": "Architectural Shingle Roofing"
+      },
+      {
+        "value": "replacement",
+        "label": "Full Roof Replacement"
+      },
+      {
+        "value": "repair",
+        "label": "Roof Repair & Maintenance"
+      },
+      {
+        "value": "inspection",
+        "label": "Free Roof Inspection"
+      }
+    ],
+    "timelines": [
+      {
+        "value": "urgent",
+        "label": "Urgent (ASAP)"
+      },
+      {
+        "value": "standard",
+        "label": "Standard (1-2 weeks)"
+      },
+      {
+        "value": "planned",
+        "label": "Planned (1-2 months)"
+      },
+      {
+        "value": "future",
+        "label": "Future Project"
+      }
+    ],
+    "email": "maxqualityroofing@gmail.com",
+    "stages": [
+      {
+        "number": 1,
+        "name": "Identity",
+        "desc": "Your details"
+      },
+      {
+        "number": 2,
+        "name": "Specification",
+        "desc": "Roof scope"
+      },
+      {
+        "number": 3,
+        "name": "Transmission",
+        "desc": "Final review"
+      }
+    ],
+    "fields": {
+      "nameLabel": "Full name",
+      "emailLabel": "Email address",
+      "phoneLabel": "Phone number",
+      "companyLabel": "Company / Organization",
+      "servicesLabel": "Select Your Services",
+      "classificationLabel": "Project classification",
+      "timelineLabel": "Timeline horizon",
+      "messageLabel": "Describe your roof condition, visible leaks, or project requirements"
+    },
+    "summary": {
+      "title": "TRANSMISSION SUMMARY",
+      "servicesLabel": "Services",
+      "classificationLabel": "Classification",
+      "timelineLabel": "Timeline",
+      "responseLabel": "Response",
+      "responseTime": "Same day"
+    },
+    "buttons": {
+      "previous": "Previous",
+      "continue": "Continue",
+      "submitIdle": "Request Free Estimate",
+      "submitMobile": "Send",
+      "submitting": "Transmitting..."
+    },
+    "consultationStat": {
+      "number": "100s",
+      "label": "of roofs inspected"
+    },
+    "success": {
+      "title": "Request Received",
+      "message": "Your project details have been sent to Max Quality Roofing.",
+      "response": "Max will personally review your request and get back to you shortly.",
+      "buttonText": "Close"
+    },
+    "notSpecified": "Not specified",
+    "noneSelected": "None selected"
+  },
+  "quickQuote": {
+    "floatingButton": {
+      "label": "Free Estimate"
+    },
+    "title": "Quick Estimate",
+    "subtitle": "Get your free roof estimate in minutes",
+    "steps": [
+      {
+        "number": 1,
+        "label": "Details"
+      },
+      {
+        "number": 2,
+        "label": "Roof"
+      },
+      {
+        "number": 3,
+        "label": "Message"
+      }
+    ],
+    "fields": {
+      "nameLabel": "Your Name",
+      "namePlaceholder": "John Doe",
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "john@example.com",
+      "phoneLabel": "Phone Number",
+      "phonePlaceholder": "(406) 217-1720",
+      "projectTypeLabel": "Service Needed",
+      "projectTypePlaceholder": "Select service type",
+      "messageLabel": "Tell us about your roof",
+      "messagePlaceholder": "Briefly describe your roof age, visible leaks, or project needs..."
+    },
+    "projectTypes": [
+      {
+        "value": "shingle",
+        "label": "Architectural Shingle Roofing"
+      },
+      {
+        "value": "replacement",
+        "label": "Full Roof Replacement"
+      },
+      {
+        "value": "repair",
+        "label": "Roof Repair & Maintenance"
+      },
+      {
+        "value": "inspection",
+        "label": "Free Roof Inspection"
+      },
+      {
+        "value": "other",
+        "label": "Other Roofing Project"
+      }
+    ],
+    "buttons": {
+      "back": "Back",
+      "continue": "Continue",
+      "submit": "Request Estimate",
+      "submitting": "Sending..."
+    },
+    "trustBadges": [
+      "Free estimate",
+      "Same-day response",
+      "Owner operated"
+    ],
+    "success": {
+      "title": "Estimate Request Sent!",
+      "message": "Max will respond as soon as possible."
+    }
+  },
+  "footer": {
+    "company": {
+      "name": "MAX QUALITY ROOFING",
+      "subTitle": "Great Falls, Montana",
+      "tagline": "MAX QUALITY. MAX CRAFTSMANSHIP.",
+      "licenseBadge": "Owner Operated • Shingle Master",
+      "description": "Max Quality Roofing is an architectural asphalt shingle specialist based in Great Falls, Montana. Owned and operated by Max Poitra, we deliver honest workmanship, quality materials, and roofing systems built to endure Montana weather."
+    },
+    "emergencyBar": {
+      "title": "Roof Leak or Damage? Need Help Now?",
+      "badge": "Call or Text",
+      "subtitle": "Fast response for Great Falls and surrounding Montana communities.",
+      "phone": "(406) 217-1720",
+      "phoneLink": "tel:+14062171720",
+      "ctaText": "Request Estimate",
+      "ctaLink": "#contact"
+    },
+    "divisions": {
+      "title": "Core Services",
+      "items": [
+        {
+          "label": "Architectural Asphalt Shingle Roofing",
+          "href": "#services",
+          "icon": "Home"
+        },
+        {
+          "label": "Full Roof Replacement",
+          "href": "#services",
+          "icon": "Hammer"
+        },
+        {
+          "label": "Roof Repair & Maintenance",
+          "href": "#services",
+          "icon": "AlertTriangle"
+        },
+        {
+          "label": "Leak Detection",
+          "href": "#services",
+          "icon": "Shield"
+        },
+        {
+          "label": "Flashing Repair",
+          "href": "#services",
+          "icon": "CheckCircle2"
+        },
+        {
+          "label": "Free Roof Inspections",
+          "href": "#services",
+          "icon": "FileText"
+        }
+      ]
+    },
+    "serviceAreas": {
+      "title": "Service Areas",
+      "items": [
+        "Great Falls, MT",
+        "Cascade County, MT",
+        "Surrounding Communities"
+      ]
+    },
+    "contact": {
+      "title": "Contact",
+      "phone": "(406) 217-1720",
+      "phoneLabel": "Call or Text Max",
+      "phoneLink": "tel:+14062171720",
+      "email": "maxqualityroofing@gmail.com",
+      "emailLabel": "Estimates & Inquiries",
+      "emailLink": "mailto:maxqualityroofing@gmail.com",
+      "hoursTitle": "Operating Schedule",
+      "schedule": [
+        {
+          "days": "Mon – Fri:",
+          "hours": "7:00 AM – 7:00 PM"
+        },
+        {
+          "days": "Saturday:",
+          "hours": "8:00 AM – 5:00 PM"
+        },
+        {
+          "days": "Sunday:",
+          "hours": "By Appointment",
+          "isHighlight": true
+        }
+      ]
+    },
+    "certifications": [
+      {
+        "title": "Shingle Master",
+        "subtitle": "Specialist Craftsmanship",
+        "icon": "Award"
+      },
+      {
+        "title": "Owner Operated",
+        "subtitle": "Max Poitra On Every Job",
+        "icon": "Users"
+      },
+      {
+        "title": "Quality Materials",
+        "subtitle": "No Shortcuts",
+        "icon": "ShieldCheck"
+      },
+      {
+        "title": "Great Falls Local",
+        "subtitle": "Montana Proud",
+        "icon": "MapPin"
+      }
+    ],
+    "social": [
+      {
+        "label": "Direct Phone",
+        "href": "tel:+14062171720",
+        "icon": "Phone"
+      },
+      {
+        "label": "Email",
+        "href": "mailto:maxqualityroofing@gmail.com",
+        "icon": "Mail"
+      },
+      {
+        "label": "Facebook",
+        "href": "https://facebook.com",
+        "icon": "FaFacebookF"
+      },
+      {
+        "label": "Instagram",
+        "href": "https://instagram.com",
+        "icon": "FaInstagram"
+      }
+    ],
+    "bottom": {
+      "copyright": "© 2026 Max Quality Roofing. All rights reserved.",
+      "tagline": "MAX QUALITY. MAX CRAFTSMANSHIP.",
+      "backToTop": "Top",
+      "links": [
+        {
+          "label": "Privacy Policy",
+          "href": "/privacy"
+        },
+        {
+          "label": "Terms & Conditions",
+          "href": "/terms"
+        },
+        {
+          "label": "Request Estimate",
+          "href": "#contact"
+        }
+      ]
+    },
+    "marquee": {
+      "texts": [
+        "MAX QUALITY. MAX CRAFTSMANSHIP.",
+        "SHINGLE MASTER • OWNER OPERATED • GREAT FALLS, MT",
+        "FREE ESTIMATES • CALL OR TEXT (406) 217-1720"
+      ]
+    }
+  },
+  "leadership": {
+    "section": {
+      "badge": "OUR LEADERSHIP",
+      "headline": "Owner Operated. <span class=\"text-primary\">Quality Driven.</span>",
+      "description": "At Max Quality Roofing, every project is led by the owner himself — because quality isn't something you delegate. It's something you personally stand behind."
+    },
+    "ceo": {
+      "name": "Max Poitra",
+      "title": "OWNER & FOUNDER",
+      "quotes": [
+        "I built Max Quality Roofing on one simple promise: do the job right, use quality materials, and treat every customer like a neighbor. That's how I do business — every roof, every time."
+      ],
+      "description": [
+        "Max Poitra is an architectural asphalt shingle specialist and the owner of Max Quality Roofing in Great Falls, Montana. He built the company on honest work, quality materials, and a refusal to cut corners. No subcontractor roulette. No high-pressure sales tactics. Just a shingle master doing the job right — the first time, and every time after.",
+        "Today, Max Quality Roofing serves homeowners and businesses across Great Falls and surrounding Montana communities. From full roof replacement and architectural asphalt shingle installations to leak repair and preventative maintenance, Max is personally involved in every project. Montana weather doesn't forgive a poorly installed roof — so every roof is built to endure heavy snow, wind, hail, and temperature swings. Max Quality. Max Craftsmanship."
+      ],
+      "social": {
+        "facebook": "#",
+        "instagram": "#",
+        "email": "maxqualityroofing@gmail.com"
+      },
+      "badges": {
+        "top": "Shingle Master",
+        "bottom": "Great Falls, MT Proud"
+      },
+      "alt": "Max Poitra - Owner & Founder, Max Quality Roofing"
+    }
+  },
+  "notFound": {
+    "code": "404",
+    "message": "Oops! Page not found",
+    "returnHome": "Return to Home"
+  }
+}

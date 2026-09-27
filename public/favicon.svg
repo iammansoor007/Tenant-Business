@@ -1,0 +1,13 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- MAX QUALITY ROOFING BRAND ICON -->
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B1D33"/>
+      <stop offset="100%" stop-color="#12365A"/>
+    </linearGradient>
+  </defs>
+  <!-- Rounded square background -->
+  <rect width="32" height="32" rx="8" fill="url(#bgGrad)"/>
+  <!-- "MQR" letters -->
+  <text x="16" y="22" font-family="Arial Black, sans-serif" font-size="10.5" font-weight="900" text-anchor="middle" fill="#FFFFFF" letter-spacing="-0.5">MQR</text>
+</svg>
