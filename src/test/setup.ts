@@ -18,4 +18,22 @@ if (typeof window !== 'undefined') {
 
   // Polyfill scrollTo
   window.scrollTo = () => {};
+
+  // Polyfill Element.prototype.animate for WAAPI / Framer Motion
+  if (typeof Element !== 'undefined' && !Element.prototype.animate) {
+    Element.prototype.animate = () => ({
+      finished: Promise.resolve(),
+      cancel: () => {},
+      finish: () => {},
+      pause: () => {},
+      play: () => {},
+      reverse: () => {},
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      currentTime: 0,
+      playbackRate: 1,
+      playState: 'running',
+    } as any);
+  }
 }
+
