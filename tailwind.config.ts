@@ -16,6 +16,8 @@ export default {
       fontFamily: {
         heading: ['Cinzel', 'serif'],
         body: ['Montserrat', 'sans-serif'],
+        sans: ['"DM Sans"', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['"Space Grotesk"', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",

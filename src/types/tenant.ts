@@ -45,6 +45,7 @@ export interface Tenant {
   phone?: string;
   email?: string;
   location?: string;
+  customDomain?: string;
   status?: "active" | "draft" | "pitched";
   media: TenantMedia;
   colors?: TenantColors;
@@ -58,6 +59,7 @@ export interface Tenant {
 export interface BulkTenantItem {
   slug: string;
   name: string;
+  customDomain?: string;
   completeData?: Record<string, any>;
   colors?: TenantColors;
   media?: TenantMedia;
@@ -70,4 +72,5 @@ export interface BulkTenantItem {
   state?: string;
   tagline?: string;
 }
+
 

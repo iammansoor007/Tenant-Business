@@ -18,6 +18,7 @@ export const ClientEditor: React.FC<ClientEditorProps> = ({ initialTenant, onSav
   const [phone, setPhone] = useState(initialTenant?.phone || '');
   const [email, setEmail] = useState(initialTenant?.email || '');
   const [location, setLocation] = useState(initialTenant?.location || '');
+  const [customDomain, setCustomDomain] = useState(initialTenant?.customDomain || '');
   const [status, setStatus] = useState<'active' | 'draft' | 'pitched'>('active');
 
   // Media Assets
@@ -62,6 +63,7 @@ export const ClientEditor: React.FC<ClientEditorProps> = ({ initialTenant, onSav
       setPhone(initialTenant.phone || '');
       setEmail(initialTenant.email || '');
       setLocation(initialTenant.location || '');
+      setCustomDomain(initialTenant.customDomain || '');
       setStatus(initialTenant.status || 'active');
       setMedia({
         logo: initialTenant.media?.logo || '',
@@ -340,6 +342,7 @@ export const ClientEditor: React.FC<ClientEditorProps> = ({ initialTenant, onSav
         phone: safePhone,
         email: safeEmail,
         location: safeLocation,
+        customDomain: customDomain.trim() ? customDomain.toLowerCase().trim() : undefined,
         status,
         media,
         colors: {
@@ -433,6 +436,27 @@ export const ClientEditor: React.FC<ClientEditorProps> = ({ initialTenant, onSav
                 value={slug}
                 onChange={(e) => setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, '-'))}
                 placeholder="apex-roofing"
+                className="w-full bg-white border border-slate-300 rounded-r-lg px-3 py-2 text-xs text-slate-900 font-mono placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-colors"
+              />
+            </div>
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700">
+                Custom Domain (Optional)
+              </label>
+              <span className="text-[10px] text-slate-400">e.g. maxqualityroofing.com</span>
+            </div>
+            <div className="flex items-center">
+              <span className="bg-slate-100 text-slate-500 px-2.5 py-2 rounded-l-lg text-xs font-mono border border-r-0 border-slate-300">
+                https://
+              </span>
+              <input
+                type="text"
+                value={customDomain}
+                onChange={(e) => setCustomDomain(e.target.value.toLowerCase().trim().replace(/^https?:\/\//, ''))}
+                placeholder="clientdomain.com"
                 className="w-full bg-white border border-slate-300 rounded-r-lg px-3 py-2 text-xs text-slate-900 font-mono placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-colors"
               />
             </div>

@@ -194,6 +194,47 @@ export async function fetchTenantBySlug(slug: string): Promise<Tenant | null> {
   return null;
 }
 
+export async function fetchTenantByDomain(hostname: string): Promise<Tenant | null> {
+  if (!hostname) return null;
+  const cleanHost = hostname.toLowerCase().trim().replace(/:\d+$/, '').replace(/^www\./, '');
+
+  // Standard development or agency root hosting hosts
+  const agencyHostnames = ['localhost', '127.0.0.1', 'pitchplatform.com', 'pitchengine.com', 'hispango.com'];
+  if (agencyHostnames.includes(cleanHost)) {
+    return null;
+  }
+
+  // Check if it's a subdomain on vercel.app (only if slug matches)
+  if (cleanHost.endsWith('.vercel.app')) {
+    const sub = cleanHost.replace('.vercel.app', '');
+    if (sub && sub !== 'tenant-business' && sub !== 'pitch-platform') {
+      const subTenant = await fetchTenantBySlug(sub);
+      if (subTenant) return subTenant;
+    }
+    return null;
+  }
+
+  // Look through tenants for customDomain match
+  try {
+    const tenants = await fetchAllTenants();
+    const matched = tenants.find((t) => {
+      if (!t.customDomain) return false;
+      const cleanCustom = t.customDomain
+        .toLowerCase()
+        .trim()
+        .replace(/^https?:\/\//, '')
+        .replace(/\/.*$/, '')
+        .replace(/^www\./, '');
+      return cleanCustom === cleanHost;
+    });
+    if (matched) return matched;
+  } catch (err) {
+    console.warn('Error fetching tenant by domain:', err);
+  }
+
+  return null;
+}
+
 export async function saveTenant(tenant: Tenant): Promise<{ success: boolean; tenant?: Tenant; message?: string }> {
   // Always update IDB first
   await idbPut(tenant);
@@ -231,6 +272,7 @@ export async function bulkCreateTenants(items: BulkTenantItem[]): Promise<{ succ
       phone: item.phone || '',
       email: item.email || '',
       location: (item.city && item.state ? `${item.city}, ${item.state}` : item.city || item.state || ''),
+      customDomain: item.customDomain ? item.customDomain.toLowerCase().trim() : undefined,
       status: 'active',
       colors: item.colors || {
         primary: '#0B1D33',

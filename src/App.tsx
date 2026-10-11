@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import Index from "./pages/Index";
+import RootRoute from "./pages/RootRoute";
 import NotFound from "./pages/NotFound";
 import { TenantProvider } from "./context/TenantContext";
 
@@ -42,14 +43,10 @@ const App = () => (
             }
           />
 
-          {/* Flagship Root Domain */}
+          {/* Root Domain: Agency Content (or Custom Client Domain) */}
           <Route
             path="/"
-            element={
-              <TenantProvider forcedSlug="max-quality-roofing">
-                <Index />
-              </TenantProvider>
-            }
+            element={<RootRoute />}
           />
 
           {/* Dynamic Client Pitch: domain.com/:clientId */}
