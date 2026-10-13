@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Tenant, TenantMedia, TenantColors } from '../types/tenant';
 import { fetchTenantBySlug } from '../lib/apiClient';
 import defaultCompleteData from '../data/completeData.json';
-import { hexToHsl } from '../lib/colorExtractor';
+import { hexToHsl, darkenHex } from '../lib/colorExtractor';
 import { updateClientSeo } from '../lib/seoManager';
 
 interface TenantContextValue {
@@ -96,9 +96,17 @@ export const TenantProvider: React.FC<{
 
     // Pasted CSS variables take top priority over color picker values
     const effectivePrimary = parsedCustomVars['--primary-hex'] || parsedCustomVars['--primary-color'] || (parsedCustomVars['--primary']?.startsWith('#') ? parsedCustomVars['--primary'] : undefined) || colors?.primary;
-    const effectivePrimaryHover = parsedCustomVars['--primary-hover-hex'] || parsedCustomVars['--cta-hex'] || parsedCustomVars['--primary-hover'] || colors?.primaryHover;
+    const effectivePrimaryHover = parsedCustomVars['--primary-hover-hex'] || parsedCustomVars['--primary-hover'] || colors?.primaryHover;
+    const effectiveCta = parsedCustomVars['--cta-hex'] || parsedCustomVars['--cta'] || effectivePrimaryHover || effectivePrimary;
     const effectiveSecondary = parsedCustomVars['--secondary-hex'] || parsedCustomVars['--secondary-color'] || (parsedCustomVars['--secondary']?.startsWith('#') ? parsedCustomVars['--secondary'] : undefined) || colors?.secondary;
     const effectiveAccent = parsedCustomVars['--accent-hex'] || parsedCustomVars['--accent-color'] || (parsedCustomVars['--accent']?.startsWith('#') ? parsedCustomVars['--accent'] : undefined) || colors?.accent;
+    const effectiveNavy = parsedCustomVars['--navy-color'] || parsedCustomVars['--navy-hex'] || (effectivePrimary ? darkenHex(effectivePrimary, 35) : undefined);
+    const effectiveNavySurface = parsedCustomVars['--navy-surface'] || (effectivePrimary ? darkenHex(effectivePrimary, 20) : undefined);
+    const effectiveDarkBg = parsedCustomVars['--dark-bg'] || parsedCustomVars['--background-hex'];
+    const effectiveCardBg = parsedCustomVars['--card-bg'];
+    const effectiveBorder = parsedCustomVars['--border-color'] || parsedCustomVars['--border'];
+    const effectiveHeading = parsedCustomVars['--heading-color'];
+    const effectiveBodyText = parsedCustomVars['--body-text-color'];
 
     if (effectivePrimary) {
       const primaryHsl = hexToHsl(effectivePrimary);
@@ -116,14 +124,21 @@ export const TenantProvider: React.FC<{
     if (effectivePrimaryHover) {
       root.style.setProperty('--primary-hover-hex', effectivePrimaryHover);
       root.style.setProperty('--primary-hover-rgb', hexToRgb(effectivePrimaryHover));
-      root.style.setProperty('--cta-hex', effectivePrimaryHover);
     } else if (effectivePrimary) {
-      root.style.setProperty('--primary-hover-hex', effectivePrimary);
-      root.style.setProperty('--cta-hex', effectivePrimary);
+      const fallbackHover = darkenHex(effectivePrimary, 15);
+      root.style.setProperty('--primary-hover-hex', fallbackHover);
+      root.style.setProperty('--primary-hover-rgb', hexToRgb(fallbackHover));
     } else {
       root.style.removeProperty('--primary-hover-hex');
       root.style.removeProperty('--primary-hover-rgb');
+    }
+
+    if (effectiveCta) {
+      root.style.setProperty('--cta-hex', effectiveCta);
+      root.style.setProperty('--cta-rgb', hexToRgb(effectiveCta));
+    } else {
       root.style.removeProperty('--cta-hex');
+      root.style.removeProperty('--cta-rgb');
     }
 
     if (effectiveSecondary) {
@@ -140,13 +155,77 @@ export const TenantProvider: React.FC<{
     if (effectiveAccent) {
       const accentHsl = hexToHsl(effectiveAccent);
       root.style.setProperty('--accent-hex', effectiveAccent);
+      root.style.setProperty('--accent-rgb', hexToRgb(effectiveAccent));
       root.style.setProperty('--accent', accentHsl);
     } else {
       root.style.removeProperty('--accent-hex');
+      root.style.removeProperty('--accent-rgb');
       root.style.removeProperty('--accent');
     }
 
-    // Apply any additional arbitrary CSS variables defined in customCss (e.g. --dark-bg, --card-bg)
+    if (effectiveNavy) {
+      root.style.setProperty('--navy-color', effectiveNavy);
+      root.style.setProperty('--navy-rgb', hexToRgb(effectiveNavy));
+    } else {
+      root.style.removeProperty('--navy-color');
+      root.style.removeProperty('--navy-rgb');
+    }
+
+    if (effectiveNavySurface) {
+      root.style.setProperty('--navy-surface', effectiveNavySurface);
+    } else {
+      root.style.removeProperty('--navy-surface');
+    }
+
+    if (effectiveDarkBg) {
+      root.style.setProperty('--dark-bg', effectiveDarkBg);
+      root.style.setProperty('--section-bg', effectiveDarkBg);
+      root.style.setProperty('--dark-bg-rgb', hexToRgb(effectiveDarkBg));
+      root.style.setProperty('--background', hexToHsl(effectiveDarkBg));
+    } else {
+      root.style.removeProperty('--dark-bg');
+      root.style.removeProperty('--section-bg');
+      root.style.removeProperty('--dark-bg-rgb');
+      root.style.removeProperty('--background');
+    }
+
+    if (effectiveCardBg) {
+      root.style.setProperty('--card-bg', effectiveCardBg);
+      root.style.setProperty('--card-bg-rgb', hexToRgb(effectiveCardBg));
+      root.style.setProperty('--card', hexToHsl(effectiveCardBg));
+    } else {
+      root.style.removeProperty('--card-bg');
+      root.style.removeProperty('--card-bg-rgb');
+      root.style.removeProperty('--card');
+    }
+
+    if (effectiveBorder) {
+      root.style.setProperty('--border-color', effectiveBorder);
+      root.style.setProperty('--border-rgb', hexToRgb(effectiveBorder));
+      root.style.setProperty('--border', hexToHsl(effectiveBorder));
+      root.style.setProperty('--muted', hexToHsl(effectiveBorder));
+    } else {
+      root.style.removeProperty('--border-color');
+      root.style.removeProperty('--border-rgb');
+      root.style.removeProperty('--border');
+      root.style.removeProperty('--muted');
+    }
+
+    if (effectiveHeading) {
+      root.style.setProperty('--heading-color', effectiveHeading);
+      root.style.setProperty('--foreground', hexToHsl(effectiveHeading));
+    } else {
+      root.style.removeProperty('--heading-color');
+      root.style.removeProperty('--foreground');
+    }
+
+    if (effectiveBodyText) {
+      root.style.setProperty('--body-text-color', effectiveBodyText);
+    } else {
+      root.style.removeProperty('--body-text-color');
+    }
+
+    // Apply any additional arbitrary CSS variables defined in customCss (e.g. font family, border-radius, etc.)
     Object.entries(parsedCustomVars).forEach(([k, v]) => {
       root.style.setProperty(k, v);
     });
@@ -176,8 +255,27 @@ export const TenantProvider: React.FC<{
       root.style.removeProperty('--secondary-rgb');
       root.style.removeProperty('--secondary');
       root.style.removeProperty('--cta-hex');
+      root.style.removeProperty('--cta-rgb');
       root.style.removeProperty('--accent-hex');
+      root.style.removeProperty('--accent-rgb');
       root.style.removeProperty('--accent');
+      root.style.removeProperty('--navy-color');
+      root.style.removeProperty('--navy-rgb');
+      root.style.removeProperty('--navy-surface');
+      root.style.removeProperty('--dark-bg');
+      root.style.removeProperty('--section-bg');
+      root.style.removeProperty('--dark-bg-rgb');
+      root.style.removeProperty('--background');
+      root.style.removeProperty('--card-bg');
+      root.style.removeProperty('--card-bg-rgb');
+      root.style.removeProperty('--card');
+      root.style.removeProperty('--border-color');
+      root.style.removeProperty('--border-rgb');
+      root.style.removeProperty('--border');
+      root.style.removeProperty('--muted');
+      root.style.removeProperty('--heading-color');
+      root.style.removeProperty('--foreground');
+      root.style.removeProperty('--body-text-color');
       root.style.removeProperty('--ring');
       const tag = document.getElementById(styleId);
       if (tag) tag.remove();

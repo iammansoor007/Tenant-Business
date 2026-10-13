@@ -203,18 +203,55 @@ export const ClientEditor: React.FC<ClientEditorProps> = ({ initialTenant, onSav
     }
   };
 
+  const updateCssVarInString = (css: string, varName: string, newVal: string): string => {
+    if (!css || !css.includes(varName)) return css;
+    const regex = new RegExp(`(${varName}\\s*:\\s*)([^;\\}]+)`, 'g');
+    return css.replace(regex, `$1${newVal}`);
+  };
+
+  const handlePrimaryColorChange = (hex: string) => {
+    setPrimaryColor(hex);
+    const hover = darkenHex(hex, 18);
+    setPrimaryHoverColor(hover);
+    setCustomCss((prev) => {
+      let updated = updateCssVarInString(prev, '--primary-hex', hex);
+      updated = updateCssVarInString(updated, '--primary-hover-hex', hover);
+      return updated;
+    });
+  };
+
+  const handlePrimaryHoverColorChange = (hex: string) => {
+    setPrimaryHoverColor(hex);
+    setCustomCss((prev) => updateCssVarInString(prev, '--primary-hover-hex', hex));
+  };
+
+  const handleSecondaryColorChange = (hex: string) => {
+    setSecondaryColor(hex);
+    setCustomCss((prev) => updateCssVarInString(prev, '--secondary-hex', hex));
+  };
+
+  const handleAccentColorChange = (hex: string) => {
+    setAccentColor(hex);
+    setCustomCss((prev) => updateCssVarInString(prev, '--accent-hex', hex));
+  };
+
   const handleLogoColorExtracted = (hex: string) => {
     const hoverHex = darkenHex(hex, 18);
     setPrimaryColor(hex);
     setPrimaryHoverColor(hoverHex);
 
     // Sync into custom CSS variables so CSS pasting and colors are in sync
-    const generatedRootCss = `:root {\n  --primary-hex: ${hex};\n  --primary-hover-hex: ${hoverHex};\n  --cta-hex: ${hoverHex};\n}`;
     setCustomCss((prev) => {
-      if (!prev || prev.includes('--primary-hex')) {
-        return generatedRootCss;
+      if (!prev) {
+        return `:root {\n  --primary-hex: ${hex};\n  --primary-hover-hex: ${hoverHex};\n  --cta-hex: ${hoverHex};\n}`;
       }
-      return `${generatedRootCss}\n\n${prev}`;
+      let updated = updateCssVarInString(prev, '--primary-hex', hex);
+      updated = updateCssVarInString(updated, '--primary-hover-hex', hoverHex);
+      updated = updateCssVarInString(updated, '--cta-hex', hoverHex);
+      if (!updated.includes('--primary-hex')) {
+        updated = `:root {\n  --primary-hex: ${hex};\n  --primary-hover-hex: ${hoverHex};\n  --cta-hex: ${hoverHex};\n}\n\n${updated}`;
+      }
+      return updated;
     });
 
     setColorNotice(`Applied logo color ${hex} to brand palette and CSS!`);
@@ -231,7 +268,7 @@ export const ClientEditor: React.FC<ClientEditorProps> = ({ initialTenant, onSav
       setPrimaryColor(primaryMatch[1]);
     }
 
-    const hoverMatch = val.match(/--(?:primary-hover(?:-hex)?|cta(?:-hex)?)\s*:\s*([#\w]+)/i);
+    const hoverMatch = val.match(/--primary-hover(?:-hex)?\s*:\s*([#\w]+)/i) || val.match(/--cta(?:-hex)?\s*:\s*([#\w]+)/i);
     if (hoverMatch && hoverMatch[1].startsWith('#')) {
       setPrimaryHoverColor(hoverMatch[1]);
     }
@@ -1121,16 +1158,13 @@ export const ClientEditor: React.FC<ClientEditorProps> = ({ initialTenant, onSav
                     <input
                       type="color"
                       value={primaryColor}
-                      onChange={(e) => {
-                        setPrimaryColor(e.target.value);
-                        setPrimaryHoverColor(darkenHex(e.target.value, 18));
-                      }}
+                      onChange={(e) => handlePrimaryColorChange(e.target.value)}
                       className="w-8 h-8 rounded-lg border-0 cursor-pointer bg-transparent"
                     />
                     <input
                       type="text"
                       value={primaryColor}
-                      onChange={(e) => setPrimaryColor(e.target.value)}
+                      onChange={(e) => handlePrimaryColorChange(e.target.value)}
                       className="w-full bg-white border border-slate-300 rounded-md px-2 py-1 text-xs text-slate-900 font-mono focus:outline-none focus:border-blue-600"
                     />
                   </div>
@@ -1142,13 +1176,13 @@ export const ClientEditor: React.FC<ClientEditorProps> = ({ initialTenant, onSav
                     <input
                       type="color"
                       value={primaryHoverColor}
-                      onChange={(e) => setPrimaryHoverColor(e.target.value)}
+                      onChange={(e) => handlePrimaryHoverColorChange(e.target.value)}
                       className="w-8 h-8 rounded-lg border-0 cursor-pointer bg-transparent"
                     />
                     <input
                       type="text"
                       value={primaryHoverColor}
-                      onChange={(e) => setPrimaryHoverColor(e.target.value)}
+                      onChange={(e) => handlePrimaryHoverColorChange(e.target.value)}
                       className="w-full bg-white border border-slate-300 rounded-md px-2 py-1 text-xs text-slate-900 font-mono focus:outline-none focus:border-blue-600"
                     />
                   </div>
@@ -1160,13 +1194,13 @@ export const ClientEditor: React.FC<ClientEditorProps> = ({ initialTenant, onSav
                     <input
                       type="color"
                       value={secondaryColor}
-                      onChange={(e) => setSecondaryColor(e.target.value)}
+                      onChange={(e) => handleSecondaryColorChange(e.target.value)}
                       className="w-8 h-8 rounded-lg border-0 cursor-pointer bg-transparent"
                     />
                     <input
                       type="text"
                       value={secondaryColor}
-                      onChange={(e) => setSecondaryColor(e.target.value)}
+                      onChange={(e) => handleSecondaryColorChange(e.target.value)}
                       className="w-full bg-white border border-slate-300 rounded-md px-2 py-1 text-xs text-slate-900 font-mono focus:outline-none focus:border-blue-600"
                     />
                   </div>
@@ -1178,13 +1212,13 @@ export const ClientEditor: React.FC<ClientEditorProps> = ({ initialTenant, onSav
                     <input
                       type="color"
                       value={accentColor}
-                      onChange={(e) => setAccentColor(e.target.value)}
+                      onChange={(e) => handleAccentColorChange(e.target.value)}
                       className="w-8 h-8 rounded-lg border-0 cursor-pointer bg-transparent"
                     />
                     <input
                       type="text"
                       value={accentColor}
-                      onChange={(e) => setAccentColor(e.target.value)}
+                      onChange={(e) => handleAccentColorChange(e.target.value)}
                       className="w-full bg-white border border-slate-300 rounded-md px-2 py-1 text-xs text-slate-900 font-mono focus:outline-none focus:border-blue-600"
                     />
                   </div>

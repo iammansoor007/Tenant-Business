@@ -330,8 +330,8 @@ const Footer = () => {
                       background:
                         "linear-gradient(135deg, var(--cta-hex), var(--secondary-hex))",
                       color: "var(--white-color)",
-                      border: "1px solid rgba(174, 184, 194, 0.4)",
-                      boxShadow: "0 8px 24px rgba(18, 54, 90, 0.5)",
+                      border: "1px solid rgba(var(--accent-rgb), 0.4)",
+                      boxShadow: "0 8px 24px rgba(var(--cta-rgb), 0.5)",
                     }}
                   >
                     <Phone className="w-4 h-4 text-white shrink-0" />

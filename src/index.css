@@ -478,15 +478,14 @@ nav .text-foreground {
   color: var(--silver-color);
 }
 
-/* Footer keeps dark navy bg */
+/* Footer styling */
 footer,
 .footer-dark {
   background: var(--navy-color);
-  color: var(--dark-bg);
+  color: #FFFFFF;
 }
 
 footer .text-white,
-footer [class*="text-"],
 .footer-dark .text-white {
-  color: inherit;
+  color: #FFFFFF;
 }

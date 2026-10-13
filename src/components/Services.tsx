@@ -350,11 +350,11 @@ const Services = () => {
               {/* Ambient glow */}
               <div
                 className="absolute -top-32 -left-32 w-80 h-80 rounded-full blur-3xl pointer-events-none"
-                style={{ background: "rgba(174, 184, 194, 0.15)" }}
+                style={{ background: "rgba(var(--accent-rgb), 0.15)" }}
               />
               <div
                 className="absolute -bottom-32 -right-32 w-80 h-80 rounded-full blur-3xl pointer-events-none"
-                style={{ background: "rgba(18, 54, 90, 0.3)" }}
+                style={{ background: "rgba(var(--cta-rgb), 0.3)" }}
               />
 
               {/* Technical blueprint grid overlay */}
@@ -377,7 +377,7 @@ const Services = () => {
                       className="inline-flex items-center gap-2.5 mb-6 rounded-full px-4 py-1.5 backdrop-blur-sm"
                       style={{
                         background: "rgba(255, 255, 255, 0.1)",
-                        border: "1px solid rgba(174, 184, 194, 0.35)",
+                        border: "1px solid rgba(var(--accent-rgb), 0.35)",
                       }}
                     >
                       <span className="w-2 h-2 rounded-full animate-pulse" style={{ background: "var(--accent-hex)" }} />

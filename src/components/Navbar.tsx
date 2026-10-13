@@ -264,7 +264,7 @@ const Navbar = () => {
                     target.src = logo;
                   }
                 }}
-                className="h-10 sm:h-12 lg:h-14 w-auto object-contain max-w-[220px] sm:max-w-[280px] scale-[1.3] sm:scale-[1.4] lg:scale-[1.45] origin-left transform-gpu drop-shadow-md"
+                className="h-10 sm:h-12 lg:h-14 w-auto object-contain max-w-[220px] sm:max-w-[280px] origin-left transform-gpu drop-shadow-md"
               />
             </motion.a>
 
@@ -349,7 +349,7 @@ const Navbar = () => {
                 style={{
                   background: "linear-gradient(135deg, var(--cta-hex), var(--secondary-hex))",
                   color: "#FFFFFF",
-                  border: "1px solid rgba(174, 184, 194, 0.35)",
+                  border: "1px solid rgba(var(--accent-rgb), 0.35)",
                 }}
               >
                 <span className="relative z-10 flex items-center space-x-2 text-white whitespace-nowrap">
@@ -688,7 +688,7 @@ const Navbar = () => {
                       style={{
                         background: "linear-gradient(135deg, var(--cta-hex), var(--secondary-hex))",
                         color: "#FFFFFF",
-                        border: "1px solid rgba(174, 184, 194, 0.35)",
+                        border: "1px solid rgba(var(--accent-rgb), 0.35)",
                       }}
                     >
                       <span className="whitespace-nowrap">{(completeData.navbar as any).mobileCtaText || ctaButton.label}</span>

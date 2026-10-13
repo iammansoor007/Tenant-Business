@@ -386,8 +386,8 @@ const Hero = () => {
                     background:
                       "linear-gradient(135deg, var(--cta-hex) 0%, var(--secondary-hex) 100%)",
                     color: "var(--white-color)",
-                    border: "1px solid rgba(174, 184, 194, 0.4)",
-                    boxShadow: "0 10px 30px rgba(18, 54, 90, 0.6)",
+                    border: "1px solid rgba(var(--accent-rgb), 0.4)",
+                    boxShadow: "0 10px 30px rgba(var(--cta-rgb), 0.5)",
                   }}
                 >
                   <div className="w-2.5 h-2.5 rounded-full animate-ping shrink-0" style={{ background: "var(--white-color)" }} />
@@ -536,7 +536,7 @@ const Hero = () => {
                               color: isActive ? "var(--white-color)" : "var(--charcoal-hex)",
                               borderColor: isActive ? "var(--cta-hex)" : "var(--border-color)",
                               boxShadow: isActive
-                                ? "0 4px 14px rgba(18, 54, 90, 0.35)"
+                                ? "0 4px 14px rgba(var(--cta-rgb), 0.35)"
                                 : "none",
                             }}
                           >
@@ -678,7 +678,7 @@ const Hero = () => {
                         background:
                           "linear-gradient(135deg, var(--cta-hex) 0%, var(--secondary-hex) 100%)",
                         color: "var(--white-color)",
-                        boxShadow: "0 8px 24px rgba(18, 54, 90, 0.45)",
+                        boxShadow: "0 8px 24px rgba(var(--cta-rgb), 0.45)",
                       }}
                     >
                       {isSubmitting ? (
