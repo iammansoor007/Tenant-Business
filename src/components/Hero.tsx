@@ -67,7 +67,7 @@ const Hero = () => {
 
   const rawDescription =
     heroData.description ||
-    "Architectural asphalt shingle specialist serving homeowners and businesses.";
+    (isFlagship ? "Architectural asphalt shingle specialist serving homeowners and businesses." : `${tenant?.name || "Professional"} services serving homeowners and businesses.`);
   const description = isFlagship
     ? rawDescription
     : (() => {
@@ -88,12 +88,24 @@ const Hero = () => {
         if (tenant?.name) {
           d = d.replace(/Max Quality Roofing/gi, tenant.name);
         }
+
+        const isRoofTrade = (tenant?.seo?.schemaType && tenant.seo.schemaType.toLowerCase().includes('roof')) || (tenant?.name && tenant.name.toLowerCase().includes('roof'));
+        if (!isRoofTrade) {
+          const isHvac = (tenant?.name?.toLowerCase().includes('hvac') || tenant?.seo?.schemaType === 'HVACBusiness');
+          const tradeWord = isHvac ? 'heating, cooling, and HVAC' : 'licensed contractor';
+          d = d
+            .replace(/Architectural asphalt shingle specialist/gi, `${tradeWord} specialist`)
+            .replace(/asphalt shingle specialist/gi, `${tradeWord} specialist`)
+            .replace(/shingle master/gi, 'licensed specialist')
+            .replace(/roofs built to endure/gi, 'systems built to endure')
+            .replace(/roofing systems/gi, 'quality installations');
+        }
         return d;
       })();
 
   const rawCurrentPhone = (!isFlagship && tenant?.phone)
     ? tenant.phone
-    : (isFlagship ? (completeData.footer?.contact?.phone || completeData.contact?.phone || "(406) 217-1720") : "");
+    : (completeData.footer?.contact?.phone || completeData.contact?.phone || (isFlagship ? "(406) 217-1720" : ""));
   const isFlagshipPhone = rawCurrentPhone?.includes("406") && rawCurrentPhone?.includes("217-1720");
   const currentPhone = (!isFlagship && isFlagshipPhone) ? "" : rawCurrentPhone;
 

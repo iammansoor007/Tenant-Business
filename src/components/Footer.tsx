@@ -69,24 +69,35 @@ const Footer = () => {
     (completeData?.media as any)?.logo ||
     logo;
   const footerData = completeData?.footer || {};
-  const rawCompanyName = footerData.company?.name || footerData.company?.title || completeData?.header?.title || "Roofing Specialist";
-  const companyName = (!isFlagship && tenant?.name) ? tenant.name : rawCompanyName;
+  const rawCompanyName = footerData.company?.name || footerData.company?.title || completeData?.header?.title || (isFlagship ? "Max Quality Roofing" : "Professional Services");
+  const companyName = (footerData.company?.name && footerData.company.name !== "Max Quality Roofing")
+    ? footerData.company.name
+    : ((!isFlagship && tenant?.name) ? tenant.name : rawCompanyName);
 
   const rawCompanySubTitle = footerData.company?.subTitle || "Owner Operated Quality";
-  const companySubTitle = (!isFlagship)
-    ? (tenant?.location || "Locally Owned & Operated")
-    : rawCompanySubTitle;
+  const companySubTitle = (footerData.company?.subTitle && footerData.company.subTitle !== "Owner Operated Quality")
+    ? footerData.company.subTitle
+    : (!isFlagship ? (tenant?.location || "Locally Owned & Operated") : rawCompanySubTitle);
 
-  let rawCompanyDesc = footerData.company?.description || completeData?.hero?.description || "High-quality residential and commercial roofing solutions.";
-  if (!isFlagship) {
+  let rawCompanyDesc = footerData.company?.description || completeData?.hero?.description || "High-quality residential and commercial solutions.";
+  if (!isFlagship && (rawCompanyDesc.includes("Max Quality Roofing") || rawCompanyDesc.includes("Max Poitra") || rawCompanyDesc.includes("Great Falls"))) {
     rawCompanyDesc = rawCompanyDesc
-      .replace(/Max Quality Roofing/gi, tenant?.name || "Our roofing company")
-      .replace(/Owned and operated by Max Poitra/gi, tenant?.name ? `Owned and operated by ${tenant.name}` : "Owned and operated by licensed roofing specialists")
+      .replace(/Max Quality Roofing/gi, companyName || "Our company")
+      .replace(/Owned and operated by Max Poitra/gi, companyName ? `Owned and operated by ${companyName}` : "Owned and operated by licensed specialists")
       .replace(/Max Poitra/gi, "our licensed team")
       .replace(/Great Falls, Montana/gi, tenant?.location || "the local area")
       .replace(/Great Falls/gi, tenant?.city || tenant?.location || "the local area")
       .replace(/Montana weather/gi, `${tenant?.state || "local"} weather`)
       .replace(/Montana/gi, tenant?.state || "local");
+
+    const isRoofTrade = (tenant?.seo?.schemaType && tenant.seo.schemaType.toLowerCase().includes('roof')) || (companyName && companyName.toLowerCase().includes('roof'));
+    if (!isRoofTrade) {
+      const isHvac = (companyName?.toLowerCase().includes('hvac') || tenant?.seo?.schemaType === 'HVACBusiness');
+      const tradeWord = isHvac ? 'heating, cooling, and HVAC' : 'licensed contractor';
+      rawCompanyDesc = rawCompanyDesc
+        .replace(/architectural asphalt shingle specialist/gi, `${tradeWord} specialist`)
+        .replace(/roofing systems/gi, 'quality installations');
+    }
   }
 
   const company = {
@@ -100,14 +111,14 @@ const Footer = () => {
   };
 
   const emergencyBar = footerData.emergencyBar || null;
-  const rawEmergencyPhone = (!isFlagship && tenant?.phone) ? tenant.phone : emergencyBar?.phone;
+  const rawEmergencyPhone = emergencyBar?.phone || (!isFlagship && tenant?.phone ? tenant.phone : null);
   const displayEmergencyPhone = (!isFlagship && rawEmergencyPhone?.includes("406") && rawEmergencyPhone?.includes("217-1720"))
     ? ""
     : (rawEmergencyPhone || (isFlagship ? "(406) 217-1720" : ""));
   const emergencyPhoneLink = displayEmergencyPhone ? `tel:${displayEmergencyPhone.replace(/[^0-9+]/g, "")}` : "#";
 
   const rawEmergencySubtitle = emergencyBar?.subtitle || "";
-  const emergencySubtitle = (!isFlagship && rawEmergencySubtitle)
+  const emergencySubtitle = (!isFlagship && rawEmergencySubtitle && (rawEmergencySubtitle.includes("Great Falls") || rawEmergencySubtitle.includes("Montana")))
     ? rawEmergencySubtitle
         .replace(/Great Falls and surrounding Montana communities/gi, `${tenant?.location || "our service area"} and surrounding communities`)
         .replace(/Great Falls/gi, tenant?.city || tenant?.location || "the local area")
@@ -118,13 +129,13 @@ const Footer = () => {
   const serviceAreas = footerData.serviceAreas || { title: "Service Areas", items: [] };
   const rawServiceAreas = Array.isArray(serviceAreas.items) ? serviceAreas.items : [];
   const displayServiceAreas = (!isFlagship && tenant?.location)
-    ? (rawServiceAreas.some((item: string) => item.includes("Great Falls") || item.includes("Cascade County"))
-        ? [tenant.location, `${tenant.location} & Surrounding Communities`]
-        : rawServiceAreas)
+    ? (rawServiceAreas.length > 0 && !rawServiceAreas.some((item: string) => item.includes("Great Falls") || item.includes("Cascade County"))
+        ? rawServiceAreas
+        : [tenant.location, `${tenant.location} & Surrounding Communities`])
     : rawServiceAreas;
 
   const contact = footerData.contact || {};
-  const rawContactPhone = (!isFlagship && tenant?.phone) ? tenant.phone : contact.phone;
+  const rawContactPhone = contact.phone || (!isFlagship && tenant?.phone ? tenant.phone : null);
   const displayContactPhone = (!isFlagship && rawContactPhone?.includes("406") && rawContactPhone?.includes("217-1720"))
     ? ""
     : (rawContactPhone || (isFlagship ? "(406) 217-1720" : ""));

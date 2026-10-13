@@ -121,6 +121,7 @@ export const ClientEditor: React.FC<ClientEditorProps> = ({ initialTenant, onSav
   // CompleteData JSON Editor
   const [jsonText, setJsonText] = useState('');
   const [jsonError, setJsonError] = useState<string | null>(null);
+  const [jsonSyncNotice, setJsonSyncNotice] = useState<string | null>(null);
 
   const [activeTab, setActiveTab] = useState<'media' | 'theme' | 'seo' | 'json'>('media');
   const [isSaving, setIsSaving] = useState(false);
@@ -432,12 +433,29 @@ export const ClientEditor: React.FC<ClientEditorProps> = ({ initialTenant, onSav
       parsed = JSON.parse(jsonText);
     } catch {}
 
+    const isClientFlagship = (slug || '').toLowerCase() === 'max-quality-roofing';
+    const parsedName = parsed?.footer?.company?.name || parsed?.header?.title || parsed?.name;
+    const isTemplateName = parsedName === 'MAX QUALITY ROOFING' || parsedName === 'Max Quality Roofing';
+    const effectiveName = name.trim() || (!isClientFlagship && !isTemplateName && parsedName ? parsedName : '') || 'Client Business Name';
+
+    const rawJsonPhone = parsed?.footer?.contact?.phone || parsed?.contact?.phone || parsed?.navbar?.cta?.phone;
+    const isTemplatePhone = rawJsonPhone?.includes('406') && rawJsonPhone?.includes('217-1720');
+    const effectivePhone = phone.trim() || (!isClientFlagship && isTemplatePhone ? undefined : rawJsonPhone);
+
+    const rawJsonEmail = parsed?.footer?.contact?.email || parsed?.contact?.email;
+    const isTemplateEmail = rawJsonEmail?.includes('maxqualityroofing');
+    const effectiveEmail = email.trim() || (!isClientFlagship && isTemplateEmail ? undefined : rawJsonEmail);
+
+    const rawJsonLoc = parsed?.footer?.serviceAreas?.items?.[0] || parsed?.footer?.company?.subTitle || parsed?.city;
+    const isTemplateLoc = rawJsonLoc?.includes('Great Falls') || rawJsonLoc?.includes('Cascade County');
+    const effectiveLocation = location.trim() || (!isClientFlagship && isTemplateLoc ? undefined : rawJsonLoc);
+
     const dummyTenant: any = {
       slug: slug || 'client-pitch',
-      name: name || 'Client Business Name',
-      phone: phone.trim() || undefined,
-      email: email.trim() || undefined,
-      location: location.trim() || undefined,
+      name: effectiveName,
+      phone: effectivePhone || undefined,
+      email: effectiveEmail || undefined,
+      location: effectiveLocation || undefined,
       media,
       seo: {
         title: seoTitle.trim() || undefined,
@@ -445,7 +463,7 @@ export const ClientEditor: React.FC<ClientEditorProps> = ({ initialTenant, onSav
         keywords: seoKeywords.trim() || undefined,
         twitterHandle: seoTwitterHandle.trim() || undefined,
         geoPlacename: seoGeoPlacename.trim() || undefined,
-        schemaType: schemaType || 'RoofingContractor',
+        schemaType: (schemaType && schemaType !== 'RoofingContractor') ? schemaType : (isClientFlagship ? 'RoofingContractor' : undefined),
         customSchemaJson: customSchemaJson.trim() ? customSchemaJson.trim() : undefined,
       },
       completeData: parsed,
@@ -460,26 +478,172 @@ export const ClientEditor: React.FC<ClientEditorProps> = ({ initialTenant, onSav
     );
   }, [slug, name, phone, email, location, media, seoTitle, seoDescription, seoKeywords, seoTwitterHandle, seoGeoPlacename, schemaType, customSchemaJson, jsonText]);
 
+  // Two-way sync: extracts client identity, contacts, locations, media, and SEO from JSON
+  const handleSyncFromJson = () => {
+    let parsed: any = null;
+    try {
+      parsed = JSON.parse(jsonText);
+    } catch (err: any) {
+      alert(`Invalid JSON format: ${err.message}`);
+      return;
+    }
+
+    if (!parsed || typeof parsed !== 'object') {
+      alert('Parsed JSON must be an object.');
+      return;
+    }
+
+    const isClientFlagship = (slug || '').toLowerCase() === 'max-quality-roofing';
+
+    // 1. Business Name
+    const extractedName =
+      parsed?.footer?.company?.name ||
+      parsed?.header?.title ||
+      parsed?.navbar?.logoAlt?.replace(/\s*Logo$/i, '') ||
+      parsed?.name;
+    const isRoofingTemplateName = extractedName === 'MAX QUALITY ROOFING' || extractedName === 'Max Quality Roofing';
+    if (extractedName && typeof extractedName === 'string' && extractedName.trim() && (!isRoofingTemplateName || isClientFlagship)) {
+      setName(extractedName.trim());
+      if (!initialTenant && !slug) {
+        const generatedSlug = extractedName.toLowerCase().trim().replace(/[^a-z0-9_-]/g, '-').replace(/-+/g, '-');
+        setSlug(generatedSlug);
+      }
+    }
+
+    // 2. Phone
+    const extractedPhone = parsed?.footer?.contact?.phone || parsed?.contact?.phone || parsed?.navbar?.cta?.phone;
+    const isTemplatePhone = extractedPhone?.includes('406') && extractedPhone?.includes('217-1720');
+    if (extractedPhone && typeof extractedPhone === 'string' && (!isTemplatePhone || isClientFlagship)) {
+      setPhone(extractedPhone.trim());
+    }
+
+    // 3. Email
+    const extractedEmail = parsed?.footer?.contact?.email || parsed?.contact?.email;
+    const isTemplateEmail = extractedEmail?.includes('maxqualityroofing');
+    if (extractedEmail && typeof extractedEmail === 'string' && (!isTemplateEmail || isClientFlagship)) {
+      setEmail(extractedEmail.trim());
+    }
+
+    // 4. Location
+    const rawLoc = parsed?.footer?.serviceAreas?.items?.[0] || parsed?.footer?.company?.subTitle || parsed?.city;
+    const isTemplateLoc = rawLoc?.includes('Great Falls') || rawLoc?.includes('Cascade County');
+    if (rawLoc && typeof rawLoc === 'string' && (!isTemplateLoc || isClientFlagship)) {
+      setLocation(rawLoc.trim());
+    }
+
+    // 5. Media
+    const extractedLogo = parsed?.navbar?.logo || parsed?.footer?.logo || parsed?.media?.logo || parsed?.logo;
+    const extractedHeroBg = parsed?.hero?.heroBg || parsed?.hero?.image || parsed?.media?.heroBg;
+    const extractedAbout = parsed?.about?.image || parsed?.about?.aboutImage || parsed?.media?.aboutImage;
+    const extractedFounder = parsed?.leadership?.ceo?.image || parsed?.media?.founderImage;
+
+    setMedia((prev) => ({
+      ...prev,
+      ...(extractedLogo ? { logo: extractedLogo } : {}),
+      ...(extractedHeroBg ? { heroBg: extractedHeroBg } : {}),
+      ...(extractedAbout ? { aboutImage: extractedAbout } : {}),
+      ...(extractedFounder ? { founderImage: extractedFounder } : {}),
+    }));
+
+    // 6. Schema & SEO Overrides
+    const effectiveName = (!isRoofingTemplateName && extractedName) ? extractedName : (name || 'Client Business');
+    const effectiveLoc = (!isTemplateLoc && rawLoc) ? rawLoc : location;
+    const effectivePhone = (!isTemplatePhone && extractedPhone) ? extractedPhone : phone;
+    const effectiveEmail = (!isTemplateEmail && extractedEmail) ? extractedEmail : email;
+
+    const auto = generateSeoMetadata(
+      {
+        slug: slug || 'client-pitch',
+        name: effectiveName,
+        phone: effectivePhone || undefined,
+        email: effectiveEmail || undefined,
+        location: effectiveLoc || undefined,
+        media: {
+          ...media,
+          ...(extractedLogo ? { logo: extractedLogo } : {}),
+        },
+        completeData: parsed,
+      } as any,
+      parsed,
+      media,
+      slug
+    );
+
+    const detectedSchema = auto.schemaJson?.['@graph']?.[0]?.['@type'] || parsed?.seo?.schemaType || parsed?.schemaType;
+    if (detectedSchema) {
+      setSchemaType(detectedSchema);
+    }
+
+    const customTitle = parsed?.meta?.title || parsed?.seo?.title;
+    const customDesc = parsed?.meta?.description || parsed?.seo?.description;
+    const customKeywords = parsed?.meta?.keywords || parsed?.seo?.keywords;
+    const customPlacename = parsed?.seo?.geoPlacename;
+
+    setSeoTitle(customTitle || auto.title);
+    setSeoDescription(customDesc || auto.description);
+    setSeoKeywords(customKeywords || auto.keywords);
+    setSeoTwitterHandle(auto.twitterSite);
+    setSeoGeoPlacename(customPlacename || auto.geoPlacename);
+
+    setJsonSyncNotice('Successfully extracted and synced client identity, contacts, media & SEO from JSON!');
+    setTimeout(() => setJsonSyncNotice(null), 4500);
+  };
+
   const handleAutoGenerateSeo = () => {
     let parsed: any = null;
     try {
       parsed = JSON.parse(jsonText);
     } catch {}
 
+    const isClientFlagship = (slug || '').toLowerCase() === 'max-quality-roofing';
+    const parsedName = parsed?.footer?.company?.name || parsed?.header?.title || parsed?.name;
+    const isTemplateName = parsedName === 'MAX QUALITY ROOFING' || parsedName === 'Max Quality Roofing';
+    const effectiveName = name.trim() || (!isClientFlagship && !isTemplateName && parsedName ? parsedName : '') || 'Client Business';
+
+    const rawJsonPhone = parsed?.footer?.contact?.phone || parsed?.contact?.phone || parsed?.navbar?.cta?.phone;
+    const isTemplatePhone = rawJsonPhone?.includes('406') && rawJsonPhone?.includes('217-1720');
+    const effectivePhone = phone.trim() || (!isClientFlagship && isTemplatePhone ? undefined : rawJsonPhone);
+
+    const rawJsonEmail = parsed?.footer?.contact?.email || parsed?.contact?.email;
+    const isTemplateEmail = rawJsonEmail?.includes('maxqualityroofing');
+    const effectiveEmail = email.trim() || (!isClientFlagship && isTemplateEmail ? undefined : rawJsonEmail);
+
+    const rawJsonLoc = parsed?.footer?.serviceAreas?.items?.[0] || parsed?.footer?.company?.subTitle || parsed?.city;
+    const isTemplateLoc = rawJsonLoc?.includes('Great Falls') || rawJsonLoc?.includes('Cascade County');
+    const effectiveLocation = location.trim() || (!isClientFlagship && isTemplateLoc ? undefined : rawJsonLoc);
+
     const auto = generateSeoMetadata(
-      { slug, name, phone: phone.trim() || undefined, email: email.trim() || undefined, location: location.trim() || undefined, media, completeData: parsed } as any,
+      {
+        slug,
+        name: effectiveName,
+        phone: effectivePhone || undefined,
+        email: effectiveEmail || undefined,
+        location: effectiveLocation || undefined,
+        media,
+        completeData: parsed
+      } as any,
       parsed,
       media,
       slug
     );
 
-    setSeoTitle(auto.title);
-    setSeoDescription(auto.description);
-    setSeoKeywords(auto.keywords);
+    const detectedSchema = auto.schemaJson?.['@graph']?.[0]?.['@type'];
+    if (detectedSchema) {
+      setSchemaType(detectedSchema);
+    }
+
+    const customTitle = parsed?.meta?.title || parsed?.seo?.title;
+    const customDesc = parsed?.meta?.description || parsed?.seo?.description;
+    const customKeywords = parsed?.meta?.keywords || parsed?.seo?.keywords;
+    const customPlacename = parsed?.seo?.geoPlacename;
+
+    setSeoTitle(customTitle || auto.title);
+    setSeoDescription(customDesc || auto.description);
+    setSeoKeywords(customKeywords || auto.keywords);
     setSeoTwitterHandle(auto.twitterSite);
-    setSeoGeoPlacename(auto.geoPlacename);
+    setSeoGeoPlacename(customPlacename || auto.geoPlacename);
     setSeoNotice('Auto-generated SEO metadata from client brand & location!');
-    setTimeout(() => setSeoNotice(null), 3000);
+    setTimeout(() => setSeoNotice(null), 3500);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -622,21 +786,42 @@ export const ClientEditor: React.FC<ClientEditorProps> = ({ initialTenant, onSav
       </div>
 
       <form onSubmit={handleSubmit} className="mt-6 space-y-6">
-        {/* Core Slug & Name */}
-        <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-              Client Name *
-            </label>
-            <input
-              type="text"
-              required
-              value={name}
-              onChange={(e) => handleNameChange(e.target.value)}
-              placeholder="e.g. Apex Roofing Pros"
-              className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-colors"
-            />
+        {jsonSyncNotice && (
+          <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-800 text-xs font-medium flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-emerald-600" />
+              {jsonSyncNotice}
+            </div>
           </div>
+        )}
+
+        {/* Core Slug & Name */}
+        <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
+          <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-200">
+            <span className="text-xs font-bold text-slate-800">Basic Client Identity</span>
+            <button
+              type="button"
+              onClick={handleSyncFromJson}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 text-[11px] font-semibold transition-colors cursor-pointer"
+            >
+              <Sparkles className="w-3 h-3 text-blue-600" />
+              Sync Info from complete.json
+            </button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                Client Name *
+              </label>
+              <input
+                type="text"
+                required
+                value={name}
+                onChange={(e) => handleNameChange(e.target.value)}
+                placeholder="e.g. Apex Roofing Pros"
+                className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-colors"
+              />
+            </div>
 
           <div>
             <label className="block text-xs font-semibold text-slate-700 mb-1.5">
@@ -732,6 +917,7 @@ export const ClientEditor: React.FC<ClientEditorProps> = ({ initialTenant, onSav
             />
           </div>
         </div>
+      </div>
 
         {/* Tab Navigation */}
         <div className="flex border-b border-slate-200">
@@ -1503,6 +1689,14 @@ export const ClientEditor: React.FC<ClientEditorProps> = ({ initialTenant, onSav
               <div className="flex items-center gap-2">
                 <button
                   type="button"
+                  onClick={handleSyncFromJson}
+                  className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-600 hover:bg-blue-700 text-xs text-white rounded-lg shadow-xs transition-colors font-semibold cursor-pointer"
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Sync Form Fields from JSON
+                </button>
+                <button
+                  type="button"
                   onClick={() => {
                     try {
                       const formatted = JSON.stringify(JSON.parse(jsonText), null, 2);
@@ -1530,6 +1724,13 @@ export const ClientEditor: React.FC<ClientEditorProps> = ({ initialTenant, onSav
                 </button>
               </div>
             </div>
+
+            {jsonSyncNotice && (
+              <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-800 text-xs font-medium flex items-center gap-2">
+                <Check className="w-4 h-4 text-emerald-600" />
+                {jsonSyncNotice}
+              </div>
+            )}
 
             {/* Quick detected fields summary */}
             {jsonSummary && (

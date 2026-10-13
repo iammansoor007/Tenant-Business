@@ -224,8 +224,21 @@ const Leadership = () => {
     description: (Array.isArray(rawCeo.description) ? rawCeo.description : []).map((d: string) => {
       if (isFlagship) return d;
       let clean = d.replace(/Max Quality Roofing/gi, tenant?.name || "our company");
+      const isRoofTrade = (tenant?.seo?.schemaType && tenant.seo.schemaType.toLowerCase().includes('roof')) || (tenant?.name && tenant.name.toLowerCase().includes('roof'));
+      const tradeSpecialist = isRoofTrade
+        ? "an architectural asphalt shingle specialist"
+        : ((tenant?.name?.toLowerCase().includes('hvac') || tenant?.seo?.schemaType === 'HVACBusiness') ? "a heating, cooling, and HVAC specialist" : "a licensed contractor specialist");
+
       clean = clean.replace(/Max Poitra is an architectural asphalt shingle specialist and the owner of Max Quality Roofing in Great Falls, Montana/gi,
-        `${tenant?.name || "Our team"} is an architectural asphalt shingle specialist serving ${tenant?.location || "the local region"}`);
+        `${tenant?.name || "Our team"} is ${tradeSpecialist} serving ${tenant?.location || "the local region"}`);
+      if (!isRoofTrade) {
+        clean = clean
+          .replace(/architectural asphalt shingle specialist/gi, tradeSpecialist)
+          .replace(/shingle master/gi, 'licensed specialist')
+          .replace(/full roof replacement and architectural asphalt shingle installations/gi, 'full system installations and comprehensive maintenance')
+          .replace(/every roof is built/gi, 'every project is built')
+          .replace(/every roof, every time/gi, 'every project, every time');
+      }
       clean = clean.replace(/Max Poitra/gi, "our leadership");
       clean = clean.replace(/Great Falls and surrounding Montana communities/gi, `${tenant?.location || "the local community"} and surrounding areas`);
       clean = clean.replace(/Great Falls, Montana/gi, tenant?.location || "the local community");

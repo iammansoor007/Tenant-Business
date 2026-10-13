@@ -29,6 +29,7 @@ export interface SeoMetadata {
   twitterImageAlt: string;
   faviconUrl: string;
   appleTouchIconUrl: string;
+  schemaType: string;
   schemaJson: Record<string, any>;
 }
 
@@ -94,8 +95,93 @@ export function generateSeoMetadata(
   // 1. Business & Brand Identity
   const isFlagship = !tenant || activeSlug === 'max-quality-roofing' || tenant.slug === 'max-quality-roofing';
 
-  const rawName = tenant?.name || completeData?.header?.title || completeData?.navbar?.logoAlt?.replace(/\s*Logo$/i, '') || (isFlagship ? 'Max Quality Roofing' : 'Roofing Contractor');
+  // Extract detected services first from completeData to inform tagline and keywords
+  const detectedServices: string[] = [];
+  if (Array.isArray(completeData?.services?.services)) {
+    completeData?.services?.services.forEach((s: any) => {
+      if (s?.title && typeof s.title === 'string' && s.title.trim()) {
+        detectedServices.push(s.title.trim());
+      }
+    });
+  }
+  if (detectedServices.length === 0 && Array.isArray(completeData?.navbar?.services)) {
+    completeData?.navbar?.services.forEach((s: any) => {
+      if (s?.title && typeof s.title === 'string' && s.title.trim()) {
+        detectedServices.push(s.title.trim());
+      }
+    });
+  }
+
+  // 1. Business Name & Location
+  const rawName =
+    tenant?.name ||
+    completeData?.footer?.company?.name ||
+    completeData?.header?.title ||
+    completeData?.navbar?.logoAlt?.replace(/\s*Logo$/i, '') ||
+    (isFlagship ? 'Max Quality Roofing' : 'Contractor Services');
   const name = rawName.trim();
+  const nameLower = name.toLowerCase();
+
+  // Detect Schema & Business Type
+  const servicesText = detectedServices.join(' ').toLowerCase();
+  const combinedContext = `${nameLower} ${servicesText}`;
+
+  // Check if business is explicitly another trade (HVAC, plumbing, moving, electrical, etc.)
+  const isExplicitlyHvac = combinedContext.includes('hvac') || combinedContext.includes('heating') || combinedContext.includes('air condition') || combinedContext.includes('cooling');
+  const isExplicitlyPlumbing = combinedContext.includes('plumb');
+  const isExplicitlyMoving = combinedContext.includes('moving') || combinedContext.includes('haul') || combinedContext.includes('junk');
+  const isExplicitlyElectric = combinedContext.includes('electric');
+  const isExplicitlyGeneral = combinedContext.includes('general contractor') || combinedContext.includes('remodel') || combinedContext.includes('construction');
+
+  const isExplicitNonRoofing = !isFlagship && !nameLower.includes('roof') && (isExplicitlyHvac || isExplicitlyPlumbing || isExplicitlyMoving || isExplicitlyElectric || isExplicitlyGeneral);
+
+  let rawSchemaType = tenant?.seo?.schemaType;
+  if (!rawSchemaType || (isExplicitNonRoofing && rawSchemaType === 'RoofingContractor')) {
+    if (isExplicitlyHvac) {
+      rawSchemaType = 'HVACBusiness';
+    } else if (isExplicitlyPlumbing) {
+      rawSchemaType = 'Plumber';
+    } else if (isExplicitlyMoving) {
+      rawSchemaType = 'MovingCompany';
+    } else if (isExplicitlyElectric) {
+      rawSchemaType = 'Electrician';
+    } else if (isExplicitlyGeneral) {
+      rawSchemaType = 'GeneralContractor';
+    } else if (isFlagship || nameLower.includes('roof') || servicesText.includes('roof')) {
+      rawSchemaType = 'RoofingContractor';
+    } else {
+      rawSchemaType = 'LocalBusiness';
+    }
+  }
+
+  const friendlySchemaType = rawSchemaType ? rawSchemaType.replace(/([A-Z])/g, ' $1').trim() : 'Contractor';
+  const isRoofingBusiness = !isExplicitNonRoofing && (isFlagship || (rawSchemaType && rawSchemaType.toLowerCase().includes('roof')) || nameLower.includes('roof'));
+
+  const servicesList = detectedServices.length > 0
+    ? detectedServices
+    : (isRoofingBusiness
+        ? [
+            'Architectural Asphalt Shingles',
+            'Full Roof Replacement',
+            'Roof Repair & Maintenance',
+            'Emergency Leak Detection',
+            'Free Roof Inspections'
+          ]
+        : (isExplicitlyHvac
+            ? [
+                'AC Repair & Installation',
+                'Heating & Furnace Maintenance',
+                'HVAC System Replacement',
+                'Air Quality & Duct Services',
+                'Emergency 24/7 HVAC Service'
+              ]
+            : [
+                friendlySchemaType,
+                'Installation & Replacement',
+                'Maintenance & Repair',
+                'Emergency Service'
+              ]));
+
   const rawLocation =
     tenant?.location ||
     tenant?.completeData?.footer?.serviceAreas?.items?.[0] ||
@@ -125,84 +211,106 @@ export function generateSeoMetadata(
       : completeData?.footer?.contact?.email) ||
     (isFlagship ? 'maxqualityroofing@gmail.com' : '');
 
+  // 2. Brand Tagline: Extract from completeData (subtitle, tagline, or first service)
+  const cdSubtitle = completeData?.footer?.company?.subTitle;
+  const isCustomSubtitle = cdSubtitle && cdSubtitle !== 'Owner Operated Quality' && !cdSubtitle.includes('Owner Operated Quality');
+
   const headlineTagline =
-    Array.isArray(completeData?.hero?.headlines)
-      ? completeData?.hero?.headlines.join(' ')
-      : 'Architectural Asphalt Shingle Specialist';
+    Array.isArray(completeData?.hero?.headlines) && completeData?.hero?.headlines.length > 0
+      ? completeData.hero.headlines.join(' ')
+      : (completeData?.hero?.tagline || completeData?.hero?.subTitle || '');
 
   const brandTagline =
+    (isCustomSubtitle ? cdSubtitle : '') ||
     completeData?.footer?.bottom?.tagline ||
+    completeData?.footer?.company?.title ||
     headlineTagline ||
-    'Architectural Asphalt Shingle Specialist';
+    (servicesList.length > 0 && !isRoofingBusiness ? `${servicesList[0]} Specialist` : '') ||
+    (isRoofingBusiness ? 'Architectural Asphalt Shingle Specialist' : `${friendlySchemaType} Specialist`);
 
-  // 2. Canonical URL
+  // 3. Canonical URL
   const canonicalUrl = tenant?.seo?.canonicalUrl || (isRoot ? `${origin}/` : `${origin}/${activeSlug}`);
 
-  // 3. Primary SEO Title
-  const baseTitle = cityAndState
-    ? `${name} | Architectural Asphalt Shingle Specialist | ${cityAndState}`
-    : `${name} | Architectural Asphalt Shingle Specialist`;
+  // 4. Primary SEO Title
+  const customTitle = completeData?.meta?.title || completeData?.seo?.title;
+  const baseTitle = customTitle || (cityAndState
+    ? `${name} | ${brandTagline} | ${cityAndState}`
+    : `${name} | ${brandTagline}`);
   const title = tenant?.seo?.title || baseTitle;
 
-  // 4. Meta Description
+  // 5. Meta Description
+  const customMetaDesc = completeData?.meta?.description || completeData?.seo?.description;
   const rawHeroDesc = completeData?.hero?.description;
-  const cleanHeroDesc = (!isFlagship && tenant?.location && rawHeroDesc)
-    ? rawHeroDesc
-        .replace(/Great Falls, Montana and surrounding communities/gi, `${tenant.location} and surrounding communities`)
-        .replace(/Great Falls, Montana/gi, tenant.location)
-        .replace(/Montana weather/gi, `${tenant.state || "local"} weather`)
-    : rawHeroDesc;
-  const defaultDesc = cleanHeroDesc
-    ? `${name}: ${cleanHeroDesc}`
-    : `${name} delivers owner-operated residential roofing solutions, architectural asphalt shingle installations, roof replacement, and leak repair${cityAndState ? ` across ${cityAndState} and surrounding areas.` : '.'}`;
+  const isDefaultRoofingCopy = !rawHeroDesc ||
+    rawHeroDesc.toLowerCase().includes('architectural asphalt shingle') ||
+    rawHeroDesc.toLowerCase().includes('shingle') ||
+    rawHeroDesc.toLowerCase().includes('max poitra') ||
+    rawHeroDesc.toLowerCase().includes('roof');
+
+  let defaultDesc = '';
+  if (customMetaDesc) {
+    defaultDesc = customMetaDesc;
+  } else if (!isRoofingBusiness && isDefaultRoofingCopy) {
+    // Non-roofing business (e.g. HVAC, plumbing): produce relevant copy, NEVER asphalt shingles
+    defaultDesc = `${name} provides trusted ${friendlySchemaType.toLowerCase()} and ${servicesList.slice(0, 3).join(', ').toLowerCase()} services${cityAndState ? ` in ${cityAndState} and surrounding areas` : ''}. Reliable service, upfront pricing, and quality workmanship.`;
+  } else if (rawHeroDesc) {
+    const cleanHeroDesc = (!isFlagship && tenant?.location)
+      ? rawHeroDesc
+          .replace(/Great Falls, Montana and surrounding communities/gi, `${tenant.location} and surrounding communities`)
+          .replace(/Great Falls, Montana/gi, tenant.location)
+          .replace(/Great Falls/gi, tenant.city || tenant.location)
+          .replace(/Montana weather/gi, `${tenant.state || "local"} weather`)
+          .replace(/Montana/gi, tenant.state || "local")
+          .replace(/Max Quality Roofing/gi, name)
+      : rawHeroDesc;
+    defaultDesc = cleanHeroDesc.toLowerCase().includes(name.toLowerCase())
+      ? cleanHeroDesc
+      : `${name}: ${cleanHeroDesc}`;
+  } else {
+    defaultDesc = `${name} delivers trusted ${brandTagline.toLowerCase()} services${cityAndState ? ` across ${cityAndState} and surrounding areas.` : '.'}`;
+  }
   const description = (tenant?.seo?.description || defaultDesc).slice(0, 320);
 
-  // 5. Meta Keywords
-  const defaultKeywords = cityAndState
-    ? `${name}, roofing contractor ${cityAndState}, ${stateCode ? `${stateCode} roofing contractor, ` : ''}roof replacement, emergency leak detection, architectural shingles, ${city ? `${city} roofer, ` : ''}residential roofing, Shingle Master`
-    : `${name}, roofing contractor, roof replacement, emergency leak detection, architectural shingles, residential roofing, Shingle Master`;
+  // 6. Meta Keywords
+  const customMetaKeywords = completeData?.meta?.keywords || completeData?.seo?.keywords;
+  let defaultKeywords = '';
+  if (customMetaKeywords) {
+    defaultKeywords = customMetaKeywords;
+  } else if (isRoofingBusiness) {
+    defaultKeywords = cityAndState
+      ? `${name}, roofing contractor ${cityAndState}, ${stateCode ? `${stateCode} roofing contractor, ` : ''}roof replacement, emergency leak detection, architectural shingles, ${city ? `${city} roofer, ` : ''}residential roofing, Shingle Master`
+      : `${name}, roofing contractor, roof replacement, emergency leak detection, architectural shingles, residential roofing, Shingle Master`;
+  } else {
+    defaultKeywords = [
+      name,
+      friendlySchemaType,
+      servicesList.slice(0, 5).join(', '),
+      cityAndState ? `${friendlySchemaType} ${cityAndState}` : '',
+      city ? `${city} ${friendlySchemaType}` : '',
+      cityAndState ? `licensed ${friendlySchemaType.toLowerCase()} ${cityAndState}` : '',
+      'emergency service, free estimate, licensed and insured'
+    ].filter(Boolean).join(', ');
+  }
   const keywords = tenant?.seo?.keywords || defaultKeywords;
 
-  // 6. Geo & Local SEO
+  // 7. Geo & Local SEO
   const geoRegion = tenant?.seo?.geoRegion || (stateCode ? `US-${stateCode}` : (isFlagship ? 'US-MT' : ''));
   const geoPlacename = tenant?.seo?.geoPlacename || cityAndState || (isFlagship ? 'Great Falls, MT' : '');
   const geoPosition = isFlagship ? '47.5053;-111.3008' : (tenant?.seo?.geoPosition || '');
   const icbm = isFlagship ? '47.5053, -111.3008' : (tenant?.seo?.icbm || '');
 
-  // 7. Visual Assets (Logo / Hero)
+  // 8. Visual Assets (Logo / Hero)
   const logoPath = tenant?.media?.logo || media?.logo || '/logo.webp';
   const heroPath = tenant?.media?.heroBg || media?.heroBg || logoPath;
   const ogImageUrl = tenant?.seo?.ogImage ? toAbsoluteUrl(tenant.seo.ogImage, origin) : toAbsoluteUrl(heroPath || logoPath, origin);
   const faviconUrl = tenant?.media?.logo || media?.logo || '/favicon.svg';
 
-  // 8. OpenGraph & Twitter
-  const ogTitle = tenant?.seo?.ogTitle || `${name} | Architectural Asphalt Shingle Specialist`;
+  // 9. OpenGraph & Twitter
+  const ogTitle = tenant?.seo?.ogTitle || (cityAndState ? `${name} | ${brandTagline} | ${cityAndState}` : `${name} | ${brandTagline}`);
   const ogDescription = tenant?.seo?.ogDescription || description;
   const twitterHandle = tenant?.seo?.twitterHandle || `@${name.replace(/[^a-zA-Z0-9]/g, '')}`;
   const twitterTitle = tenant?.seo?.twitterTitle || ogTitle;
   const twitterDescription = tenant?.seo?.twitterDescription || description;
-
-  // 9. Offer Catalog Services
-  const detectedServices: string[] = [];
-  if (Array.isArray(completeData?.services?.services)) {
-    completeData?.services?.services.forEach((s: any) => {
-      if (s?.title) detectedServices.push(s.title);
-    });
-  }
-  if (detectedServices.length === 0 && Array.isArray(completeData?.navbar?.services)) {
-    completeData?.navbar?.services.forEach((s: any) => {
-      if (s?.title) detectedServices.push(s.title);
-    });
-  }
-  const servicesList = detectedServices.length > 0
-    ? detectedServices
-    : [
-        'Architectural Asphalt Shingles',
-        'Full Roof Replacement',
-        'Roof Repair & Maintenance',
-        'Emergency Leak Detection',
-        'Free Roof Inspections'
-      ];
 
   // 10. Service Areas
   const serviceAreas: string[] = (!isFlagship && tenant?.location)
@@ -235,7 +343,7 @@ export function generateSeoMetadata(
       ];
 
   // 12. Schema.org JSON-LD (supports custom editable schema or custom business type)
-  const businessType = tenant?.seo?.schemaType || 'RoofingContractor';
+  const businessType = rawSchemaType || tenant?.seo?.schemaType || 'RoofingContractor';
   let schemaJson: Record<string, any>;
 
   if (tenant?.seo?.customSchemaJson) {
@@ -316,7 +424,9 @@ export function generateSeoMetadata(
         '@id': `${canonicalUrl}#website`,
         url: canonicalUrl,
         name,
-        description: `Official website of ${name}. Owner-operated residential roofing contractor serving ${cityAndState} and surrounding areas.`,
+        description: isRoofingBusiness
+          ? `Official website of ${name}. Owner-operated residential roofing contractor serving ${cityAndState} and surrounding areas.`
+          : `Official website of ${name}. Trusted ${friendlySchemaType.toLowerCase()} serving ${cityAndState} and surrounding areas.`,
         publisher: { '@id': `${canonicalUrl}#business` },
       },
     ],
@@ -352,6 +462,7 @@ export function generateSeoMetadata(
     twitterImageAlt: `${name} – ${cityAndState}`,
     faviconUrl,
     appleTouchIconUrl: faviconUrl,
+    schemaType: rawSchemaType || 'LocalBusiness',
     schemaJson,
   };
 }

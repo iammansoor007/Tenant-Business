@@ -177,6 +177,53 @@ describe('seoManager', () => {
       expect(businessSchema.geo).toBeUndefined();
       expect(businessSchema.address).toBeUndefined();
     });
+
+    it('accurately identifies and produces trade-specific SEO metadata for non-roofing businesses (e.g. HVAC)', () => {
+      const hvacTenant: Tenant = {
+        slug: 'a1-hvac',
+        name: 'a1 hvac',
+        location: 'St. Louis, MO',
+        phone: '(314) 555-0199',
+        email: 'info@a1hvac.com',
+        completeData: {
+          services: {
+            services: [
+              { title: 'AC Repair & Installation' },
+              { title: 'Heating & Furnace Maintenance' },
+            ],
+          },
+          hero: {
+            description: 'Architectural asphalt shingle specialist serving Great Falls, Montana and surrounding communities. Honest work, quality materials, and roofs built to endure Montana weather.',
+          },
+        },
+      };
+
+      const metadata = generateSeoMetadata(
+        hvacTenant,
+        hvacTenant.completeData,
+        hvacTenant.media,
+        hvacTenant.slug,
+        'https://tenantproduction.vercel.app'
+      );
+
+      // Verify trade schema
+      expect(metadata.schemaType).toBe('HVACBusiness');
+      expect(metadata.schemaJson['@graph'][0]['@type']).toBe('HVACBusiness');
+
+      // Verify NO roofing copy in title
+      expect(metadata.title).not.toContain('Architectural Asphalt Shingle Specialist');
+      expect(metadata.title).toContain('a1 hvac');
+      expect(metadata.title).toContain('St. Louis, MO');
+
+      // Verify NO roofing copy in description
+      expect(metadata.description).not.toContain('Architectural asphalt shingle');
+      expect(metadata.description).not.toContain('roofs built to endure');
+
+      // Verify trade-relevant keywords
+      expect(metadata.keywords).not.toContain('roofing contractor');
+      expect(metadata.keywords).not.toContain('shingle master');
+      expect(metadata.keywords.toLowerCase()).toContain('hvac');
+    });
   });
 
   describe('updateClientSeo (Browser DOM mutation)', () => {
