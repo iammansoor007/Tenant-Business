@@ -106,7 +106,14 @@ const Navbar = () => {
   const tenantMedia = useTenantMedia();
   const { tenant } = useTenant();
   const isFlagship = !tenant || tenant.slug === "max-quality-roofing";
-  const activeLogo = tenantMedia.logo || logo;
+  const activeLogo =
+    tenantMedia.logo ||
+    tenantMedia.logoUrl ||
+    (completeData?.navbar as any)?.logo ||
+    (completeData?.navbar as any)?.logoUrl ||
+    (completeData as any)?.logo ||
+    (completeData?.media as any)?.logo ||
+    logo;
   const navbarData = completeData.navbar || {};
   const rawServices = Array.isArray(navbarData.services) ? navbarData.services : [];
   const services = rawServices.map((service: any) => {

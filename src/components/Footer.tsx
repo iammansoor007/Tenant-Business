@@ -60,7 +60,14 @@ const Footer = () => {
   const { tenant } = useTenant();
   const isFlagship = !tenant || tenant.slug === "max-quality-roofing";
 
-  const activeLogo = tenantMedia.logo || logo;
+  const activeLogo =
+    tenantMedia.logo ||
+    tenantMedia.logoUrl ||
+    (completeData?.footer as any)?.logo ||
+    (completeData?.navbar as any)?.logo ||
+    (completeData as any)?.logo ||
+    (completeData?.media as any)?.logo ||
+    logo;
   const footerData = completeData?.footer || {};
   const rawCompanyName = footerData.company?.name || footerData.company?.title || completeData?.header?.title || "Roofing Specialist";
   const companyName = (!isFlagship && tenant?.name) ? tenant.name : rawCompanyName;

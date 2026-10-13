@@ -202,7 +202,18 @@ const Hero = () => {
   })();
 
   const tenantMedia = useTenantMedia();
-  const heroImageSrc = tenantMedia.heroBg || roofingBg;
+  const heroImageSrc =
+    tenantMedia.heroBg ||
+    tenantMedia.hero_bg ||
+    tenantMedia.heroImage ||
+    tenantMedia.backgroundImage ||
+    tenantMedia.bg ||
+    completeData?.hero?.heroBg ||
+    completeData?.hero?.image ||
+    completeData?.hero?.heroImage ||
+    completeData?.hero?.backgroundImage ||
+    completeData?.hero?.bg ||
+    roofingBg;
 
   const [activeDivision, setActiveDivision] = useState<string>(
     estimateCard?.divisions?.[0]?.key || "residential"

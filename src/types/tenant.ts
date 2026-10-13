@@ -11,6 +11,8 @@ export interface TenantSeo {
   canonicalUrl?: string;
   geoRegion?: string;
   geoPlacename?: string;
+  schemaType?: string;
+  customSchemaJson?: string | Record<string, any>;
 }
 
 export interface TenantMedia {

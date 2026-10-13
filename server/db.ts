@@ -108,6 +108,7 @@ export async function connectDB(): Promise<boolean> {
 
 async function seedDefaultAdmin() {
   try {
+    const { username: ADMIN_USERNAME, password: ADMIN_PASSWORD } = getAdminCreds();
     const existing = await AdminModel.findOne({ username: ADMIN_USERNAME });
     if (!existing) {
       const salt = await bcrypt.genSalt(10);

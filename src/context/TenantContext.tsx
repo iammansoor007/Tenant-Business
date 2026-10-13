@@ -191,8 +191,80 @@ export const TenantProvider: React.FC<{
   }, [tenant]);
 
   const media: TenantMedia = useMemo(() => {
-    return tenant?.media || {};
-  }, [tenant]);
+    const raw = tenant?.media || {};
+    const cd = (mergedCompleteData || {}) as any;
+    const cdMedia = cd.media || {};
+
+    const resolvedLogo =
+      raw.logo ||
+      raw.logoUrl ||
+      cd.navbar?.logo ||
+      cd.navbar?.logoUrl ||
+      cd.logo ||
+      cdMedia.logo ||
+      '';
+
+    const resolvedHeroBg =
+      raw.heroBg ||
+      raw.hero_bg ||
+      raw.heroImage ||
+      raw.backgroundImage ||
+      raw.bg ||
+      cd.hero?.heroBg ||
+      cd.hero?.image ||
+      cd.hero?.heroImage ||
+      cd.hero?.backgroundImage ||
+      cd.hero?.bg ||
+      cdMedia.heroBg ||
+      '';
+
+    const resolvedAbout =
+      raw.aboutImage ||
+      raw.about_image ||
+      raw.about ||
+      cd.about?.image ||
+      cd.about?.aboutImage ||
+      cdMedia.aboutImage ||
+      '';
+
+    const resolvedFounder =
+      raw.founderImage ||
+      raw.founder_image ||
+      raw.ceoImage ||
+      raw.ownerImage ||
+      cd.leadership?.ceo?.image ||
+      cd.leadership?.founderImage ||
+      cd.leadership?.image ||
+      cdMedia.founderImage ||
+      '';
+
+    const resolvedHowWeWork =
+      raw.howWeWorkVector ||
+      raw.vector ||
+      cd.howWeWork?.vector ||
+      cd.howWeWork?.image ||
+      cdMedia.howWeWorkVector ||
+      '';
+
+    const resolvedFaq =
+      raw.faqVector ||
+      raw.vector ||
+      cd.faq?.vector ||
+      cd.faq?.image ||
+      cdMedia.faqVector ||
+      '';
+
+    return {
+      ...cdMedia,
+      ...raw,
+      ...(resolvedLogo ? { logo: resolvedLogo } : {}),
+      ...(resolvedHeroBg ? { heroBg: resolvedHeroBg } : {}),
+      ...(resolvedAbout ? { aboutImage: resolvedAbout } : {}),
+      ...(resolvedFounder ? { founderImage: resolvedFounder } : {}),
+      ...(resolvedHowWeWork ? { howWeWorkVector: resolvedHowWeWork } : {}),
+      ...(resolvedFaq ? { faqVector: resolvedFaq } : {}),
+    };
+  }, [tenant, mergedCompleteData]);
 
   // ─── DYNAMIC CLIENT SEO & METADATA SYNCHRONIZATION ───
   // Automatically keeps 100% of Primary SEO, Canonical, OG, Twitter, Favicon, and Schema.org in sync

@@ -286,7 +286,7 @@ export default function AboutSection() {
             >
               <div className="relative h-full min-h-[400px] lg:min-h-full">
                 <img
-                  src={tenantMedia.aboutImage || AboutImg}
+                  src={tenantMedia.aboutImage || (completeData?.about as any)?.image || (completeData?.about as any)?.aboutImage || (completeData?.media as any)?.aboutImage || AboutImg}
                   alt={imageAlt}
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   loading="eager"

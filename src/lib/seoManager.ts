@@ -234,12 +234,33 @@ export function generateSeoMetadata(
         },
       ];
 
-  // 12. Schema.org JSON-LD
-  const schemaJson = {
-    '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'RoofingContractor',
+  // 12. Schema.org JSON-LD (supports custom editable schema or custom business type)
+  const businessType = tenant?.seo?.schemaType || 'RoofingContractor';
+  let schemaJson: Record<string, any>;
+
+  if (tenant?.seo?.customSchemaJson) {
+    try {
+      schemaJson = typeof tenant.seo.customSchemaJson === 'string'
+        ? JSON.parse(tenant.seo.customSchemaJson)
+        : tenant.seo.customSchemaJson;
+    } catch {
+      schemaJson = {
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': businessType,
+            '@id': `${canonicalUrl}#business`,
+            name,
+          },
+        ],
+      };
+    }
+  } else {
+    schemaJson = {
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': businessType,
         '@id': `${canonicalUrl}#business`,
         name,
         alternateName: `${name} LLC`,
@@ -299,7 +320,8 @@ export function generateSeoMetadata(
         publisher: { '@id': `${canonicalUrl}#business` },
       },
     ],
-  };
+    };
+  }
 
   return {
     title,

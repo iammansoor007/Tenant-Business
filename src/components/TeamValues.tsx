@@ -115,7 +115,7 @@ const CeoPortrait = () => {
           style={{ boxShadow: "0 25px 50px -12px rgba(var(--black-rgb), 0.15)" }}
         >
           <img
-            src={tenantMedia.founderImage || ownerImg}
+            src={tenantMedia.founderImage || (completeData?.leadership as any)?.ceo?.image || (completeData?.leadership as any)?.founderImage || (completeData?.media as any)?.founderImage || ownerImg}
             alt={ceoData.alt || ceoData.name || "Owner & Founder"}
             loading="lazy"
             decoding="async"

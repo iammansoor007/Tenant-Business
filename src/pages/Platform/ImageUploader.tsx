@@ -313,30 +313,55 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
           )}
         </div>
       ) : (
-        <div
-          onDragEnter={handleDrag}
-          onDragLeave={handleDrag}
-          onDragOver={handleDrag}
-          onDrop={handleDrop}
-          onClick={() => fileInputRef.current?.click()}
-          className={`border border-dashed rounded-lg p-5 flex flex-col items-center justify-center cursor-pointer transition-colors ${
-            dragActive
-              ? 'border-blue-600 bg-blue-50/40'
-              : 'border-slate-300 hover:border-blue-500 bg-slate-50/60 hover:bg-blue-50/20'
-          }`}
-        >
-          <Upload className="w-5 h-5 text-slate-400 mb-2" />
-          <p className="text-xs text-slate-700 font-medium text-center">
-            Click to upload or drag image
-          </p>
-          <p className="text-[10px] text-slate-400 mt-0.5">PNG, JPG, SVG, WEBP</p>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
-          />
+        <div className="space-y-2">
+          <div
+            onDragEnter={handleDrag}
+            onDragLeave={handleDrag}
+            onDragOver={handleDrag}
+            onDrop={handleDrop}
+            onClick={() => fileInputRef.current?.click()}
+            className={`border border-dashed rounded-lg p-4 flex flex-col items-center justify-center cursor-pointer transition-colors ${
+              dragActive
+                ? 'border-blue-600 bg-blue-50/40'
+                : 'border-slate-300 hover:border-blue-500 bg-slate-50/60 hover:bg-blue-50/20'
+            }`}
+          >
+            <Upload className="w-5 h-5 text-slate-400 mb-1.5" />
+            <p className="text-xs text-slate-700 font-medium text-center">
+              Click to upload or drag image
+            </p>
+            <p className="text-[10px] text-slate-400 mt-0.5">PNG, JPG, SVG, WEBP</p>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
+            />
+          </div>
+
+          <div className="flex items-center gap-1.5 pt-1">
+            <input
+              type="text"
+              placeholder="Or paste image URL / path..."
+              className="flex-1 text-[11px] px-2.5 py-1.5 rounded-lg border border-slate-200 bg-slate-50 focus:bg-white focus:border-blue-500 outline-none transition-colors"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  const target = e.target as HTMLInputElement;
+                  if (target.value.trim()) {
+                    onChange(target.value.trim());
+                    target.value = '';
+                  }
+                }
+              }}
+              onBlur={(e) => {
+                if (e.target.value.trim()) {
+                  onChange(e.target.value.trim());
+                  e.target.value = '';
+                }
+              }}
+            />
+          </div>
         </div>
       )}
     </div>

@@ -24,7 +24,7 @@ describe('ClientEditor Component', () => {
     fireEvent.click(colorsTab);
 
     expect(screen.getByText('Primary Brand')).toBeInTheDocument();
-    expect(screen.getByText(/Custom CSS \/ Variables Pasting/i)).toBeInTheDocument();
+    expect(screen.getByText(/Custom CSS \/ Variables Overrides/i)).toBeInTheDocument();
 
     const cssTextarea = screen.getByPlaceholderText(/:root {/i) as HTMLTextAreaElement;
     fireEvent.change(cssTextarea, { target: { value: ':root { --test: #123; }' } });
@@ -126,7 +126,7 @@ describe('ClientEditor Component', () => {
     // Previews should appear
     expect(screen.getByText(/Google Search Preview/i)).toBeInTheDocument();
     expect(screen.getByText(/OpenGraph & Social Preview/i)).toBeInTheDocument();
-    expect(screen.getByText(/Generated Schema\.org JSON-LD/i)).toBeInTheDocument();
+    expect(screen.getByText(/Schema\.org Structured Data/i)).toBeInTheDocument();
 
     // Auto-generate button should be present
     const autoGenBtn = screen.getByRole('button', { name: /Auto-Generate from Brand/i });

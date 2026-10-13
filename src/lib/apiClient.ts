@@ -171,6 +171,16 @@ export async function fetchTenantBySlug(slug: string): Promise<Tenant | null> {
   const cached = await idbGet(cleanSlug);
   if (cached) return cached;
 
+  // Fallback to localStorage
+  try {
+    const lsItem = localStorage.getItem(`pitchengine_tenant_${cleanSlug}`);
+    if (lsItem) {
+      const parsed = JSON.parse(lsItem);
+      await idbPut(parsed);
+      return parsed;
+    }
+  } catch {}
+
   // If asking for default/flagship
   if (cleanSlug === 'max-quality-roofing' || cleanSlug === 'default') {
     return {
@@ -238,6 +248,9 @@ export async function fetchTenantByDomain(hostname: string): Promise<Tenant | nu
 export async function saveTenant(tenant: Tenant): Promise<{ success: boolean; tenant?: Tenant; message?: string }> {
   // Always update IDB first
   await idbPut(tenant);
+  try {
+    localStorage.setItem(`pitchengine_tenant_${tenant.slug}`, JSON.stringify(tenant));
+  } catch {}
 
   // Try sending to MongoDB backend
   try {

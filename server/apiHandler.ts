@@ -135,7 +135,7 @@ export async function handleApiRequest(req: http.IncomingMessage, res: http.Serv
         }),
       });
 
-      const uploadData = await uploadRes.json();
+      const uploadData: any = await uploadRes.json();
       if (uploadData.secure_url) {
         sendJson(res, 200, {
           success: true,
@@ -245,7 +245,7 @@ export async function handleApiRequest(req: http.IncomingMessage, res: http.Serv
             await TenantModel.findOneAndUpdate(
               { slug: tenantData.slug },
               tenantData,
-              { upsert: true, returnDocument: 'after' }
+              { upsert: true, new: true }
             );
           } catch (dbErr: any) {
             console.warn(`MongoDB bulk save failed for ${tenantData.slug}, saved to local fallback:`, dbErr.message);
@@ -313,21 +313,22 @@ export async function handleApiRequest(req: http.IncomingMessage, res: http.Serv
         updatedAt: new Date().toISOString(),
       };
 
+      // Always update in-memory fallback cache immediately
+      fallbackTenants.set(tenantObj.slug, tenantObj);
+
       if (isDbConnected) {
         try {
           const saved = await TenantModel.findOneAndUpdate(
             { slug: tenantObj.slug },
             tenantObj,
-            { upsert: true, returnDocument: 'after' }
+            { upsert: true, new: true }
           );
-          sendJson(res, 200, { success: true, tenant: saved });
+          sendJson(res, 200, { success: true, tenant: saved || tenantObj });
         } catch (dbErr: any) {
           console.warn('MongoDB save error, falling back to in-memory store:', dbErr.message);
-          fallbackTenants.set(tenantObj.slug, tenantObj);
           sendJson(res, 200, { success: true, tenant: tenantObj, warning: 'Saved to memory due to database document size limits' });
         }
       } else {
-        fallbackTenants.set(tenantObj.slug, tenantObj);
         sendJson(res, 200, { success: true, tenant: tenantObj });
       }
       return true;
