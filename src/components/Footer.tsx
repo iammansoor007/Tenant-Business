@@ -356,8 +356,14 @@ const Footer = () => {
               <div className="flex items-center gap-3">
                 <div className="h-12 w-auto flex items-center">
                   <img
-                    src={activeLogo}
+                    src={activeLogo || logo}
                     alt={companyName}
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      if (target.src !== logo) {
+                        target.src = logo;
+                      }
+                    }}
                     className="h-12 w-auto object-contain filter drop-shadow-md"
                   />
                 </div>

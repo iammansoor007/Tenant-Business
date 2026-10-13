@@ -12,21 +12,35 @@ interface ImageUploaderProps {
 }
 
 // Client-side image compression to prevent MongoDB BSON 16MB document size limit
-function compressImage(file: File, maxDim = 1400, quality = 0.82): Promise<string> {
+function compressImage(file: File, maxDim = 1400, quality = 0.85): Promise<string> {
   return new Promise((resolve) => {
+    // SVGs are vector; keep exact data URL
     if (file.type === 'image/svg+xml') {
       const reader = new FileReader();
-      reader.onload = () => resolve(reader.result as string);
+      reader.onload = () => resolve((reader.result as string) || '');
+      reader.onerror = () => resolve('');
       reader.readAsDataURL(file);
       return;
     }
 
     const reader = new FileReader();
     reader.onload = (e) => {
+      const rawDataUrl = (e.target?.result as string) || '';
+      if (!rawDataUrl) return resolve('');
+
       const img = new Image();
       img.onload = () => {
-        let width = img.width;
-        let height = img.height;
+        let width = img.naturalWidth || img.width;
+        let height = img.naturalHeight || img.height;
+
+        if (!width || !height) {
+          return resolve(rawDataUrl);
+        }
+
+        // If file is already small (< 500KB) and dimensions are within bounds, keep original
+        if (file.size <= 500 * 1024 && width <= maxDim && height <= maxDim) {
+          return resolve(rawDataUrl);
+        }
 
         if (width > maxDim || height > maxDim) {
           if (width > height) {
@@ -43,29 +57,46 @@ function compressImage(file: File, maxDim = 1400, quality = 0.82): Promise<strin
         canvas.height = height;
         const ctx = canvas.getContext('2d');
         if (!ctx) {
-          return resolve(e.target?.result as string);
+          return resolve(rawDataUrl);
         }
 
-        // Always compress photos and raster graphics to WebP to eliminate MongoDB 16MB BSON document limits
-        let targetFormat = 'image/webp';
+        // CLEAR and DRAW the image onto the canvas
+        ctx.clearRect(0, 0, width, height);
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const isPng = file.type === 'image/png';
+
+        // For PNGs (especially logos), try WebP or fall back to PNG to preserve transparency
+        if (isPng) {
+          try {
+            const webpUrl = canvas.toDataURL('image/webp', quality);
+            if (webpUrl && webpUrl.startsWith('data:image/webp')) {
+              return resolve(webpUrl);
+            }
+          } catch {}
+          try {
+            return resolve(canvas.toDataURL('image/png'));
+          } catch {}
+        }
+
+        // For photos (JPEG, etc.), try WebP first, then JPEG
         try {
-          if (!canvas.toDataURL('image/webp').startsWith('data:image/webp')) {
-            targetFormat = 'image/jpeg';
+          const webpUrl = canvas.toDataURL('image/webp', quality);
+          if (webpUrl && webpUrl.startsWith('data:image/webp')) {
+            return resolve(webpUrl);
           }
-        } catch {
-          targetFormat = 'image/jpeg';
-        }
+        } catch {}
 
         try {
-          const compressedDataUrl = canvas.toDataURL(targetFormat, quality);
-          resolve(compressedDataUrl);
+          return resolve(canvas.toDataURL('image/jpeg', quality));
         } catch {
-          resolve(e.target?.result as string);
+          return resolve(rawDataUrl);
         }
       };
-      img.onerror = () => resolve(e.target?.result as string);
-      img.src = e.target?.result as string;
+      img.onerror = () => resolve(rawDataUrl);
+      img.src = rawDataUrl;
     };
+    reader.onerror = () => resolve('');
     reader.readAsDataURL(file);
   });
 }
@@ -84,8 +115,13 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
   const [appliedHex, setAppliedHex] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [imageLoadError, setImageLoadError] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    setImageLoadError(false);
+  }, [value]);
 
   // Automatically extract colors from existing logo on mount or when value changes
   useEffect(() => {
@@ -210,18 +246,35 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
           {sublabel && <p className="text-[11px] text-slate-500 mt-0.5">{sublabel}</p>}
         </div>
         {value && !isUploading && (
-          <button
-            type="button"
-            onClick={() => {
-              onChange('');
-              setExtractedColors([]);
-            }}
-            className="text-[11px] text-slate-500 hover:text-rose-600 flex items-center gap-1 py-0.5 px-2 rounded hover:bg-rose-50 transition-colors"
-          >
-            <X className="w-3 h-3" /> Remove
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="text-[11px] text-blue-600 hover:text-blue-700 font-medium py-0.5 px-2 rounded hover:bg-blue-50 transition-colors"
+            >
+              Change
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                onChange('');
+                setExtractedColors([]);
+              }}
+              className="text-[11px] text-slate-500 hover:text-rose-600 flex items-center gap-1 py-0.5 px-2 rounded hover:bg-rose-50 transition-colors"
+            >
+              <X className="w-3 h-3" /> Remove
+            </button>
+          </div>
         )}
       </div>
+
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
+      />
 
       {isUploading ? (
         <div className="border border-blue-200 bg-blue-50/50 rounded-lg p-6 flex flex-col items-center justify-center">
@@ -231,15 +284,30 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
         </div>
       ) : value ? (
         <div className="relative rounded-lg border border-slate-200 bg-slate-50/60 p-3 flex flex-col items-center justify-center">
-          <img
-            ref={imgRef}
-            src={value}
-            alt={label}
-            onClick={handleImageClick}
-            className={`max-h-32 max-w-full object-contain rounded transition-all ${
-              isSampling ? 'cursor-crosshair ring-2 ring-blue-600' : ''
-            }`}
-          />
+          <div className="w-full flex items-center justify-center p-2 rounded bg-slate-100 border border-slate-200 min-h-[100px] overflow-hidden"
+               style={{
+                 backgroundImage: 'linear-gradient(45deg, #e2e8f0 25%, transparent 25%), linear-gradient(-45deg, #e2e8f0 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e2e8f0 75%), linear-gradient(-45deg, transparent 75%, #e2e8f0 75%)',
+                 backgroundSize: '16px 16px',
+                 backgroundPosition: '0 0, 0 8px, 8px -8px, -8px 0px'
+               }}>
+            {imageLoadError ? (
+              <div className="text-center py-4 px-2">
+                <p className="text-xs font-semibold text-rose-600">Failed to load image</p>
+                <p className="text-[10px] text-slate-500 mt-0.5">Please check URL or re-upload</p>
+              </div>
+            ) : (
+              <img
+                ref={imgRef}
+                src={value}
+                alt={label}
+                onClick={handleImageClick}
+                onError={() => setImageLoadError(true)}
+                className={`max-h-32 max-w-full object-contain rounded transition-all shadow-xs bg-white/40 p-1 ${
+                  isSampling ? 'cursor-crosshair ring-2 ring-blue-600' : ''
+                }`}
+              />
+            )}
+          </div>
 
           {isCloudinary && (
             <div className="flex items-center gap-1.5 text-[10px] text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2.5 py-0.5 rounded-full font-medium mt-2">
@@ -331,13 +399,6 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
               Click to upload or drag image
             </p>
             <p className="text-[10px] text-slate-400 mt-0.5">PNG, JPG, SVG, WEBP</p>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
-            />
           </div>
 
           <div className="flex items-center gap-1.5 pt-1">
