@@ -75,12 +75,10 @@ describe('TenantContext', () => {
       expect(screen.getByTestId('is-custom')).toHaveTextContent('true');
       expect(screen.getByTestId('has-tenant')).toHaveTextContent('true');
       expect(screen.getByTestId('default-phone')).toHaveTextContent('(512) 555-9988');
+      expect(document.documentElement.style.getPropertyValue('--primary-hex')).toBe('#0F4C81');
+      expect(document.documentElement.style.getPropertyValue('--secondary-hex')).toBe('#2C3E50');
+      expect(document.documentElement.style.getPropertyValue('--accent-hex')).toBe('#D4AF37');
     });
-
-    // Check CSS variables on document.documentElement
-    expect(document.documentElement.style.getPropertyValue('--primary-hex')).toBe('#0F4C81');
-    expect(document.documentElement.style.getPropertyValue('--secondary-hex')).toBe('#2C3E50');
-    expect(document.documentElement.style.getPropertyValue('--accent-hex')).toBe('#D4AF37');
 
     // Check custom style element injected into head
     const styleTag = document.getElementById('pitchengine-dynamic-custom-css');
