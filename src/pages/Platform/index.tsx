@@ -197,8 +197,12 @@ export const PlatformDashboard: React.FC = () => {
       return;
     }
 
+    const cloned = JSON.parse(JSON.stringify(sourceTenant));
+    delete (cloned as any)._id;
+    delete (cloned as any).id;
+
     const duplicatedTenant: Tenant = {
-      ...JSON.parse(JSON.stringify(sourceTenant)),
+      ...cloned,
       name: enteredName.trim(),
       slug: cleanSlug,
       status: 'draft',
