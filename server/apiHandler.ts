@@ -2,7 +2,7 @@ import http from 'http';
 import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { connectDB, isDbConnected, AdminModel, TenantModel } from './db';
+import { connectDB, isDbConnected, AdminModel, TenantModel, PitchVisitModel } from './db';
 import completeDataTemplate from '../src/data/completeData.json';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'pitchengine_super_secret_jwt_key_2026';
@@ -11,6 +11,7 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin12345!';
 
 // In-memory fallback if MongoDB is offline
 export const fallbackTenants: Map<string, any> = new Map();
+export const fallbackPitchVisits: Map<string, any[]> = new Map();
 
 // Initialize default template in fallback
 fallbackTenants.set('max-quality-roofing', {
@@ -386,6 +387,394 @@ export async function handleApiRequest(req: http.IncomingMessage, res: http.Serv
         }
       }
       sendJson(res, 200, { success: true, message: `Updated status for ${slugs?.length || 0} clients` });
+      return true;
+    }
+
+    // ─── 10. TRACK PITCH EVENT: POST /api/analytics/track ───
+    if (url === '/api/analytics/track' && req.method === 'POST') {
+      const data = await parseRequestBody(req);
+      const slug = (data.slug || '').toLowerCase().trim();
+      const sessionId = data.sessionId || 'anon-' + Date.now();
+
+      if (!slug) {
+        sendJson(res, 400, { success: false, message: 'Missing slug' });
+        return true;
+      }
+
+      // Extract client IP with Cloudflare, proxy, and socket support
+      const cfIp = req.headers['cf-connecting-ip'];
+      const realIp = req.headers['x-real-ip'];
+      const forwarded = req.headers['x-forwarded-for'];
+      const headerIp =
+        (typeof cfIp === 'string' && cfIp.trim()) ||
+        (typeof realIp === 'string' && realIp.trim()) ||
+        (typeof forwarded === 'string' && forwarded.split(',')[0].trim()) ||
+        req.socket.remoteAddress ||
+        '';
+      const isLoopback = !data.ip || data.ip === '127.0.0.1' || data.ip === '::1' || data.ip.includes('localhost');
+      const effectiveIp = isLoopback ? (headerIp || 'Direct Network') : data.ip;
+
+      const incomingDuration = Number(data.durationSeconds) || 0;
+      const incomingScroll = Number(data.scrollDepth) || 0;
+      const incomingSections = Array.isArray(data.sectionsViewed) ? data.sectionsViewed : [];
+      const incomingEngagement = (typeof data.sectionEngagement === 'object' && data.sectionEngagement) ? data.sectionEngagement : {};
+      const incomingButtons = Array.isArray(data.clickedButtons) ? data.clickedButtons : [];
+      const incomingRageClicks = Array.isArray(data.rageClicks) ? data.rageClicks : [];
+      const incomingCopied = Array.isArray(data.copiedTexts) ? data.copiedTexts : [];
+      const incomingTimeline = Array.isArray(data.eventsTimeline) ? data.eventsTimeline : [];
+      const incomingScore = Number(data.engagementScore) || 0;
+      const incomingCategory = data.intentCategory || 'COLD';
+
+      const visitPayload = {
+        slug,
+        sessionId,
+        isAdminPreview: Boolean(data.isAdminPreview),
+        ip: effectiveIp,
+        city: data.city || '',
+        region: data.region || '',
+        country: data.country || '',
+        org: data.org || '',
+        deviceType: data.deviceType || 'Desktop',
+        deviceModel: data.deviceModel || '',
+        browser: data.browser || '',
+        os: data.os || '',
+        screen: data.screen || '',
+        language: data.language || '',
+        referrer: data.referrer || '',
+        referrerDomain: data.referrerDomain || '',
+        timezone: data.timezone || '',
+        prospectLocalTime: data.prospectLocalTime || '',
+        connectionType: data.connectionType || '',
+        downlinkSpeed: data.downlinkSpeed || '',
+        rtt: data.rtt || '',
+        batteryLevel: data.batteryLevel || '',
+        isCharging: Boolean(data.isCharging),
+        cpuCores: Number(data.cpuCores) || 0,
+        deviceMemoryGb: Number(data.deviceMemoryGb) || 0,
+        pixelRatio: data.pixelRatio || '',
+        screenOrientation: data.screenOrientation || '',
+        tabSwitches: Number(data.tabSwitches) || 0,
+        idleSeconds: Number(data.idleSeconds) || 0,
+        utmSource: data.utmSource || '',
+        utmMedium: data.utmMedium || '',
+        utmCampaign: data.utmCampaign || '',
+        lastSeen: new Date(),
+        durationSeconds: incomingDuration,
+        scrollDepth: incomingScroll,
+        sectionsViewed: incomingSections,
+        sectionEngagement: incomingEngagement,
+        clickedButtons: incomingButtons,
+        rageClicks: incomingRageClicks,
+        exitIntent: Boolean(data.exitIntent),
+        copiedTexts: incomingCopied,
+        engagementScore: incomingScore,
+        intentCategory: incomingCategory,
+        eventsTimeline: incomingTimeline,
+        clickedPhone: Boolean(data.clickedPhone),
+        clickedCta: Boolean(data.clickedCta),
+        submittedForm: Boolean(data.submittedForm),
+      };
+
+      // 1) Update In-Memory fallback store
+      let slugVisits = fallbackPitchVisits.get(slug) || [];
+      const existingIdx = slugVisits.findIndex(v => v.sessionId === sessionId);
+      if (existingIdx >= 0) {
+        const prev = slugVisits[existingIdx];
+        const mergedSections = Array.from(new Set([...(prev.sectionsViewed || []), ...incomingSections]));
+        const mergedEngagement = { ...(prev.sectionEngagement || {}) };
+        Object.entries(incomingEngagement).forEach(([sec, secTime]: [string, any]) => {
+          mergedEngagement[sec] = Math.max(mergedEngagement[sec] || 0, Number(secTime) || 0);
+        });
+
+        const mergedButtons = [...(prev.clickedButtons || [])];
+        for (const b of incomingButtons) {
+          if (!mergedButtons.some(ex => ex.timestamp === b.timestamp && ex.text === b.text)) {
+            mergedButtons.push(b);
+          }
+        }
+
+        const mergedRageClicks = [...(prev.rageClicks || [])];
+        for (const r of incomingRageClicks) {
+          if (!mergedRageClicks.some(ex => ex.timestamp === r.timestamp && ex.text === r.text)) {
+            mergedRageClicks.push(r);
+          }
+        }
+
+        const mergedCopied = Array.from(new Set([...(prev.copiedTexts || []), ...incomingCopied]));
+        const mergedTimeline = [...(prev.eventsTimeline || []), ...incomingTimeline].slice(-50);
+
+        slugVisits[existingIdx] = {
+          ...prev,
+          ...visitPayload,
+          ip: effectiveIp || prev.ip,
+          city: data.city || prev.city,
+          region: data.region || prev.region,
+          country: data.country || prev.country,
+          org: data.org || prev.org,
+          firstSeen: prev.firstSeen || new Date(),
+          durationSeconds: Math.max(prev.durationSeconds || 0, incomingDuration),
+          scrollDepth: Math.max(prev.scrollDepth || 0, incomingScroll),
+          tabSwitches: Math.max(prev.tabSwitches || 0, Number(data.tabSwitches) || 0),
+          idleSeconds: Math.max(prev.idleSeconds || 0, Number(data.idleSeconds) || 0),
+          sectionsViewed: mergedSections,
+          sectionEngagement: mergedEngagement,
+          clickedButtons: mergedButtons,
+          rageClicks: mergedRageClicks,
+          exitIntent: prev.exitIntent || Boolean(data.exitIntent),
+          copiedTexts: mergedCopied,
+          engagementScore: Math.max(prev.engagementScore || 0, incomingScore),
+          intentCategory: (incomingCategory === 'HOT' || prev.intentCategory === 'HOT') ? 'HOT' : (incomingCategory === 'WARM' || prev.intentCategory === 'WARM') ? 'WARM' : incomingCategory,
+          eventsTimeline: mergedTimeline,
+          clickedPhone: prev.clickedPhone || Boolean(data.clickedPhone),
+          clickedCta: prev.clickedCta || Boolean(data.clickedCta),
+          submittedForm: prev.submittedForm || Boolean(data.submittedForm),
+          visitCount: (prev.visitCount || 1) + (data.isNewVisit ? 1 : 0),
+        };
+      } else {
+        slugVisits.unshift({
+          ...visitPayload,
+          firstSeen: new Date(),
+          visitCount: 1,
+        });
+      }
+      fallbackPitchVisits.set(slug, slugVisits);
+
+      // 2) Update MongoDB if available
+      if (isDbConnected) {
+        try {
+          const existingDb = await PitchVisitModel.findOne({ slug, sessionId });
+          if (existingDb) {
+            const mergedSections = Array.from(new Set([...(existingDb.sectionsViewed || []), ...incomingSections]));
+            const mergedEngagement = { ...(existingDb.sectionEngagement || {}) };
+            Object.entries(incomingEngagement).forEach(([sec, secTime]: [string, any]) => {
+              mergedEngagement[sec] = Math.max(mergedEngagement[sec] || 0, Number(secTime) || 0);
+            });
+
+            const mergedButtons = [...(existingDb.clickedButtons || [])];
+            for (const b of incomingButtons) {
+              if (!mergedButtons.some((ex: any) => ex.timestamp === b.timestamp && ex.text === b.text)) {
+                mergedButtons.push(b);
+              }
+            }
+
+            const mergedRageClicks = [...(existingDb.rageClicks || [])];
+            for (const r of incomingRageClicks) {
+              if (!mergedRageClicks.some((ex: any) => ex.timestamp === r.timestamp && ex.text === r.text)) {
+                mergedRageClicks.push(r);
+              }
+            }
+
+            const mergedCopied = Array.from(new Set([...(existingDb.copiedTexts || []), ...incomingCopied]));
+            const mergedTimeline = [...(existingDb.eventsTimeline || []), ...incomingTimeline].slice(-50);
+
+            existingDb.durationSeconds = Math.max(existingDb.durationSeconds || 0, incomingDuration);
+            existingDb.scrollDepth = Math.max(existingDb.scrollDepth || 0, incomingScroll);
+            existingDb.tabSwitches = Math.max(existingDb.tabSwitches || 0, Number(data.tabSwitches) || 0);
+            existingDb.idleSeconds = Math.max(existingDb.idleSeconds || 0, Number(data.idleSeconds) || 0);
+            existingDb.sectionsViewed = mergedSections;
+            existingDb.sectionEngagement = mergedEngagement;
+            existingDb.clickedButtons = mergedButtons;
+            existingDb.rageClicks = mergedRageClicks;
+            existingDb.exitIntent = existingDb.exitIntent || Boolean(data.exitIntent);
+            existingDb.copiedTexts = mergedCopied;
+            existingDb.engagementScore = Math.max(existingDb.engagementScore || 0, incomingScore);
+            existingDb.intentCategory = (incomingCategory === 'HOT' || existingDb.intentCategory === 'HOT') ? 'HOT' : (incomingCategory === 'WARM' || existingDb.intentCategory === 'WARM') ? 'WARM' : incomingCategory;
+            existingDb.eventsTimeline = mergedTimeline;
+
+            existingDb.markModified('sectionEngagement');
+            existingDb.markModified('clickedButtons');
+            existingDb.markModified('rageClicks');
+            existingDb.markModified('sectionsViewed');
+            existingDb.markModified('copiedTexts');
+            existingDb.markModified('eventsTimeline');
+
+            if (effectiveIp) existingDb.ip = effectiveIp;
+            if (data.city) existingDb.city = data.city;
+            if (data.region) existingDb.region = data.region;
+            if (data.country) existingDb.country = data.country;
+            if (data.org) existingDb.org = data.org;
+            if (data.deviceType) existingDb.deviceType = data.deviceType;
+            if (data.deviceModel) existingDb.deviceModel = data.deviceModel;
+            if (data.browser) existingDb.browser = data.browser;
+            if (data.os) existingDb.os = data.os;
+            if (data.timezone) existingDb.timezone = data.timezone;
+            if (data.prospectLocalTime) existingDb.prospectLocalTime = data.prospectLocalTime;
+            if (data.connectionType) existingDb.connectionType = data.connectionType;
+            if (data.downlinkSpeed) existingDb.downlinkSpeed = data.downlinkSpeed;
+            if (data.rtt) existingDb.rtt = data.rtt;
+            if (data.batteryLevel) existingDb.batteryLevel = data.batteryLevel;
+            if (typeof data.isCharging === 'boolean') existingDb.isCharging = data.isCharging;
+            if (data.cpuCores) existingDb.cpuCores = Number(data.cpuCores);
+            if (data.deviceMemoryGb) existingDb.deviceMemoryGb = Number(data.deviceMemoryGb);
+            if (data.pixelRatio) existingDb.pixelRatio = data.pixelRatio;
+            if (data.screenOrientation) existingDb.screenOrientation = data.screenOrientation;
+            if (data.referrerDomain) existingDb.referrerDomain = data.referrerDomain;
+            if (data.utmSource) existingDb.utmSource = data.utmSource;
+            if (data.utmMedium) existingDb.utmMedium = data.utmMedium;
+            if (data.utmCampaign) existingDb.utmCampaign = data.utmCampaign;
+            if (data.clickedPhone) existingDb.clickedPhone = true;
+            if (data.clickedCta) existingDb.clickedCta = true;
+            if (data.submittedForm) existingDb.submittedForm = true;
+            if (data.isNewVisit) existingDb.visitCount = (existingDb.visitCount || 1) + 1;
+            existingDb.lastSeen = new Date();
+            await existingDb.save();
+          } else {
+            await PitchVisitModel.create({
+              ...visitPayload,
+              firstSeen: new Date(),
+              visitCount: 1,
+            });
+          }
+        } catch (dbErr: any) {
+          console.warn('MongoDB analytics track error:', dbErr.message);
+        }
+      }
+
+      sendJson(res, 200, { success: true, message: 'Tracked' });
+      return true;
+    }
+
+    // ─── 11. GET ANALYTICS SUMMARY: GET /api/analytics/summary ───
+    if (url === '/api/analytics/summary' && req.method === 'GET') {
+      const summaryMap: Record<string, any> = {};
+
+      if (isDbConnected) {
+        try {
+          const allVisits = await PitchVisitModel.find({}).sort({ lastSeen: -1 });
+          allVisits.forEach((v: any) => {
+            const item = v.toObject ? v.toObject() : v;
+            const s = item.slug;
+            if (!summaryMap[s]) {
+              summaryMap[s] = {
+                slug: s,
+                isOpened: true,
+                isLiveNow: false,
+                totalVisits: 0,
+                uniqueSessions: 0,
+                totalDurationSeconds: 0,
+                maxScrollDepth: 0,
+                firstOpenedAt: item.firstSeen,
+                lastOpenedAt: item.lastSeen,
+                latestLocation: [item.city, item.region, item.country].filter(Boolean).join(', ') || 'Unknown Location',
+                latestDevice: `${item.deviceModel || item.deviceType} (${item.os || 'Unknown OS'})`,
+                latestBrowser: item.browser || 'Unknown Browser',
+                latestIp: item.ip || '',
+                latestOrg: item.org || '',
+                latestTimezone: item.timezone || '',
+                latestConnection: [item.connectionType, item.downlinkSpeed].filter(Boolean).join(' • '),
+                latestBattery: item.batteryLevel ? `${item.batteryLevel}${item.isCharging ? ' ⚡' : ''}` : '',
+                engagementScore: 0,
+                intentCategory: 'COLD',
+                clickedPhone: false,
+                clickedCta: false,
+                submittedForm: false,
+                rageClicksCount: 0,
+                visits: [],
+              };
+            }
+            const agg = summaryMap[s];
+            agg.totalVisits += (item.visitCount || 1);
+            agg.uniqueSessions += 1;
+            agg.totalDurationSeconds += (item.durationSeconds || 0);
+            agg.maxScrollDepth = Math.max(agg.maxScrollDepth, item.scrollDepth || 0);
+            agg.engagementScore = Math.max(agg.engagementScore || 0, item.engagementScore || 0);
+            agg.rageClicksCount = (agg.rageClicksCount || 0) + (item.rageClicks?.length || 0);
+
+            if (item.intentCategory === 'HOT' || agg.intentCategory === 'HOT') agg.intentCategory = 'HOT';
+            else if (item.intentCategory === 'WARM' || agg.intentCategory === 'WARM') agg.intentCategory = 'WARM';
+
+            if (new Date(item.lastSeen) > new Date(agg.lastOpenedAt)) {
+              agg.lastOpenedAt = item.lastSeen;
+              agg.latestLocation = [item.city, item.region, item.country].filter(Boolean).join(', ') || agg.latestLocation;
+              agg.latestDevice = `${item.deviceModel || item.deviceType} (${item.os || 'Unknown OS'})`;
+              agg.latestBrowser = item.browser || agg.latestBrowser;
+              agg.latestIp = item.ip || agg.latestIp;
+              agg.latestOrg = item.org || agg.latestOrg;
+              if (item.timezone) agg.latestTimezone = item.timezone;
+              if (item.connectionType) agg.latestConnection = [item.connectionType, item.downlinkSpeed].filter(Boolean).join(' • ');
+              if (item.batteryLevel) agg.latestBattery = `${item.batteryLevel}${item.isCharging ? ' ⚡' : ''}`;
+            }
+
+            agg.isLiveNow = (Date.now() - new Date(agg.lastOpenedAt).getTime()) < 45000;
+
+            if (item.clickedPhone) agg.clickedPhone = true;
+            if (item.clickedCta) agg.clickedCta = true;
+            if (item.submittedForm) agg.submittedForm = true;
+            agg.visits.push(item);
+          });
+        } catch (dbErr: any) {
+          console.warn('MongoDB analytics summary error:', dbErr.message);
+        }
+      }
+
+      // Merge / fallback from in-memory store
+      fallbackPitchVisits.forEach((visits, s) => {
+        if (!summaryMap[s] && visits.length > 0) {
+          const latest = visits[0];
+          summaryMap[s] = {
+            slug: s,
+            isOpened: true,
+            totalVisits: visits.reduce((acc, v) => acc + (v.visitCount || 1), 0),
+            uniqueSessions: visits.length,
+            totalDurationSeconds: visits.reduce((acc, v) => acc + (v.durationSeconds || 0), 0),
+            maxScrollDepth: visits.reduce((acc, v) => Math.max(acc, v.scrollDepth || 0), 0),
+            firstOpenedAt: latest.firstSeen,
+            lastOpenedAt: latest.lastSeen,
+            latestLocation: [latest.city, latest.region, latest.country].filter(Boolean).join(', ') || 'Unknown Location',
+            latestDevice: `${latest.deviceModel || latest.deviceType} (${latest.os || 'Unknown OS'})`,
+            latestBrowser: latest.browser || 'Unknown Browser',
+            latestIp: latest.ip || '',
+            latestOrg: latest.org || '',
+            latestTimezone: latest.timezone || '',
+            latestConnection: [latest.connectionType, latest.downlinkSpeed].filter(Boolean).join(' • '),
+            latestBattery: latest.batteryLevel ? `${latest.batteryLevel}${latest.isCharging ? ' ⚡' : ''}` : '',
+            isLiveNow: (Date.now() - new Date(latest.lastSeen).getTime()) < 45000,
+            engagementScore: visits.reduce((acc, v) => Math.max(acc, v.engagementScore || 0), 0),
+            intentCategory: visits.some(v => v.intentCategory === 'HOT') ? 'HOT' : visits.some(v => v.intentCategory === 'WARM') ? 'WARM' : 'COLD',
+            clickedPhone: visits.some(v => v.clickedPhone),
+            clickedCta: visits.some(v => v.clickedCta),
+            submittedForm: visits.some(v => v.submittedForm),
+            rageClicksCount: visits.reduce((acc, v) => acc + (v.rageClicks?.length || 0), 0),
+            visits,
+          };
+        }
+      });
+
+      sendJson(res, 200, { success: true, summary: summaryMap });
+      return true;
+    }
+
+    // ─── 12. GET DETAILED CLIENT ANALYTICS: GET /api/analytics/client/:slug ───
+    if (url.startsWith('/api/analytics/client/') && req.method === 'GET') {
+      const slug = url.replace('/api/analytics/client/', '').split('?')[0].trim().toLowerCase();
+      let visits: any[] = [];
+
+      if (isDbConnected) {
+        try {
+          visits = await PitchVisitModel.find({ slug }).sort({ lastSeen: -1 });
+        } catch (dbErr: any) {
+          console.warn('MongoDB fetch client visits error:', dbErr.message);
+        }
+      }
+
+      if (visits.length === 0) {
+        visits = fallbackPitchVisits.get(slug) || [];
+      }
+
+      sendJson(res, 200, { success: true, slug, visits });
+      return true;
+    }
+
+    // ─── 13. CLEAR CLIENT ANALYTICS: DELETE /api/analytics/client/:slug ───
+    if (url.startsWith('/api/analytics/client/') && req.method === 'DELETE') {
+      const slug = url.replace('/api/analytics/client/', '').split('?')[0].trim().toLowerCase();
+      if (isDbConnected) {
+        try {
+          await PitchVisitModel.deleteMany({ slug });
+        } catch {}
+      }
+      fallbackPitchVisits.delete(slug);
+      sendJson(res, 200, { success: true, message: `Analytics cleared for ${slug}` });
       return true;
     }
 

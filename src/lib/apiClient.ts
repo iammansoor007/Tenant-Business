@@ -382,3 +382,57 @@ export async function bulkUpdateTenantStatus(slugs: string[], status: 'active' |
   }
 }
 
+// ─── PITCH ANALYTICS & VISITOR TRACKING ───
+
+export async function trackPitchEvent(payload: Record<string, any>): Promise<boolean> {
+  try {
+    const res = await fetch('/api/analytics/track', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+export async function fetchPitchAnalyticsSummary(): Promise<Record<string, any>> {
+  try {
+    const res = await fetch('/api/analytics/summary');
+    if (res && res.ok) {
+      const data = await res.json();
+      return data.summary || {};
+    }
+  } catch {
+    // Quiet fallback for testing and offline modes
+  }
+  return {};
+}
+
+export async function fetchClientPitchAnalytics(slug: string): Promise<any[]> {
+  try {
+    const res = await fetch(`/api/analytics/client/${slug}`);
+    if (res && res.ok) {
+      const data = await res.json();
+      return data.visits || [];
+    }
+  } catch {
+    // Quiet fallback for testing and offline modes
+  }
+  return [];
+}
+
+export async function clearClientPitchAnalytics(slug: string): Promise<boolean> {
+  try {
+    const res = await fetch(`/api/analytics/client/${slug}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${getAuthToken() || ''}` },
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+

@@ -81,6 +81,65 @@ TenantSchema.pre('save', function (next) {
 
 export const TenantModel = mongoose.models.Tenant || mongoose.model('Tenant', TenantSchema);
 
+// ─── PITCH VISIT / ANALYTICS SCHEMA & MODEL ───
+const PitchVisitSchema = new mongoose.Schema({
+  slug: { type: String, required: true, index: true },
+  sessionId: { type: String, required: true, index: true },
+  ip: { type: String, default: '' },
+  city: { type: String, default: '' },
+  region: { type: String, default: '' },
+  country: { type: String, default: '' },
+  org: { type: String, default: '' },
+  deviceType: { type: String, default: 'Desktop' },
+  deviceModel: { type: String, default: '' },
+  browser: { type: String, default: '' },
+  os: { type: String, default: '' },
+  screen: { type: String, default: '' },
+  language: { type: String, default: '' },
+  referrer: { type: String, default: '' },
+  referrerDomain: { type: String, default: '' },
+  timezone: { type: String, default: '' },
+  prospectLocalTime: { type: String, default: '' },
+  connectionType: { type: String, default: '' },
+  downlinkSpeed: { type: String, default: '' },
+  rtt: { type: String, default: '' },
+  batteryLevel: { type: String, default: '' },
+  isCharging: { type: Boolean, default: false },
+  cpuCores: { type: Number, default: 0 },
+  deviceMemoryGb: { type: Number, default: 0 },
+  pixelRatio: { type: String, default: '' },
+  screenOrientation: { type: String, default: '' },
+  tabSwitches: { type: Number, default: 0 },
+  idleSeconds: { type: Number, default: 0 },
+  utmSource: { type: String, default: '' },
+  utmMedium: { type: String, default: '' },
+  utmCampaign: { type: String, default: '' },
+  firstSeen: { type: Date, default: Date.now },
+  lastSeen: { type: Date, default: Date.now },
+  durationSeconds: { type: Number, default: 0 },
+  scrollDepth: { type: Number, default: 0 },
+  sectionsViewed: { type: [String], default: [] },
+  sectionEngagement: { type: mongoose.Schema.Types.Mixed, default: {} },
+  clickedButtons: { type: [mongoose.Schema.Types.Mixed], default: [] },
+  rageClicks: { type: [mongoose.Schema.Types.Mixed], default: [] },
+  clickedPhone: { type: Boolean, default: false },
+  clickedCta: { type: Boolean, default: false },
+  submittedForm: { type: Boolean, default: false },
+  exitIntent: { type: Boolean, default: false },
+  copiedTexts: { type: [String], default: [] },
+  engagementScore: { type: Number, default: 0 },
+  intentCategory: { type: String, default: 'COLD' },
+  eventsTimeline: { type: [mongoose.Schema.Types.Mixed], default: [] },
+  visitCount: { type: Number, default: 1 },
+}, { timestamps: true });
+
+if (mongoose.models.PitchVisit) {
+  try {
+    delete mongoose.models.PitchVisit;
+  } catch {}
+}
+export const PitchVisitModel = mongoose.model('PitchVisit', PitchVisitSchema);
+
 // ─── CONNECT & SEED ───
 export async function connectDB(): Promise<boolean> {
   if (isDbConnected && mongoose.connection.readyState === 1) return true;

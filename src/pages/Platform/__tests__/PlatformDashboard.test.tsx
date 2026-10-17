@@ -30,6 +30,7 @@ describe('PlatformDashboard Component', () => {
     vi.clearAllMocks();
     vi.spyOn(apiClientModule, 'getAuthToken').mockReturnValue('mock_token');
     vi.spyOn(apiClientModule, 'fetchAllTenants').mockResolvedValue(mockTenants);
+    vi.spyOn(apiClientModule, 'fetchPitchAnalyticsSummary').mockResolvedValue({});
     // Mock window.confirm
     window.confirm = vi.fn().mockReturnValue(true);
   });

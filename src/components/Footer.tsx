@@ -211,6 +211,7 @@ const Footer = () => {
 
   return (
     <footer
+      id="footer"
       className="relative text-white overflow-hidden border-t"
       style={{
         background: "var(--navy-color)",

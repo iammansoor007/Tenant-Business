@@ -75,4 +75,98 @@ export interface BulkTenantItem {
   tagline?: string;
 }
 
+export interface PitchVisit {
+  _id?: string;
+  slug: string;
+  sessionId: string;
+  ip?: string;
+  city?: string;
+  region?: string;
+  country?: string;
+  org?: string;
+  deviceType?: 'Mobile' | 'Tablet' | 'Desktop';
+  deviceModel?: string;
+  browser?: string;
+  os?: string;
+  screen?: string;
+  language?: string;
+  referrer?: string;
+  referrerDomain?: string;
+  timezone?: string;
+  prospectLocalTime?: string;
+  connectionType?: string;
+  downlinkSpeed?: string;
+  rtt?: string;
+  batteryLevel?: string;
+  isCharging?: boolean;
+  cpuCores?: number;
+  deviceMemoryGb?: number;
+  pixelRatio?: string;
+  screenOrientation?: string;
+  tabSwitches?: number;
+  idleSeconds?: number;
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+  firstSeen: string;
+  lastSeen: string;
+  durationSeconds: number;
+  scrollDepth: number;
+  sectionsViewed: string[];
+  sectionEngagement?: Record<string, number>;
+  clickedButtons?: Array<{
+    text: string;
+    tag: string;
+    href?: string;
+    timestamp: string;
+  }>;
+  rageClicks?: Array<{
+    text: string;
+    count: number;
+    timestamp: string;
+  }>;
+  clickedPhone?: boolean;
+  clickedCta?: boolean;
+  submittedForm?: boolean;
+  exitIntent?: boolean;
+  copiedTexts?: string[];
+  engagementScore?: number;
+  intentCategory?: 'HOT' | 'WARM' | 'COLD' | 'BOUNCE';
+  eventsTimeline?: Array<{
+    type: 'OPEN' | 'SCROLL' | 'CLICK' | 'COPY' | 'EXIT_INTENT' | 'FORM_SUBMIT' | 'RAGE_CLICK' | 'TAB_SWITCH' | 'BACKTRACK';
+    label: string;
+    elapsedSeconds: number;
+    timestamp: string;
+  }>;
+  visitCount: number;
+}
+
+export interface ClientAnalyticsSummary {
+  slug: string;
+  isOpened: boolean;
+  isLiveNow?: boolean;
+  totalVisits: number;
+  uniqueSessions: number;
+  totalDurationSeconds: number;
+  maxScrollDepth: number;
+  firstOpenedAt?: string;
+  lastOpenedAt?: string;
+  latestLocation?: string;
+  latestDevice?: string;
+  latestBrowser?: string;
+  latestIp?: string;
+  latestOrg?: string;
+  latestTimezone?: string;
+  latestConnection?: string;
+  latestBattery?: string;
+  engagementScore?: number;
+  intentCategory?: 'HOT' | 'WARM' | 'COLD' | 'BOUNCE';
+  clickedPhone: boolean;
+  clickedCta: boolean;
+  submittedForm: boolean;
+  rageClicksCount?: number;
+  visits: PitchVisit[];
+}
+
+
 

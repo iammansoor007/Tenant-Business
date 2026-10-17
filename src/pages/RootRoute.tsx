@@ -59,6 +59,22 @@ export const RootRoute: React.FC = () => {
     );
   }
 
+  // Check if link was accessed via query param (e.g. yourdomain.com/?client=apex-roofing or ?pitch=apex-roofing)
+  const querySlug = typeof window !== 'undefined'
+    ? (new URLSearchParams(window.location.search).get('client') ||
+       new URLSearchParams(window.location.search).get('pitch') ||
+       new URLSearchParams(window.location.search).get('tenant') ||
+       new URLSearchParams(window.location.search).get('t'))
+    : null;
+
+  if (querySlug) {
+    return (
+      <TenantProvider forcedSlug={querySlug}>
+        <Index />
+      </TenantProvider>
+    );
+  }
+
   // Root domain on agency host: render Agency Content
   return <AgencyHome />;
 };

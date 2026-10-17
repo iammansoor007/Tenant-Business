@@ -5,6 +5,7 @@ import { fetchTenantBySlug } from '../lib/apiClient';
 import defaultCompleteData from '../data/completeData.json';
 import { hexToHsl, darkenHex } from '../lib/colorExtractor';
 import { updateClientSeo } from '../lib/seoManager';
+import { usePitchTracker } from '../lib/pitchTracker';
 
 interface TenantContextValue {
   tenant: Tenant | null;
@@ -58,8 +59,17 @@ export const TenantProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ forcedSlug, tenantSlug, children }) => {
   const params = useParams<{ clientId?: string }>();
-  const activeSlug = forcedSlug || tenantSlug || params.clientId || 'max-quality-roofing';
+  const querySlug = typeof window !== 'undefined'
+    ? (new URLSearchParams(window.location.search).get('client') ||
+       new URLSearchParams(window.location.search).get('pitch') ||
+       new URLSearchParams(window.location.search).get('tenant') ||
+       new URLSearchParams(window.location.search).get('t'))
+    : null;
+  const activeSlug = forcedSlug || tenantSlug || params.clientId || querySlug || 'max-quality-roofing';
   const isCustomRoute = activeSlug !== 'max-quality-roofing';
+
+  // Automatically track prospect link visits, time spent, device, IP, and scroll
+  usePitchTracker(activeSlug);
 
   const [tenant, setTenant] = useState<Tenant | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(isCustomRoute);
