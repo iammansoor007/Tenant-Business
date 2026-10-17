@@ -105,12 +105,66 @@ export async function apiLogin(username: string, password: string): Promise<{ su
   }
 }
 
+function createSeededTenant(
+  slug: string,
+  name: string,
+  phone: string,
+  location: string,
+  status: 'active' | 'draft',
+  primary: string,
+  primaryHover: string,
+  secondary: string,
+  accent: string,
+  tagline?: string
+): Tenant {
+  const cd = JSON.parse(JSON.stringify(baselineCompleteData));
+  if (cd.footer?.contact) {
+    cd.footer.contact.phone = phone;
+    cd.footer.contact.phoneLink = `tel:${phone.replace(/\D/g, '')}`;
+    cd.footer.contact.address = location;
+  }
+  if (tagline && cd.hero) {
+    cd.hero.headlines = [tagline, `${name} in ${location}`];
+  }
+  return {
+    slug,
+    name,
+    phone,
+    location,
+    status,
+    media: { logo: '/logo.webp', heroBg: '/assets/newhero.webp' },
+    colors: { primary, primaryHover, secondary, accent },
+    completeData: cd,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+}
+
+export const SEEDED_FALLBACK_TENANTS: Tenant[] = [
+  {
+    slug: 'max-quality-roofing',
+    name: 'Max Quality Roofing',
+    phone: '(406) 217-1720',
+    location: 'Great Falls, MT',
+    status: 'active',
+    media: { logo: '/logo.webp', heroBg: '/assets/newhero.webp' },
+    colors: { primary: '#0B1D33', primaryHover: '#12365A', secondary: '#344B63', accent: '#AEB8C2' },
+    completeData: baselineCompleteData,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  createSeededTenant('a1-hvac', 'a1 hvac', '+13147578637', 'St. Louis, Missouri', 'active', '#0F4C81', '#0A3358', '#2C3E50', '#D4AF37', 'Premier HVAC & Climate Comfort'),
+  createSeededTenant('a1-hvac-copy', 'a1 hvac (Copy)', '+13147578637', 'St. Louis, Missouri', 'draft', '#0F4C81', '#0A3358', '#2C3E50', '#D4AF37', 'Premier HVAC & Climate Comfort'),
+  createSeededTenant('tnb-junk-removal', 'TNB Junk Removal', '(615) 601-2244', 'Nashville, TN', 'active', '#0D5C3A', '#083D26', '#1F2937', '#F59E0B', 'Fast, Dependable Residential & Commercial Junk Removal'),
+  createSeededTenant('come-and-take-it-junk-removal', 'Come and Take It Junk Removal', '(512) 898-7722', 'Austin, TX', 'active', '#8B1E1E', '#631313', '#1E293B', '#EAB308', 'Texas-Tough Junk Hauling, Cleanouts & Light Demolition'),
+];
+
 export async function fetchAllTenants(): Promise<Tenant[]> {
   try {
     const res = await fetch('/api/tenants');
     if (res.ok) {
       const data = await res.json();
-      if (data.success && Array.isArray(data.tenants)) {
+      if (data.success && Array.isArray(data.tenants) && data.tenants.length > 0) {
         // Cache to IDB
         for (const t of data.tenants) {
           await idbPut(t);
@@ -125,28 +179,21 @@ export async function fetchAllTenants(): Promise<Tenant[]> {
   // Fallback to IDB
   const localList = await idbGetAll();
   if (localList.length === 0) {
-    // Ensure default flagship tenant exists
-    const defaultTenant: Tenant = {
-      slug: 'max-quality-roofing',
-      name: 'Max Quality Roofing',
-      status: 'active',
-      media: {
-        logo: '/logo.webp',
-        heroBg: '/assets/newhero.webp',
-      },
-      colors: {
-        primary: '#0B1D33',
-        primaryHover: '#12365A',
-        secondary: '#344B63',
-        accent: '#AEB8C2',
-      },
-      completeData: baselineCompleteData,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    await idbPut(defaultTenant);
-    return [defaultTenant];
+    for (const t of SEEDED_FALLBACK_TENANTS) {
+      await idbPut(t);
+    }
+    return SEEDED_FALLBACK_TENANTS;
   }
+
+  // Ensure any core seeded pitches exist on this device
+  const existingSlugs = new Set(localList.map((t) => t.slug));
+  for (const st of SEEDED_FALLBACK_TENANTS) {
+    if (!existingSlugs.has(st.slug)) {
+      localList.push(st);
+      await idbPut(st);
+    }
+  }
+
   return localList;
 }
 
@@ -181,24 +228,11 @@ export async function fetchTenantBySlug(slug: string): Promise<Tenant | null> {
     }
   } catch {}
 
-  // If asking for default/flagship
-  if (cleanSlug === 'max-quality-roofing' || cleanSlug === 'default') {
-    return {
-      slug: 'max-quality-roofing',
-      name: 'Max Quality Roofing',
-      status: 'active',
-      media: {
-        logo: '/logo.webp',
-        heroBg: '/assets/newhero.webp',
-      },
-      colors: {
-        primary: '#0B1D33',
-        primaryHover: '#12365A',
-        secondary: '#344B63',
-        accent: '#AEB8C2',
-      },
-      completeData: baselineCompleteData,
-    };
+  // Check built-in seeded catalog
+  const foundSeeded = SEEDED_FALLBACK_TENANTS.find((t) => t.slug === cleanSlug);
+  if (foundSeeded) {
+    await idbPut(foundSeeded);
+    return foundSeeded;
   }
 
   return null;
