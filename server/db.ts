@@ -138,7 +138,7 @@ if (mongoose.models.PitchVisit) {
     delete mongoose.models.PitchVisit;
   } catch {}
 }
-export const PitchVisitModel = mongoose.model('PitchVisit', PitchVisitSchema);
+export const PitchVisitModel = mongoose.models.PitchVisit || mongoose.model('PitchVisit', PitchVisitSchema);
 
 // ─── CONNECT & SEED ───
 export async function connectDB(): Promise<boolean> {
@@ -146,10 +146,16 @@ export async function connectDB(): Promise<boolean> {
 
   const activeUri = getMongoUri();
 
+  // If deployed on Vercel and no external MongoDB Atlas URI is set, do not hang trying to reach localhost
+  if (process.env.VERCEL && (!process.env.MONGODB_URI || process.env.MONGODB_URI.includes('localhost'))) {
+    isDbConnected = false;
+    return false;
+  }
+
   try {
     if (mongoose.connection.readyState === 0) {
       await mongoose.connect(activeUri, {
-        serverSelectionTimeoutMS: 3000,
+        serverSelectionTimeoutMS: 2000,
       });
     }
     isDbConnected = (mongoose.connection.readyState === 1);

@@ -3,32 +3,104 @@ import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { connectDB, isDbConnected, AdminModel, TenantModel, PitchVisitModel } from './db';
-import completeDataTemplate from '../src/data/completeData.json';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+
+let completeDataTemplate: any = {};
+try {
+  completeDataTemplate = require('../src/data/completeData.json');
+} catch {
+  try {
+    completeDataTemplate = require('./completeData.json');
+  } catch {}
+}
 
 const JWT_SECRET = process.env.JWT_SECRET || 'pitchengine_super_secret_jwt_key_2026';
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin@pitchplatform.com';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin12345!';
 
-// In-memory fallback if MongoDB is offline
+// In-memory fallback if MongoDB is offline or in ephemeral serverless environments
 export const fallbackTenants: Map<string, any> = new Map();
 export const fallbackPitchVisits: Map<string, any[]> = new Map();
 
-// Initialize default template in fallback
+// Helper to clone base completeData
+function cloneBaseData(overrides: { name: string; phone: string; location: string; tagline?: string }) {
+  const d = JSON.parse(JSON.stringify(completeDataTemplate || {}));
+  if (d.footer?.contact) {
+    d.footer.contact.phone = overrides.phone;
+    d.footer.contact.phoneLink = `tel:${overrides.phone.replace(/\D/g, '')}`;
+    d.footer.contact.address = overrides.location;
+  }
+  if (d.hero) {
+    if (overrides.tagline) {
+      d.hero.headlines = [overrides.tagline, `${overrides.name} in ${overrides.location}`];
+    }
+  }
+  return d;
+}
+
+// Initialize flagship and default pitches in fallback
 fallbackTenants.set('max-quality-roofing', {
   slug: 'max-quality-roofing',
   name: 'Max Quality Roofing',
+  phone: '(406) 217-1720',
+  location: 'Great Falls, MT',
   status: 'active',
-  media: {
-    logo: '/logo.webp',
-    heroBg: '/assets/newhero.webp',
-  },
-  colors: {
-    primary: '#0B1D33',
-    primaryHover: '#12365A',
-    secondary: '#344B63',
-    accent: '#AEB8C2',
-  },
+  media: { logo: '/logo.webp', heroBg: '/assets/newhero.webp' },
+  colors: { primary: '#0B1D33', primaryHover: '#12365A', secondary: '#344B63', accent: '#AEB8C2' },
   completeData: completeDataTemplate,
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+});
+
+fallbackTenants.set('a1-hvac', {
+  slug: 'a1-hvac',
+  name: 'a1 hvac',
+  phone: '+13147578637',
+  location: 'St. Louis, Missouri',
+  status: 'active',
+  media: { logo: '/logo.webp', heroBg: '/assets/newhero.webp' },
+  colors: { primary: '#0F4C81', primaryHover: '#0A3358', secondary: '#2C3E50', accent: '#D4AF37' },
+  completeData: cloneBaseData({ name: 'a1 hvac', phone: '+13147578637', location: 'St. Louis, Missouri', tagline: 'Premier HVAC & Climate Comfort' }),
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+});
+
+fallbackTenants.set('a1-hvac-copy', {
+  slug: 'a1-hvac-copy',
+  name: 'a1 hvac (Copy)',
+  phone: '+13147578637',
+  location: 'St. Louis, Missouri',
+  status: 'draft',
+  media: { logo: '/logo.webp', heroBg: '/assets/newhero.webp' },
+  colors: { primary: '#0F4C81', primaryHover: '#0A3358', secondary: '#2C3E50', accent: '#D4AF37' },
+  completeData: cloneBaseData({ name: 'a1 hvac (Copy)', phone: '+13147578637', location: 'St. Louis, Missouri', tagline: 'Premier HVAC & Climate Comfort' }),
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+});
+
+fallbackTenants.set('tnb-junk-removal', {
+  slug: 'tnb-junk-removal',
+  name: 'TNB Junk Removal',
+  phone: '(615) 601-2244',
+  location: 'Nashville, TN',
+  status: 'active',
+  media: { logo: '/logo.webp', heroBg: '/assets/newhero.webp' },
+  colors: { primary: '#0D5C3A', primaryHover: '#083D26', secondary: '#1F2937', accent: '#F59E0B' },
+  completeData: cloneBaseData({ name: 'TNB Junk Removal', phone: '(615) 601-2244', location: 'Nashville, TN', tagline: 'Fast, Dependable Residential & Commercial Junk Removal' }),
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+});
+
+fallbackTenants.set('come-and-take-it-junk-removal', {
+  slug: 'come-and-take-it-junk-removal',
+  name: 'Come and Take It Junk Removal',
+  phone: '(512) 898-7722',
+  location: 'Austin, TX',
+  status: 'active',
+  media: { logo: '/logo.webp', heroBg: '/assets/newhero.webp' },
+  colors: { primary: '#8B1E1E', primaryHover: '#631313', secondary: '#1E293B', accent: '#EAB308' },
+  completeData: cloneBaseData({ name: 'Come and Take It Junk Removal', phone: '(512) 898-7722', location: 'Austin, TX', tagline: 'Texas-Tough Junk Hauling, Cleanouts & Light Demolition' }),
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),
 });
@@ -81,7 +153,19 @@ function sendJson(res: http.ServerResponse, status: number, data: any) {
 }
 
 export async function handleApiRequest(req: http.IncomingMessage, res: http.ServerResponse): Promise<boolean> {
-  const url = req.url || '';
+  const reqAny = req as any;
+  const rawUrl =
+    (req.headers && ((req.headers['x-matched-path'] as string) || (req.headers['x-forwarded-uri'] as string))) ||
+    reqAny.originalUrl ||
+    req.url ||
+    '';
+  let url = rawUrl.split('?')[0] || '';
+  if ((url === '/api' || url === '/api/') && reqAny.query) {
+    const slug = reqAny.query.slug || reqAny.query.path;
+    if (slug) {
+      url = `/api/${Array.isArray(slug) ? slug.join('/') : slug}`;
+    }
+  }
 
   // Only handle /api/ routes
   if (!url.startsWith('/api')) {
