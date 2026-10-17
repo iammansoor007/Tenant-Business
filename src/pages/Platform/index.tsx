@@ -19,6 +19,7 @@ import {
   Zap,
   Search,
   Copy,
+  CopyPlus,
   ExternalLink,
   Edit,
   Trash2,
@@ -171,6 +172,47 @@ export const PlatformDashboard: React.FC = () => {
       await deleteTenant(slug);
       setSelectedSlugs((prev) => prev.filter((s) => s !== slug));
       await loadData();
+    }
+  };
+
+  const handleDuplicateClient = async (sourceTenant: Tenant) => {
+    let baseSlug = `${sourceTenant.slug}-copy`;
+    let newSlug = baseSlug;
+    let counter = 1;
+    while (tenants.some((t) => t.slug === newSlug)) {
+      counter++;
+      newSlug = `${baseSlug}-${counter}`;
+    }
+
+    const defaultName = `${sourceTenant.name} (Copy${counter > 1 ? ` ${counter}` : ''})`;
+    const enteredName = prompt('Enter company name for the duplicated pitch:', defaultName);
+    if (!enteredName || !enteredName.trim()) return;
+
+    const enteredSlug = prompt('Enter URL slug for the duplicated pitch:', newSlug);
+    if (!enteredSlug || !enteredSlug.trim()) return;
+
+    const cleanSlug = enteredSlug.trim().toLowerCase().replace(/[^a-z0-9_-]/g, '-');
+    if (tenants.some((t) => t.slug === cleanSlug)) {
+      alert(`A pitch with the slug '/${cleanSlug}' already exists. Please choose a different slug.`);
+      return;
+    }
+
+    const duplicatedTenant: Tenant = {
+      ...JSON.parse(JSON.stringify(sourceTenant)),
+      name: enteredName.trim(),
+      slug: cleanSlug,
+      status: 'draft',
+      updatedAt: new Date().toISOString(),
+    };
+
+    setIsLoading(true);
+    try {
+      await saveTenant(duplicatedTenant);
+      await loadData();
+    } catch (err: any) {
+      alert(`Failed to duplicate pitch: ${err.message || 'Unknown error'}`);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -813,6 +855,14 @@ export const PlatformDashboard: React.FC = () => {
                                 </button>
 
                                 <button
+                                  onClick={() => handleDuplicateClient(t)}
+                                  className="p-1.5 rounded-lg border border-slate-200 bg-white hover:bg-blue-50 text-slate-500 hover:text-blue-600 shadow-xs transition-colors cursor-pointer"
+                                  title="Duplicate Pitch (Clone Client)"
+                                >
+                                  <CopyPlus className="w-3.5 h-3.5" />
+                                </button>
+
+                                <button
                                   onClick={() => handleDeleteClient(t.slug)}
                                   className="p-1.5 rounded-lg border border-slate-200 bg-white hover:bg-rose-50 text-slate-400 hover:text-rose-600 shadow-xs transition-colors"
                                   title="Delete client"
@@ -1010,6 +1060,14 @@ export const PlatformDashboard: React.FC = () => {
                           title="Edit Client"
                         >
                           <Edit className="w-4 h-4" />
+                        </button>
+
+                        <button
+                          onClick={() => handleDuplicateClient(t)}
+                          className="p-1.5 rounded-lg border border-slate-200 bg-white hover:bg-blue-50 text-slate-500 hover:text-blue-600 shadow-xs transition-colors cursor-pointer"
+                          title="Duplicate Pitch (Clone Client)"
+                        >
+                          <CopyPlus className="w-4 h-4" />
                         </button>
 
                         <button

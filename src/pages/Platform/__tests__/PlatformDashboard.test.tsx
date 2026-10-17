@@ -179,4 +179,28 @@ describe('PlatformDashboard Component', () => {
       expect(bulkStatusSpy).toHaveBeenCalledWith(['apex-roofing'], 'pitched');
     });
   });
+
+  it('duplicates a pitch with unique slug and cloned configuration', async () => {
+    const saveSpy = vi.spyOn(apiClientModule, 'saveTenant').mockResolvedValue(true);
+    vi.spyOn(window, 'prompt').mockReturnValueOnce('Apex Roofing Austin (Cloned)').mockReturnValueOnce('apex-roofing-cloned');
+
+    render(<PlatformDashboard />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Apex Roofing Austin')).toBeInTheDocument();
+    });
+
+    const duplicateButtons = screen.getAllByTitle(/Duplicate Pitch/i);
+    expect(duplicateButtons.length).toBeGreaterThan(0);
+    fireEvent.click(duplicateButtons[0]);
+
+    await waitFor(() => {
+      expect(saveSpy).toHaveBeenCalledWith(expect.objectContaining({
+        name: 'Apex Roofing Austin (Cloned)',
+        slug: 'apex-roofing-cloned',
+        status: 'draft',
+      }));
+    });
+  });
 });
+
