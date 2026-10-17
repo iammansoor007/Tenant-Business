@@ -220,7 +220,8 @@ export const PitchAnalyticsModal: React.FC<PitchAnalyticsModalProps> = ({
   });
 
   // WhatsApp follow-up link
-  const phoneClean = tenant.phone ? tenant.phone.replace(/[^0-9]/g, '') : '';
+  const resolvedPhone = tenant.phone || tenant.completeData?.footer?.contact?.phone || tenant.completeData?.contact?.phone || '';
+  const phoneClean = resolvedPhone ? resolvedPhone.replace(/[^0-9]/g, '') : '';
   const waPitchLink = typeof window !== 'undefined' ? `${window.location.origin}/${tenant.slug}` : `/${tenant.slug}`;
   const waMessage = encodeURIComponent(
     `Hi ${tenant.name}! 👋 I noticed you were just reviewing the proposal on your custom pitch link (${waPitchLink}). ` +
@@ -339,9 +340,9 @@ export const PitchAnalyticsModal: React.FC<PitchAnalyticsModalProps> = ({
                   <MessageSquare className="w-3.5 h-3.5" />
                   <span>WhatsApp</span>
                 </a>
-                {tenant.phone && (
+                {resolvedPhone && (
                   <a
-                    href={`tel:${tenant.phone}`}
+                    href={`tel:${resolvedPhone}`}
                     className="px-3.5 py-1.5 bg-white text-emerald-950 font-bold text-xs rounded-lg hover:bg-emerald-50 transition-colors shrink-0 shadow-sm flex items-center gap-1.5"
                   >
                     <PhoneCall className="w-3.5 h-3.5 text-emerald-700" />

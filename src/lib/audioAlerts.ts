@@ -11,13 +11,41 @@ function getAudioContext(): AudioContext | null {
         audioCtx = new AudioContextClass();
       }
     }
-    if (audioCtx && audioCtx.state === 'suspended') {
-      audioCtx.resume();
-    }
     return audioCtx;
   } catch {
     return null;
   }
+}
+
+export function resetAudioContextForTesting(): void {
+  audioCtx = null;
+}
+
+// Global user-gesture audio auto-unlock to comply with modern browser autoplay policies
+if (typeof window !== 'undefined') {
+  const unlockAudioContext = () => {
+    try {
+      const ctx = getAudioContext();
+      if (ctx && ctx.state === 'suspended') {
+        ctx.resume().catch(() => {});
+      }
+    } catch {}
+  };
+  window.addEventListener('pointerdown', unlockAudioContext, { passive: true });
+  window.addEventListener('keydown', unlockAudioContext, { passive: true });
+}
+
+async function ensureAudioReady(): Promise<AudioContext | null> {
+  const ctx = getAudioContext();
+  if (!ctx) return null;
+  if (ctx.state === 'suspended') {
+    try {
+      await ctx.resume();
+    } catch {
+      return null;
+    }
+  }
+  return ctx;
 }
 
 export function isAudioAlertsEnabled(): boolean {
@@ -34,9 +62,9 @@ export function setAudioAlertsEnabled(enabled: boolean): void {
 /**
  * Play a subtle, premium radar chime when a prospect enters the pitch
  */
-export function playLiveArrivalChime() {
+export async function playLiveArrivalChime() {
   if (!isAudioAlertsEnabled()) return;
-  const ctx = getAudioContext();
+  const ctx = await ensureAudioReady();
   if (!ctx) return;
 
   try {
@@ -73,9 +101,9 @@ export function playLiveArrivalChime() {
 /**
  * Play an urgent high-intent lead chime (when lead score reaches HOT or phone is tapped)
  */
-export function playHotLeadChime() {
+export async function playHotLeadChime() {
   if (!isAudioAlertsEnabled()) return;
-  const ctx = getAudioContext();
+  const ctx = await ensureAudioReady();
   if (!ctx) return;
 
   try {
